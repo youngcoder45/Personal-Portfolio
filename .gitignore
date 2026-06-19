@@ -1,2 +1,5 @@
 tmp.txt
 copy.txt
+*.venv
+*.agents
+*.codex
