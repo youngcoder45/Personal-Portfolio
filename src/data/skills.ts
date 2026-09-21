@@ -80,6 +80,19 @@ export const skillGroups: SkillGroup[] = [
       { name: 'Web3', spec: 'wallets · dapps · solidity', level: 2 },
     ],
   },
+  {
+    id: 'devops',
+    title: 'DevOps & Infra',
+    blurb: 'Shipping, running, and keeping things alive in production.',
+    path: '~/etc/aditya/{ci,containers,monitoring}',
+    skills: [
+      { name: 'Docker', spec: 'compose · build · registry', level: 3 },
+      { name: 'CI/CD', spec: 'github actions · pipelines', level: 3 },
+      { name: 'Linux Servers', spec: 'systemd · nginx · hardening', level: 3 },
+      { name: 'Networking (ops)', spec: 'dns · tls · reverse proxy', level: 3 },
+      { name: 'Monitoring', spec: 'logs · metrics · alerts', level: 2 },
+    ],
+  },
 ] as const;
 
 export const stackLabels: Record<string, string> = {
@@ -89,6 +102,7 @@ export const stackLabels: Record<string, string> = {
   backend: 'backend',
   data: 'data',
   devtools: 'devtools',
+  devops: 'devops',
   web: 'web',
   foss: 'foss',
 } as const;

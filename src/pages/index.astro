@@ -5,7 +5,7 @@ import Term from '../components/Term.astro';
 import Section from '../components/Section.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import NoteRow from '../components/NoteRow.astro';
-import { identity, rig, socials, tagline } from '../lib/profile';
+import { identity, neofetch, socials, tagline } from '../lib/profile';
 import { levelTag, skillGroups } from '../data/skills';
 
 const featured = (await getCollection('projects')).filter((p) => p.data.featured).sort(
@@ -147,7 +147,7 @@ const notes = (await getCollection('notes'))
   <!-- ============ toolchain ============ -->
   <Section id="toolchain" index="02" title="toolchain" path="~/.config/aditya/toolchain.json">
     <p class="tc-note">
-      <span aria-hidden="true">＄</span> <code>aditya --manifest</code> · 5 bundles ·
+      <span aria-hidden="true">＄</span> <code>aditya --manifest</code> · 6 bundles ·
       {skillGroups.reduce((n, g) => n + g.skills.length, 0)} packages ·
       proficiency is tagged honestly:
       <span class="tc-tag lv-5">expert</span>
@@ -229,15 +229,29 @@ const notes = (await getCollection('notes'))
         <span class="title">/proc/aditya/environ</span>
         <span class="meta">current rig</span>
       </div>
-      <div style="padding:1rem 1.2rem;display:grid;grid-template-columns:auto 1fr;gap:.28rem 1.6rem;font-size:.84rem">
-        {
-          rig.map(([k, v]) => (
-            <>
-              <span style="color:var(--cyan)">{k.padEnd(10)}</span>
-              <span>{v}</span>
-            </>
-          ))
-        }
+      <div class="neo" style="padding:1rem 1.2rem">
+        <pre class="neo-art magenta">{neofetch.art.join('\n')}</pre>
+        <div class="neofetch">
+          <div class="row">
+            <strong class="lbl">{neofetch.label}</strong>
+            <span class="sep">  ───────────────────</span>
+          </div>
+          {neofetch.info.map((line) => {
+            const [k, ...rest] = line.split(/ {2,}/);
+            return (
+              <div class="row">
+                <span class="lbl">{k.padEnd(9)} </span>
+                <span>{rest.join(' ')}</span>
+              </div>
+            );
+          })}
+          <div class="row">
+            <span class="cdot">{'Colors'.padEnd(12)}</span>
+            {neofetch.colors.map((c) => (
+              <span style={`color:${c}`} aria-hidden="true">●</span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </Section>

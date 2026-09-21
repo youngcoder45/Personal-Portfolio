@@ -145,7 +145,7 @@ const skillsCmd: Cmd = (args) => {
     rows.push(...grp.skills.map((s) => ({ text: `  ${s.name.padEnd(16)} ${s.spec}`, cls: 'dim' as const })));
     rows.push('');
   }
-  rows.push({ cls: 'dim', text: 'usage: skills [systems|embedded|backend|data|web]' });
+  rows.push({ cls: 'dim', text: 'usage: skills [systems|embedded|backend|data|web|devops]' });
   return rows;
 };
 

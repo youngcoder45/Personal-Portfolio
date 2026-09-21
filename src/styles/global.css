@@ -315,13 +315,13 @@ section {
   font-size: inherit;
   line-height: 1.45;
 }
-.term .neo {
+.neo {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 1.1rem;
 }
 @media (min-width: 760px) {
-  .term .neo {
+  .neo {
     grid-template-columns: 200px 1fr;
   }
 }
@@ -476,6 +476,93 @@ section {
     bottom: 6.2rem;
   }
   .term-panel .term-body { max-height: 62vh; }
+}
+
+/* ---------- boot splash ---------- */
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--bg) 96%, var(--bg-2));
+  color: var(--fg);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.boot-screen.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.booted .boot-screen { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen { transition: none; }
+}
+.boot-inner {
+  width: min(540px, 88vw);
+}
+.boot-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--fg-dim);
+  font-size: 0.78rem;
+  margin-bottom: 1rem;
+}
+.boot-host {
+  color: var(--green);
+}
+.boot-lines {
+  list-style: none;
+  margin: 0 0 1.1rem;
+  padding: 0;
+  font-size: 0.82rem;
+}
+.boot-lines li {
+  opacity: 0;
+  transform: translateY(2px);
+  animation: bootLine 0.28s ease forwards;
+}
+.boot-lines li:nth-child(1) { animation-delay: 0.18s; }
+.boot-lines li:nth-child(2) { animation-delay: 0.58s; }
+.boot-lines li:nth-child(3) { animation-delay: 0.98s; }
+.boot-lines li:nth-child(4) { animation-delay: 1.32s; }
+.bl-ok {
+  color: var(--green);
+  margin-right: 0.6rem;
+}
+@keyframes bootLine {
+  to { opacity: 1; transform: none; }
+}
+.boot-progress {
+  height: 3px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.boot-progress i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--green-dim), var(--accent));
+  animation: bootFill 1.7s ease forwards;
+}
+@keyframes bootFill {
+  to { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .boot-lines li {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .boot-progress i {
+    width: 100%;
+    animation: none;
+  }
 }
 
 /* noscript fallback */
