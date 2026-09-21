@@ -48,8 +48,12 @@ const canonical = new URL(path, Astro.site).toString();
 
     <script is:inline>
       (function () {
+        var ids = ['paper','dark','nord','dracula','lofi','sunset','dim','synthwave','forest','abyss','retro','cyberpunk','halloween','autumn','coffee','garden','business','winter'];
         var t = 'dark';
-        try { t = localStorage.getItem('av-theme') === 'paper' ? 'paper' : 'dark'; } catch (e) {}
+        try {
+          var stored = localStorage.getItem('av-theme');
+          if (stored && ids.indexOf(stored) !== -1) t = stored;
+        } catch (e) {}
         document.documentElement.dataset.theme = t;
         try { if (sessionStorage.getItem('av-booted')) document.documentElement.classList.add('booted'); } catch (e) {}
       })();
@@ -64,8 +68,52 @@ const canonical = new URL(path, Astro.site).toString();
       </div>
     </main>
     <FooterBar />
+    <div
+      id="cmd-palette"
+      class="cmd-palette-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Command Palette"
+    >
+      <div class="cmd-palette-modal">
+        <div class="cmd-palette-header">
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input
+            type="text"
+            id="cmd-palette-input"
+            placeholder="Search pages, projects..."
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Search"
+            aria-controls="cmd-palette-results"
+          />
+          <kbd>ESC</kbd>
+        </div>
+        <div id="cmd-palette-results" class="cmd-palette-results" role="listbox" aria-label="Results"></div>
+        <div class="cmd-palette-footer">
+          <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+          <span><kbd>↵</kbd> Open</span>
+          <span><kbd>ESC</kbd> Close</span>
+        </div>
+      </div>
+    </div>
     <script>
       import '../scripts/theme.ts';
+      import { initCommandPalette } from '../scripts/palette.ts';
+      initCommandPalette();
     </script>
   </body>
 </html>

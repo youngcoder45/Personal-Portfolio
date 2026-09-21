@@ -1,32 +1,73 @@
+import { themes } from '../data/themes';
+
 const KEY = 'av-theme';
 const root = document.documentElement;
+const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
 
-function current(): 'dark' | 'paper' {
-  return root.dataset.theme === 'paper' ? 'paper' : 'dark';
+function current(): string {
+  return (root.dataset.theme as string | undefined) || 'dark';
 }
 
-function sync(t: 'dark' | 'paper') {
+function syncIcon(t: string) {
   const btn = document.getElementById('themeToggle');
-  if (btn) {
-    btn.setAttribute('aria-pressed', String(t === 'paper'));
-    btn.innerHTML = t === 'dark' ? '&#9790; light' : '&#9788; dark';
-  }
+  if (!btn) return;
+  const th = themes.find((x) => x.id === t);
+  btn.innerHTML = th?.mode === 'light' ? '&#9788;' : '&#9790;';
+}
+
+function apply(t: string) {
+  root.dataset.theme = t;
   try {
     localStorage.setItem(KEY, t);
   } catch {
     /* private mode */
   }
+  const th = themes.find((x) => x.id === t);
+  if (meta && th) meta.content = th.swatch[0];
+  document.querySelectorAll<HTMLButtonElement>('.theme-option').forEach((opt) => {
+    const active = opt.dataset.theme === t;
+    opt.classList.toggle('active', active);
+    opt.setAttribute('aria-selected', String(active));
+  });
+  syncIcon(t);
+}
+
+function setOpen(open: boolean) {
+  const menu = document.getElementById('themeMenu');
+  const btn = document.getElementById('themeToggle');
+  if (!menu || !btn) return;
+  menu.hidden = !open;
+  btn.setAttribute('aria-expanded', String(open));
 }
 
 function init() {
   const btn = document.getElementById('themeToggle');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    const next = current() === 'paper' ? 'dark' : 'paper';
-    root.dataset.theme = next;
-    sync(next);
+  const menu = document.getElementById('themeMenu');
+  if (!btn || !menu) return;
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setOpen(menu.hidden);
   });
-  sync(current());
+
+  menu.addEventListener('click', (e) => {
+    const opt = (e.target as Element).closest<HTMLButtonElement>('.theme-option');
+    if (!opt) return;
+    const id = opt.dataset.theme;
+    if (id && themes.some((x) => x.id === id)) apply(id);
+    setOpen(false);
+    btn.focus();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('.theme-picker')) setOpen(false);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+
+  apply(current());
 }
 
 if (document.readyState === 'loading') {

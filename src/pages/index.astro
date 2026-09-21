@@ -220,7 +220,7 @@ const notes = (await getCollection('notes'))
   </Section>
 
   <!-- ============ env ============ -->
-  <Section index="05" title="environment" path="/proc/aditya/environ">
+  <Section id="environment" index="05" title="environment" path="/proc/aditya/environ">
     <div class="win">
       <div class="win-bar">
         <span class="dot r" aria-hidden="true"></span>
@@ -229,28 +229,25 @@ const notes = (await getCollection('notes'))
         <span class="title">/proc/aditya/environ</span>
         <span class="meta">current rig</span>
       </div>
-      <div class="neo" style="padding:1rem 1.2rem">
-        <pre class="neo-art magenta">{neofetch.art.join('\n')}</pre>
-        <div class="neofetch">
-          <div class="row">
-            <strong class="lbl">{neofetch.label}</strong>
-            <span class="sep">  ───────────────────</span>
-          </div>
-          {neofetch.info.map((line) => {
-            const [k, ...rest] = line.split(/ {2,}/);
-            return (
-              <div class="row">
-                <span class="lbl">{k.padEnd(9)} </span>
-                <span>{rest.join(' ')}</span>
-              </div>
-            );
-          })}
-          <div class="row">
-            <span class="cdot">{'Colors'.padEnd(12)}</span>
-            {neofetch.colors.map((c) => (
-              <span style={`color:${c}`} aria-hidden="true">●</span>
-            ))}
-          </div>
+      <div class="neofetch" style="padding:1rem 1.2rem;max-width:560px">
+        <div class="row">
+          <strong class="lbl">{neofetch.label}</strong>
+          <span class="sep">  ───────────────────</span>
+        </div>
+        {neofetch.info.map((line) => {
+          const [k, ...rest] = line.split(/ {2,}/);
+          return (
+            <div class="row">
+              <span class="lbl">{k.padEnd(9)} </span>
+              <span>{rest.join(' ')}</span>
+            </div>
+          );
+        })}
+        <div class="row">
+          <span class="cdot">{'Colors'.padEnd(12)}</span>
+          {neofetch.colors.map((c) => (
+            <span style={`color:${c}`} aria-hidden="true">●</span>
+          ))}
         </div>
       </div>
     </div>

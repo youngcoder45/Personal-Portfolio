@@ -1,21 +1,49 @@
 ---
+import { execSync } from 'node:child_process';
 import { identity, nav } from '../lib/profile';
+import { themes } from '../data/themes';
 
 interface Props {
   path: string;
 }
 const { path } = Astro.props as Props;
 const current = path.split('#')[0] || '/';
+let COMMIT = 'dev';
+try {
+  COMMIT = execSync('git rev-parse --short HEAD').toString().trim() || 'dev';
+} catch {
+  /* not a git checkout */
+}
 ---
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="/" aria-label="aditya@arch ~">
-      <span class="prompt">❯</span>
-      <span>{identity.handle}</span>
-      <span class="path">:~$</span>
-      <span class="cursor" aria-hidden="true"></span>
-    </a>
+    <span class="brand-wrap">
+      <a class="brand" href="/" aria-label="aditya@arch ~">
+        <span class="prompt">❯</span>
+        <span>{identity.handle}</span>
+        <span class="path">:~$</span>
+        <span class="cursor" aria-hidden="true"></span>
+      </a>
+      <span class="build-badge" title={`built from commit ${COMMIT}`}>
+        <svg
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="18" cy="6" r="3"></circle>
+          <circle cx="6" cy="18" r="3"></circle>
+          <path d="M6 21V9a9 9 0 0 0 9 9"></path>
+        </svg>
+        build&nbsp;<b>{COMMIT}</b>
+      </span>
+    </span>
     <nav class="nav" aria-label="primary">
       {
         nav.map((item) => {
@@ -29,12 +57,52 @@ const current = path.split('#')[0] || '/';
         })
       }
       <button
-        id="themeToggle"
-        class="icon-btn"
+        id="paletteToggle"
+        class="search-chip"
         type="button"
-        aria-pressed="false"
-        aria-label="toggle light/dark theme"
-      >light</button>
+        title="Press Cmd+K to search"
+        aria-label="Open command palette"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <kbd>Cmd&#8202;K</kbd>
+      </button>
+      <div class="theme-picker">
+        <button
+          id="themeToggle"
+          class="icon-btn"
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-label="choose theme"
+        ></button>
+        <div class="theme-picker-menu" id="themeMenu" role="listbox" aria-label="choose a theme" hidden>
+          {
+            themes.map((t) => (
+              <button class="theme-option" type="button" role="option" data-theme={t.id} aria-selected="false">
+                <span class="theme-swatch" aria-hidden="true">
+                  {t.swatch.map((c) => (
+                    <span style={`background:${c}`}></span>
+                  ))}
+                </span>
+                <span class="theme-name">{t.name}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
     </nav>
   </div>
 </header>
