@@ -2,7 +2,7 @@ import { themes } from '../data/themes';
 
 const KEY = 'av-theme';
 const root = document.documentElement;
-const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+const metas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
 
 function current(): string {
   return (root.dataset.theme as string | undefined) || 'dark';
@@ -23,7 +23,7 @@ function apply(t: string) {
     /* private mode */
   }
   const th = themes.find((x) => x.id === t);
-  if (meta && th) meta.content = th.swatch[0];
+  metas.forEach((m) => (m.content = th?.swatch[0] ?? '#0b0f14'));
   document.querySelectorAll<HTMLButtonElement>('.theme-option').forEach((opt) => {
     const active = opt.dataset.theme === t;
     opt.classList.toggle('active', active);

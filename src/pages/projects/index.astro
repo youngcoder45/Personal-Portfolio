@@ -11,12 +11,14 @@ const featured = projects.filter((p) => p.data.featured);
 const rest = projects.filter((p) => !p.data.featured);
 ---
 
-<Layout path="/projects" title="~/projects — Aditya Verma" description="Selected systems, embedded, backend and FOSS projects by Aditya Verma.">
+<Layout path="/projects" title="~/projects — Aditya Verma" description="Systems, embedded, backend and open-source projects by Aditya Verma — Rust, C/C++, Python, ESP32, Linux tooling and FOSS software.">
   <nav class="crumb" aria-label="breadcrumb">
     <a href="/">~</a>
     <span>/</span>
     <span class="cw">projects</span>
   </nav>
+
+  <h1 class="sr-only">~/projects — Aditya Verma</h1>
 
   <Section index="01" title="projects" path="~/projects — 47 repos · 9 write-ups">
     <p style="color:var(--fg-dim);font-size:.86rem;margin-top:-.4rem;margin-bottom:1.6rem">

@@ -16,9 +16,12 @@ const { project } = Astro.props as Props;
 const { Content } = await render(project);
 const { data } = project;
 const cat = stackLabels[data.category];
+const metaTitle = `${data.title} — Aditya Verma`.length <= 62
+  ? `${data.title} — Aditya Verma`
+  : data.title;
 ---
 
-<Layout path={`/projects/${project.id}/`} title={`${data.title} — Aditya Verma`} description={data.blurb}>
+<Layout path={`/projects/${project.id}/`} title={metaTitle} description={data.blurb}>
   <nav class="crumb" aria-label="breadcrumb">
     <a href="/">~</a>
     <span>/</span>
@@ -65,7 +68,7 @@ const cat = stackLabels[data.category];
             <dt class="k">stars</dt><dd class="v">★ {data.stars}</dd>
             <dt class="k">stack</dt><dd class="v">{data.stack.join(', ')}</dd>
             <dt class="k">status</dt><dd class="v">{data.status}</dd>
-            { data.org && <><dt class="k">org</dt><dd class="v"><a href="https://github.com/TheCodeVerseHub">TheCodeVerseHub</a></dd></> }
+            { data.org && <><dt class="k">org</dt><dd class="v"><a href="https://github.com/TheCodeVerseHub" target="_blank" rel="noopener noreferrer">TheCodeVerseHub ↗</a></dd></> }
           </dl>
           <a class="btn" style="width:100%;justify-content:center;margin-top:.7rem" href={data.repo} target="_blank" rel="noopener noreferrer">
             git clone ↗

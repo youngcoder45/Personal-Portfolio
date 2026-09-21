@@ -21,9 +21,12 @@ const fmt = new Intl.DateTimeFormat('en-CA', {
   month: '2-digit',
   day: '2-digit',
 });
+const metaTitle = `${data.title} — Aditya Verma`.length <= 62
+  ? `${data.title} — Aditya Verma`
+  : data.title;
 ---
 
-<Layout path={`/notes/${note.id}/`} title={`${data.title} — Aditya Verma`} description={data.description}>
+<Layout path={`/notes/${note.id}/`} title={metaTitle} description={data.description}>
   <nav class="crumb" aria-label="breadcrumb">
     <a href="/">~</a>
     <span>/</span>

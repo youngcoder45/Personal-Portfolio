@@ -20,7 +20,7 @@ as output, you touch two registers. The flow is:
 gpio_pad_select_gpio(GPIO_NUM_20);
 
 // 2. set direction: bits [9:0] of GPIO_ENABLE_REG
-REG_WRITE(GPIO_OUT_W1TS_REG, (1u << 20); // actually: set the OUT register
+REG_WRITE(GPIO_ENABLE_REG, (1u << 20)); // actually: enable GPIO20 as output
 
 // 3. blink by writing the output set/clear registers
 while (1) {
@@ -31,7 +31,7 @@ while (1) {
 }
 ```
 
-The satisfaction is real: you fps-drift into the pin individually.
+The satisfaction is real: you're driving the output bit yourself, pin by pin, no framework in between.
 
 ## The same thing in Rust
 

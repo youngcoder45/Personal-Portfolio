@@ -6,4 +6,3 @@ export type Row = {
 };
 
 export type CmdOut = (Row | string)[];
-export type Cmd = (args: string[]) => CmdOut;

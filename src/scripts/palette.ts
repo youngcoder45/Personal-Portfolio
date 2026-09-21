@@ -171,12 +171,14 @@ export function initCommandPalette(): void {
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     renderResults();
+    input.setAttribute('aria-expanded', 'true');
     window.setTimeout(() => input.focus(), 50);
   }
 
   function close(): void {
     if (!isOpen()) return;
     overlay.classList.remove('active');
+    input.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
     if (lastFocused && document.body.contains(lastFocused)) lastFocused.focus();
     lastFocused = null;

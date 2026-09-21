@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { identity } from '../lib/profile';
+import { identity, socials } from '../lib/profile';
 import TopBar from './TopBar.astro';
 import FooterBar from './FooterBar.astro';
 import BootScreen from './BootScreen.astro';
@@ -9,15 +9,76 @@ interface Props {
   title?: string;
   description?: string;
   path: string;
+  /** emit a Person schema.org block (home + about) */
+  person?: boolean;
 }
 
 const {
-  title = `${identity.name} — ${identity.title}`,
-  description = `Systems & backend developer. C, C++, Rust, Python. Linux, embedded, ESP32, robotics & open source.`,
+  title = 'Aditya Verma — Systems & Backend Developer, Rust, C & Python',
+  description = 'Aditya Verma — systems & backend developer and electronics engineering student from Mumbai. Rust, C, C++, Python for Linux, embedded ESP32 & open source.',
   path,
+  person = false,
 } = Astro.props as Props;
 
+const site = (Astro.site?.toString().replace(/\/$/, '')) ?? 'https://aditya-verma.me';
 const canonical = new URL(path, Astro.site).toString();
+const ogImage = `${site}/me.png`;
+
+const socialUrls = socials.map((s) => s.href);
+const knowsAbout = [
+  'Systems Programming',
+  'Backend Development',
+  'C',
+  'C++',
+  'Rust',
+  'Python',
+  'Linux',
+  'Embedded Systems',
+  'ESP32',
+  'Robotics',
+  'Open Source',
+];
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${site}/#website`,
+      url: `${site}/`,
+      name: identity.name,
+      description: 'Portfolio of Aditya Verma — systems & backend developer. Rust, C, C++, Python. Linux, embedded ESP32, robotics & open source.',
+      inLanguage: 'en',
+      ...(person ? { publisher: { '@id': `${site}/#person` } } : {}),
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: title,
+      description,
+      inLanguage: 'en',
+      isPartOf: { '@id': `${site}/#website` },
+    },
+    ...(person
+      ? [
+          {
+            '@type': 'Person',
+            '@id': `${site}/#person`,
+            name: identity.name,
+            alternateName: identity.handle,
+            jobTitle: identity.title,
+            url: `${site}/`,
+            image: ogImage,
+            sameAs: socialUrls,
+            address: { '@type': 'PostalAddress', addressLocality: 'Mumbai', addressCountry: 'IN' },
+            alumniOf: { '@type': 'CollegeOrUniversity', name: 'Mumbai University' },
+            knowsAbout,
+          },
+        ]
+      : []),
+  ],
+});
 ---
 
 <!doctype html>
@@ -29,26 +90,44 @@ const canonical = new URL(path, Astro.site).toString();
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="author" content={identity.name} />
     <link rel="canonical" href={canonical} />
 
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
 
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={identity.name} />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={`${identity.name} — ${identity.title}`} />
+    <meta property="og:image:width" content="429" />
+    <meta property="og:image:height" content="458" />
+
+    <!-- Twitter / X card -->
     <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@youngcoder45" />
+    <meta name="twitter:creator" content="@youngcoder45" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={`${identity.name} — ${identity.title}`} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/me.png" />
     <link rel="alternate" type="application/rss+xml" title="aditya · notes" href="/rss.xml" />
+
+    <script type="application/ld+json" set:html={schema} />
 
     <script is:inline>
       (function () {
-        var ids = ['paper','dark','nord','dracula','lofi','sunset','dim','synthwave','forest','abyss','retro','cyberpunk','halloween','autumn','coffee','garden','business','winter'];
+        var ids = ['paper','dark','nord','dracula','sunset','dim','synthwave','forest','abyss','retro','cyberpunk','halloween','autumn','coffee'];
         var t = 'dark';
         try {
           var stored = localStorage.getItem('av-theme');
@@ -97,6 +176,9 @@ const canonical = new URL(path, Astro.site).toString();
             placeholder="Search pages, projects..."
             autocomplete="off"
             spellcheck="false"
+            role="combobox"
+            aria-expanded="false"
+            aria-autocomplete="list"
             aria-label="Search"
             aria-controls="cmd-palette-results"
           />

@@ -9,12 +9,14 @@ const notes = (await getCollection('notes'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout path="/notes" title="~/notes — Aditya Verma" description="Field notes, postmortems and technical writing from Aditya Verma.">
+<Layout path="/notes" title="~/notes — Aditya Verma" description="Engineering field notes, postmortems and technical writing from Aditya Verma — Rust, C, embedded ESP32, Linux and systems programming.">
   <nav class="crumb" aria-label="breadcrumb">
     <a href="/">~</a>
     <span>/</span>
     <span class="cw">notes</span>
   </nav>
+
+  <h1 class="sr-only">~/notes — Aditya Verma</h1>
 
   <Section index="01" title="notes" path="~/notes/{registry,field,postmortem}.mdx">
     <p style="color:var(--fg-dim);font-size:.86rem;margin-top:-.4rem;margin-bottom:1.6rem">

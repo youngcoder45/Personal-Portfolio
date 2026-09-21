@@ -1,0 +1,56 @@
+# Aditya Verma
+
+> Systems & Backend Developer · Electronics Engineering Student · Arch Linux AUR Maintainer
+
+Aditya Verma is a systems and backend developer based in Mumbai, India, studying
+Electronics & Telecommunications at Mumbai University (2026–2030). He writes C, C++,
+Rust and Python for Linux, embedded systems (ESP32, Arduino, Raspberry Pi) and
+open-source software. He maintains Arch Linux AUR packages and founded the open-source
+community TheCodeVerseHub. His motto: Code. Study. Research. Repeat.
+
+## Key facts
+
+- Name: Aditya Verma
+- Handle: youngcoder45 (GitHub: https://github.com/youngcoder45)
+- Location: Mumbai, India (UTC+05:30)
+- Role: Systems & Backend Developer, Electronics Engineering student
+- Languages: C, C++, Rust, Python, Shell, JavaScript/TypeScript
+- Domains: Systems programming, backend services, embedded/ESP32, Linux/Arch, FOSS
+- Education: B.Tech Electronics & Telecommunications, Mumbai University (2026–2030)
+- Experience: AUR maintainer for Arch Linux (2024–present), independent open-source
+  programmer (2021–present), founder of TheCodeVerseHub (2023–present)
+- Site: https://aditya-verma.me
+
+## Pages
+
+- Home: https://aditya-verma.me/
+- About (education, experience, bio): https://aditya-verma.me/about/
+- Projects: https://aditya-verma.me/projects/
+- Notes: https://aditya-verma.me/notes/
+
+## Notes (technical writing)
+
+- https://aditya-verma.me/notes/why-niri/ — What a compositor actually is (and why I run niri)
+- https://aditya-verma.me/notes/tui-without-curses/ — A TUI with zero curses: raw C and termios
+- https://aditya-verma.me/notes/esp32-registers/ — GPIO as a state machine: bare-metal ESP32 in C vs Rust
+- https://aditya-verma.me/notes/dotfiles-infra/ — Version your brain: dotfiles as infrastructure
+
+## Projects
+
+- https://aditya-verma.me/projects/niri-utils/ — Rust · Wayland tooling for the niri compositor
+- https://aditya-verma.me/projects/eclipse-linux/ — Void-based Linux distribution
+- https://aditya-verma.me/projects/eigen-bot/ — Python · Discord bot
+- https://aditya-verma.me/projects/opencv-math-solver/ — Python · computer vision math solver
+- https://aditya-verma.me/projects/discord-matrix-bridge/ — TypeScript · Discord/Matrix federation
+- https://aditya-verma.me/projects/discord-server-exporter-bot/ — Python · Discord API dumps
+- https://aditya-verma.me/projects/codeversehub-website/ — TypeScript/Next.js · community site
+- https://aditya-verma.me/projects/student-performance-predictor/ — Python · ML
+
+## Contact
+
+- GitHub issues: https://github.com/youngcoder45/youngcoder45/issues
+- LinkedIn: https://www.linkedin.com/in/youngcoder45/
+- Orcid: https://orcid.org/0009-0002-2090-9265
+- Community: https://github.com/TheCodeVerseHub
+
+<!-- Note: this file follows the llms.txt spec (https://llmstxt.org/) -->

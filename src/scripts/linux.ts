@@ -428,7 +428,6 @@ function sl(): CmdOut {
 const MAN: Record<string, string[]> = {
   aditya: [
     'ADITYA(1)  User Commands  ADITYA(1)',
-    '',
     'NAME',
     '  aditya - systems & backend developer, electronics student',
     '',

@@ -1,0 +1,58 @@
+# Aditya Verma — full text
+
+Aditya Verma is a systems and backend developer, electronics engineering student and
+open-source maintainer based in Mumbai, India (UTC+05:30). He writes C, C++, Rust and
+Python for low-level, embedded and backend work: firmware for ESP32 and Arduino boards,
+Linux systems tooling, Wayland compositor utilities, Discord bots, REST APIs and machine
+learning experiments. He runs Arch Linux (plus a Void-based distro he calls EclipseLinux),
+maintains packages in the Arch Linux User Repository (AUR), and founded the open-source
+community TheCodeVerseHub. His focus areas are systems programming, embedded engineering,
+and the intersection of AI and hardware. Motto: "Code. Study. Research. Repeat."
+
+## Biography
+
+- Name: Aditya Verma
+- Username / GitHub handle: youngcoder45
+- Title: Systems & Backend Developer
+- Location: Mumbai, India (IST, UTC+05:30)
+- Education: B.Tech in Electronics & Telecommunications, Mumbai University, 2026–2030
+- Experience:
+  - AUR Maintainer, Arch Linux User Repository (2024–present)
+  - Independent / Open Source Programmer (2021–present)
+  - Founder, TheCodeVerseHub (2023–present)
+
+## Skills
+
+- Systems & low-level: C, C++, Rust, Shell/POSIX, Linux (Arch, Void), networking
+- Embedded & hardware: ESP32 (ESP-IDF, Wi-Fi, MQTT), Arduino (AVR), Raspberry Pi, Embedded C, IoT
+- Backend & services: Python, FastAPI, PostgreSQL, SQLite, MongoDB, Node.js/TypeScript
+- Data & ML: NumPy, Pandas, scikit-learn, OpenCV, MediaPipe, Matplotlib, Jupyter
+- DevOps & infra: Docker, CI/CD (GitHub Actions), Linux servers (systemd, nginx), monitoring
+- Web (secondary): HTML/CSS, JavaScript/TypeScript, Astro, React/Next
+
+## Notable projects
+
+- niri-utils — Rust; tooling for the niri scrollable-tiling Wayland compositor
+- EclipseLinux — Lua/Void; a Linux distribution ("distro") built on top of Void Linux
+- eigen-bot — Python; Discord bot
+- OpenCV-Math-Solver — Python; solves math problems via computer vision
+- discord-matrix-bridge — TypeScript; bridges Discord and Matrix
+- Discord-Server-Exporter-Bot — Python; exports Discord server data via API
+- CodeVerseHub-Website — TypeScript/Next.js; website for TheCodeVerseHub community
+- Student-Performance-Predictor — Python; machine learning prediction of student performance
+
+## Technical notes
+
+- "What a compositor actually is (and why I run niri)" — Wayland, X11, compositors
+- "A TUI with zero curses: raw C and termios" — terminal UI programming in C
+- "GPIO as a state machine: bare-metal ESP32 in C vs Rust" — embedded firmware
+- "Version your brain: dotfiles as infrastructure" — dotfiles, config management
+
+## Links
+
+- Website: https://aditya-verma.me/
+- GitHub: https://github.com/youngcoder45
+- LinkedIn: https://www.linkedin.com/in/youngcoder45/
+- Community: https://github.com/TheCodeVerseHub
+- ORCID: https://orcid.org/0009-0002-2090-9265
+- Discord community server: https://discord.gg/3xKFvKhuGR

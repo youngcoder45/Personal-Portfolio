@@ -265,6 +265,7 @@ function promptLabel() {
 
 function initPrompt(container: HTMLElement) {
   outEl = el('div', 'out');
+  outEl.setAttribute('aria-live', 'polite');
   const line = el('div', 'line prompt');
   const ps = el('span', 'ps', promptLabel());
   line.append(ps);

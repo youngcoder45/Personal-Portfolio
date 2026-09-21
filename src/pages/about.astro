@@ -1,0 +1,223 @@
+---
+import Layout from '../components/Layout.astro';
+import Section from '../components/Section.astro';
+import { identity, tagline } from '../lib/profile';
+---
+
+<Layout path="/about" person description="Education, experience and biography of Aditya Verma — electronics engineering student, AUR maintainer, and systems & backend developer in Rust, C, C++ and Python." title="Aditya Verma — Systems & Backend Developer · About">
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">~</a>
+    <span>/</span>
+    <span class="cw">about</span>
+  </nav>
+
+  <h1 class="sr-only">{identity.name} — {identity.title} · about</h1>
+
+  <Section index="01" title="whoami" path="~/.local/share/man/man1/aditya(1)">
+    <div class="man">
+      <div class="man-bar">
+        <span>ADITYA(1)</span>
+        <span>Systems Engineering Reference</span>
+        <span>aditya-verma.me</span>
+      </div>
+      <div class="man-body">
+        <div class="man-cols">
+          <span>ADITYA(1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Systems Engineering Reference&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADITYA(1)</span>
+          <span>/* a long-form datasheet of a person */</span>
+        </div>
+
+        <section class="man-sec">
+          <h3>NAME</h3>
+          <div class="body">
+            <p><b>aditya</b> — <b>{identity.title}</b>; electronics engineering student; AUR maintainer; founder of <b>@TheCodeVerseHub</b>.</p>
+          </div>
+        </section>
+
+        <section class="man-sec">
+          <h3>DESCRIPTION</h3>
+          <div class="body">
+            <p>
+              $whoami → <b>Aditya Verma</b>. Electronics &amp; Telecom engineering student at
+              Mumbai University, based in Mumbai, India (IST, UTC+05:30).
+            </p>
+            <p>
+              Codes at the <b>low level</b>: C, C++ and Rust for systems work; Python for backend
+              services, bots and data. Skims datasheets for fun, flashes ESP32s on a breadboard,
+              and reads register maps like bedtime stories.
+            </p>
+            <p>
+              A heavy user of <b>Linux</b> (Arch daily-driver, plus a Void-based <b>EclipseLinux</b>
+              pet distro), a maintainer in the <b>Arch User Repository</b>, a tinkerer in the
+              <b>Wayland</b> ecosystem (niri, dotfiles, a compositor experiment), and a believer
+              that <b>web tech is one tool in the box</b> — not the identity.
+            </p>
+            <p>
+              Maintains <b>@TheCodeVerseHub</b>, an open community that builds and ships software
+              together. Learns by doing: <i>{tagline.join(' ')}</i>. Long-term: <b>AI × embedded</b>,
+              useful software, and giving back to FOSS.
+            </p>
+          </div>
+        </section>
+
+        <section class="man-sec">
+          <h3>SEE ALSO</h3>
+          <div class="body">
+            <p class="deps">
+              education(7) · experience(5) · toolchain(1) · projects(1) · notes(1) — same system,
+              different man pages.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </Section>
+
+  <Section index="02" title="education" path="~/edu/transcript.pdf">
+    <div class="win">
+      <div class="win-bar">
+        <span class="dot r" aria-hidden="true"></span>
+        <span class="dot a" aria-hidden="true"></span>
+        <span class="dot g" aria-hidden="true"></span>
+        <span class="title">~/edu/transcript.pdf</span>
+        <span class="meta">degree: engineering</span>
+      </div>
+      <div class="tl">
+        <article class="tl-item">
+          <span class="tl-meta">
+            <time>2026 — 2030</time>
+            <span class="tl-tag">in progress</span>
+          </span>
+          <div class="tl-body">
+            <h3>B.Tech — Electronics &amp; Telecommunications</h3>
+            <p class="tl-org">Mumbai University</p>
+            <p>
+              The electrical + CS overlap on purpose: signal processing, embedded systems, digital
+              design and communication theory. Day job while the terminal runs in the background.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </Section>
+
+  <Section index="03" title="experience" path="~/career/*.md">
+    <div class="win">
+      <div class="win-bar">
+        <span class="dot r" aria-hidden="true"></span>
+        <span class="dot a" aria-hidden="true"></span>
+        <span class="dot g" aria-hidden="true"></span>
+        <span class="title">~/career/</span>
+        <span class="meta">time-since-epoch: booting since 2021</span>
+      </div>
+      <div class="tl">
+        <article class="tl-item">
+          <span class="tl-meta">
+            <time>2024 — present</time>
+            <span class="tl-tag">foss</span>
+          </span>
+          <div class="tl-body">
+            <h3>AUR Maintainer</h3>
+            <p class="tl-org">Arch Linux User Repository</p>
+            <p>
+              Packaging and maintaining packages for Arch Linux. Keeps the daily-driver distro fed
+              with software, and gives back to the FOSS ecosystem one PKGBUILD at a time.
+            </p>
+          </div>
+        </article>
+
+        <article class="tl-item">
+          <span class="tl-meta">
+            <time>2021 — present</time>
+            <span class="tl-tag">opensource</span>
+          </span>
+          <div class="tl-body">
+            <h3>Independent / Open Source Programmer</h3>
+            <p class="tl-org">solo → {identity.handle} · @TheCodeVerseHub</p>
+            <p>
+              Systems, tools and embedded projects shipped publicly. From C/esp32 firmware to Rust
+              Wayland tooling, Python bots and ML experiments — all on
+              <a href={identity.github} target="_blank" rel="noopener noreferrer">github</a>.
+            </p>
+          </div>
+        </article>
+
+        <article class="tl-item">
+          <span class="tl-meta">
+            <time>2023 — present</time>
+            <span class="tl-tag">community</span>
+          </span>
+          <div class="tl-body">
+            <h3>Founder — TheCodeVerseHub</h3>
+            <p class="tl-org">open community for sharers &amp; builders</p>
+            <p>
+              A community that builds and ships software together — workshops, projects and mutual
+              debugging sessions over Discord.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </Section>
+
+  <Section index="04" title="contact" path="{{ identity.github }}">
+    <p style="color:var(--fg-dim);font-size:.86rem">
+      &gt;_ want the short version? Run <code style="color:var(--cyan)">man aditya</code> in the
+      terminal on the <a href="/">index page</a>, or skip ahead to
+      <a href="/#contact">~/contact</a>.
+    </p>
+  </Section>
+</Layout>
+
+<style>
+  .tl {
+    padding: 0.2rem 1.2rem 1.2rem;
+  }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 1.2rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .tl-item:last-child {
+    border-bottom: none;
+  }
+  @media (max-width: 680px) {
+    .tl-item {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+  }
+  .tl-meta {
+    color: var(--fg-dim);
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    line-height: 1.4;
+  }
+  .tl-tag {
+    align-self: flex-start;
+    color: var(--green);
+    border: 1px solid var(--border);
+    background: var(--bg-3);
+    border-radius: var(--radius);
+    padding: 0.05rem 0.45rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+  .tl-body h3 {
+    margin: 0 0 0.15rem;
+    font-size: 1rem;
+    color: var(--fg-strong);
+  }
+  .tl-org {
+    margin: 0 0 0.5rem;
+    color: var(--accent);
+    font-size: 0.82rem;
+  }
+  .tl-body p {
+    margin: 0.35rem 0;
+    line-height: 1.6;
+  }
+</style>

@@ -15,7 +15,7 @@ export const SEARCH_GROUPS: SearchGroup[] = [
     title: 'Pages',
     items: [
       { label: 'Home', icon: 'home', href: '/' },
-      { label: 'About · man aditya', icon: 'dir', href: '/#about' },
+      { label: 'About · man aditya', icon: 'dir', href: '/about' },
       { label: 'Toolchain', icon: 'dir', href: '/#toolchain' },
       { label: 'Projects', icon: 'dir', href: '/#projects' },
       { label: 'Notes', icon: 'dir', href: '/#notes' },
