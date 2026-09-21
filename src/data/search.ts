@@ -25,44 +25,6 @@ export const SEARCH_GROUPS: SearchGroup[] = [
     ],
   },
   {
-    title: 'Notes',
-    items: [
-      {
-        label: 'A TUI with zero curses: raw C and termios',
-        icon: 'note',
-        href: '/notes/tui-without-curses/',
-      },
-      {
-        label: 'GPIO as a state machine: bare-metal ESP32 in C vs Rust',
-        icon: 'note',
-        href: '/notes/esp32-registers/',
-      },
-      {
-        label: 'Version your brain: dotfiles as infrastructure',
-        icon: 'note',
-        href: '/notes/dotfiles-infra/',
-      },
-      {
-        label: 'What a compositor actually is (and why I run niri)',
-        icon: 'note',
-        href: '/notes/why-niri/',
-      },
-    ],
-  },
-  {
-    title: 'Projects',
-    items: [
-      { label: 'Student-Performance-Predictor', icon: 'file', href: '/projects/student-performance-predictor/' },
-      { label: 'OpenCV-Math-Solver', icon: 'file', href: '/projects/opencv-math-solver/' },
-      { label: 'discord-matrix-bridge', icon: 'file', href: '/projects/discord-matrix-bridge/' },
-      { label: 'EclipseLinux', icon: 'file', href: '/projects/eclipse-linux/' },
-      { label: 'Eigen-Bot', icon: 'file', href: '/projects/eigen-bot/' },
-      { label: 'niri-utils', icon: 'file', href: '/projects/niri-utils/' },
-      { label: 'Discord-Server-Exporter-Bot', icon: 'file', href: '/projects/discord-server-exporter-bot/' },
-      { label: 'CodeVerseHub-Website', icon: 'file', href: '/projects/codeversehub-website/' },
-    ],
-  },
-  {
     title: 'Actions',
     items: [
       { label: 'View Source', icon: 'terminal', action: 'view-source' },

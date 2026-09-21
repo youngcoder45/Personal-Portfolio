@@ -1,4 +1,22 @@
-import { SEARCH_GROUPS, type SearchItem } from '../data/search';
+import { SEARCH_GROUPS, type SearchGroup, type SearchItem } from '../data/search';
+
+function loadContentGroups(): SearchGroup[] {
+  const el = document.getElementById('search-content');
+  if (!el?.textContent) return [];
+  try {
+    return JSON.parse(el.textContent) as SearchGroup[];
+  } catch {
+    return [];
+  }
+}
+
+const SEARCH_GROUPS_ORDERED: SearchGroup[] = (() => {
+  const base = [...SEARCH_GROUPS];
+  const dynamic = loadContentGroups();
+  const actionIdx = base.findIndex((g) => g.title === 'Actions');
+  if (dynamic.length > 0 && actionIdx !== -1) base.splice(actionIdx, 0, ...dynamic);
+  return base;
+})();
 
 const ICONS: Record<string, string> = {
   home: '<path d="m3 11 9-7 9 7"/><path d="M5 10v11h14V10"/>',
@@ -116,7 +134,7 @@ export function initCommandPalette(): void {
     selectedIndex = 0;
     const q = input.value.trim();
 
-    for (const group of SEARCH_GROUPS) {
+    for (const group of SEARCH_GROUPS_ORDERED) {
       const matched: { item: SearchItem; score: number; indices: Set<number> }[] = [];
       for (const item of group.items) {
         const m = fuzzyMatch(q, item.label);

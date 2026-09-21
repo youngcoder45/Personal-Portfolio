@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
 import { identity, socials } from '../lib/profile';
 import TopBar from './TopBar.astro';
 import FooterBar from './FooterBar.astro';
@@ -22,9 +23,27 @@ const {
 
 const site = (Astro.site?.toString().replace(/\/$/, '')) ?? 'https://aditya-verma.me';
 const canonical = new URL(path, Astro.site).toString();
-const ogImage = `${site}/me.png`;
+const ogImage = `${site}/og.png`;
 
 const socialUrls = socials.map((s) => s.href);
+const searchContent = JSON.stringify([
+  {
+    title: 'Notes',
+    items: (
+      await getCollection('notes')
+    )
+      .filter((n) => !n.data.draft)
+      .map((n) => ({ label: n.data.title, icon: 'note', href: `/notes/${n.id}/` })),
+  },
+  {
+    title: 'Projects',
+    items: (
+      await getCollection('projects')
+    )
+      .sort((a, b) => b.data.stars - a.data.stars)
+      .map((p) => ({ label: p.data.title, icon: 'file', href: `/projects/${p.id}/` })),
+  },
+]).replace(/</g, '\\u003c');
 const knowsAbout = [
   'Systems Programming',
   'Backend Development',
@@ -107,12 +126,13 @@ const schema = JSON.stringify({
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content={`${identity.name} — ${identity.title}`} />
-    <meta property="og:image:width" content="429" />
-    <meta property="og:image:height" content="458" />
+    <meta property="og:image:alt" content={`${identity.name} — ${identity.title} — terminal-flavoured portfolio`} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <!-- Twitter / X card -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@youngcoder45" />
     <meta name="twitter:creator" content="@youngcoder45" />
     <meta name="twitter:title" content={title} />
@@ -192,6 +212,7 @@ const schema = JSON.stringify({
         </div>
       </div>
     </div>
+    <script type="application/json" id="search-content" set:html={searchContent} />
     <script>
       import '../scripts/theme.ts';
       import { initCommandPalette } from '../scripts/palette.ts';

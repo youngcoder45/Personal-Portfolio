@@ -6,9 +6,11 @@
   "description": "Aditya Verma — Systems & Backend Developer. A terminal-flavoured personal site built with Astro, TypeScript, Vanilla CSS and MDX.",
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/generate-og.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "og": "node scripts/generate-og.mjs",
     "astro": "astro"
   },
   "dependencies": {

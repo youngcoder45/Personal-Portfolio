@@ -841,8 +841,6 @@ section {
 .prompt input.tty-input:focus-visible {
   outline: none;
   box-shadow: none;
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  border-radius: 2px;
 }
 .term:focus-within .term-body {
   box-shadow: inset 2px 0 0 var(--accent);
