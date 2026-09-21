@@ -1,6 +1,9 @@
-# aditya-verma-portfolio
+# Aditya-Verma-portfolio
 
 Terminal-flavoured personal portfolio for Aditya Verma, built with [Astro](https://astro.build) and vanilla TypeScript. Static, no framework, no client runtime except the shell/theme scripts.
+
+## Live Link
+https://aditya-verma.me
 
 ## Tech
 

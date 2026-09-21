@@ -44,65 +44,108 @@ try {
         build&nbsp;<b>{COMMIT}</b>
       </span>
     </span>
-    <nav class="nav" aria-label="primary">
-      {
-        nav.map((item) => {
-          const isRoute = item.path.startsWith('/');
-          const active = isRoute && current.startsWith(item.path);
-          return (
-            <a href={item.path} aria-current={active ? 'page' : undefined}>
-              <span class="nl">&gt;_ </span>{item.label}
-            </a>
-          );
-        })
-      }
-      <button
-        id="paletteToggle"
-        class="search-chip"
-        type="button"
-        title="Press Cmd+K to search"
-        aria-label="Open command palette"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          width="14"
-          height="14"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="11" cy="11" r="7"></circle>
-          <path d="m21 21-4.3-4.3"></path>
-        </svg>
-        <kbd>Cmd&#8202;K</kbd>
-      </button>
-      <div class="theme-picker">
+    <div class="nav-cluster">
+      <nav id="siteNav" class="nav" aria-label="primary">
+        {
+          nav.map((item) => {
+            const isRoute = item.path.startsWith('/');
+            const active = isRoute && current.startsWith(item.path);
+            return (
+              <a href={item.path} aria-current={active ? 'page' : undefined}>
+                <span class="nl">&gt;_ </span>{item.label}
+              </a>
+            );
+          })
+        }
+      </nav>
+      <div class="nav-actions">
         <button
-          id="themeToggle"
-          class="icon-btn"
+          id="paletteToggle"
+          class="search-chip"
           type="button"
-          aria-haspopup="listbox"
-          aria-expanded="false"
-          aria-label="choose theme"
-        ></button>
-        <div class="theme-picker-menu" id="themeMenu" role="listbox" aria-label="choose a theme" hidden>
-          {
-            themes.map((t) => (
-              <button class="theme-option" type="button" role="option" data-theme={t.id} aria-selected="false">
-                <span class="theme-swatch" aria-hidden="true">
-                  {t.swatch.map((c) => (
-                    <span style={`background:${c}`}></span>
-                  ))}
-                </span>
-                <span class="theme-name">{t.name}</span>
-              </button>
-            ))
-          }
+          title="Press Cmd+K to search"
+          aria-label="Open command palette"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <kbd>Cmd&#8202;K</kbd>
+        </button>
+        <div class="theme-picker">
+          <button
+            id="themeToggle"
+            class="icon-btn"
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            aria-label="choose theme"
+          ></button>
+          <div class="theme-picker-menu" id="themeMenu" role="listbox" aria-label="choose a theme" hidden>
+            {
+              themes.map((t) => (
+                <button class="theme-option" type="button" role="option" data-theme={t.id} aria-selected="false">
+                  <span class="theme-swatch" aria-hidden="true">
+                    {t.swatch.map((c) => (
+                      <span style={`background:${c}`}></span>
+                    ))}
+                  </span>
+                  <span class="theme-name">{t.name}</span>
+                </button>
+              ))
+            }
+          </div>
         </div>
+        <button
+          id="navToggle"
+          class="nav-toggle"
+          type="button"
+          aria-controls="siteNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation menu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
       </div>
-    </nav>
+    </div>
   </div>
+  <script is:inline>
+    (function () {
+      var toggle = document.getElementById('navToggle');
+      var nav = document.getElementById('siteNav');
+      if (!toggle || !nav) return;
+      var close = function () {
+        nav.classList.remove('nav-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      };
+      var open = function () {
+        nav.classList.add('nav-open');
+        toggle.setAttribute('aria-expanded', 'true');
+      };
+      toggle.addEventListener('click', function () {
+        nav.classList.contains('nav-open') ? close() : open();
+      });
+      nav.addEventListener('click', function (e) {
+        if (e.target.closest('a')) close();
+      });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.nav-cluster')) close();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') close();
+      });
+    })();
+  </script>
 </header>
