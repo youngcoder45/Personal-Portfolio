@@ -37,10 +37,17 @@ const href = `/projects/${id}/`;
         <span>{data.year}</span>
       </span>
       <span class="links">
-        {data.demo && (
-          <a class="repo" href={data.demo} target="_blank" rel="noopener noreferrer">
-            ↗ live
+        <a class="repo" href={href}>↗ read</a>
+        {data.star ? (
+          <a class="repo" href={data.repo} target="_blank" rel="noopener noreferrer">
+            ★ star this repo
           </a>
+        ) : (
+          data.demo && (
+            <a class="repo" href={data.demo} target="_blank" rel="noopener noreferrer">
+              ↗ live
+            </a>
+          )
         )}
         <a class="repo" href={data.repo} target="_blank" rel="noopener noreferrer">
           ↗ repo

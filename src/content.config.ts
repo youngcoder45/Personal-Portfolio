@@ -23,6 +23,7 @@ const projects = defineCollection({
     stars: z.number().default(0),
     repo: z.string().url(),
     demo: z.string().url().optional(),
+    star: z.boolean().default(false),
     status: z
       .enum(['active', 'maintained', 'archived', 'experimental'])
       .default('active'),

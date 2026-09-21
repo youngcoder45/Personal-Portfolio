@@ -1,0 +1,50 @@
+---
+title: 'Personal-Portfolio'
+blurb: 'This very site — a terminal-flavoured portfolio: boot sequence, virtual shell, command palette (Cmd+K), man-page about, MDX notes and projects. Astro 5 + vanilla TypeScript, 14 themes, no client framework.'
+year: 2026
+language: 'Astro'
+category: 'web'
+stack: ['Astro', 'TypeScript', 'MDX', 'CSS', 'Netlify']
+tags: ['web', 'portfolio', 'astro', 'frontend']
+stars: 4
+repo: 'https://github.com/youngcoder45/Personal-Portfolio'
+status: 'active'
+featured: true
+star: true
+---
+
+Aditya's portfolio lives here. Everything you're looking at — the terminal, the
+boot screen, the Cmd+K palette, the theme switcher — is vanilla TypeScript on a
+static **Astro 5** build. No SPA, no framework runtime, no JavaScript unless you
+asked for it.
+
+```ts
+// the site is a terminal that escaped into the browser
+const site = new Portfolio({
+  framework: "Astro 5",
+  rendering: "static, 0 client-side framework",
+  themes: ["paper", "dark", "nord", "synthwave", "forest", "coffee"],
+  terminal: {
+    boot: "BIOS → neofetch → prompt",
+    shell: "whoami, man aditya, ls projects",
+    search: "Cmd+K command palette",
+  },
+  deploy: "Netlify",
+});
+```
+
+## Stack
+
+- **Astro 5** static output + MDX content collections for the notes and projects.
+- **Vanilla TypeScript** for the boot sequence, virtual shell, command palette
+  and theme switcher — no framework in the browser.
+- **14 themes**, each with AA-tested contrast tokens, plus OSC 10/11/52 terminal
+  escape support so the browser follows your emulator's theme.
+- A **Rust/c-like man page**, neofetch rig block, and honest skill tags
+  (`expert`/`working`/`learning`).
+
+## Meta
+
+- Build-time OG image generated with `sharp` (`scripts/generate-og.mjs`).
+- RSS, sitemap with accurate `lastmod`, robots.txt + `llms.txt` for LLM crawlers.
+- Deployed on **Netlify** with CSP/security headers set in `netlify.toml`.

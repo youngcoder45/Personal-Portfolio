@@ -1337,7 +1337,7 @@ section {
 /* ---------- notes ---------- */
 .note-row {
   display: grid;
-  grid-template-columns: 90px 1fr;
+  grid-template-columns: 90px 1fr auto;
   gap: 0.4rem 1rem;
   padding: 0.85rem 0.2rem;
   border-bottom: 1px dashed var(--border);
@@ -1362,8 +1362,16 @@ section {
   font-size: 0.82rem;
 }
 .note-arrow { color: var(--accent); }
+.note-read {
+  color: var(--accent);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.note-read:hover { color: var(--fg-strong); text-decoration: underline; }
 @media (max-width: 560px) {
   .note-row { grid-template-columns: 1fr; gap: 0.2rem; }
+  .note-read { justify-self: end; margin-top: 0.2rem; }
 }
 
 /* ---------- tags on list pages ---------- */

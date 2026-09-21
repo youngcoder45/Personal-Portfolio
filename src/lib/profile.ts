@@ -6,7 +6,7 @@ export const identity = {
   location: "Mumbai, India",
   tz: "UTC+05:30 (IST)",
   github: "https://github.com/youngcoder45",
-  repo: "https://github.com/youngcoder45/portfolio",
+  repo: "https://github.com/youngcoder45/Personal-Portfolio",
   issues: "https://github.com/youngcoder45/youngcoder45/issues",
   site: "https://aditya-verma.me",
   orcid: "https://orcid.org/0009-0002-2090-9265",
@@ -56,7 +56,7 @@ export const socials: { label: string; href: string; hint: string }[] = [
 export const nav = [
   { id: "about", label: "whoami", path: "/about" },
   { id: "toolchain", label: "toolchain", path: "/#toolchain" },
-  { id: "projects", label: "projects", path: "/#projects" },
+  { id: "projects", label: "projects", path: "/projects" },
   { id: "notes", label: "notes", path: "/notes" },
   { id: "contact", label: "contact", path: "/#contact" },
 ] as const;
