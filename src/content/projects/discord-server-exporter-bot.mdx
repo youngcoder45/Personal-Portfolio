@@ -1,0 +1,53 @@
+---
+title: 'Discord-Server-Exporter-Bot'
+blurb: 'Export every piece of information available through the Discord API about a server into structured files for analysis by AI models or human review.'
+year: 2026
+language: 'Python'
+category: 'backend'
+stack: ['Python', 'discord.py', 'asyncio', 'aiohttp', 'CLI']
+tags: ['discord', 'exporter', 'ai', 'reports']
+stars: 3
+repo: 'https://github.com/youngcoder45/Discord-Server-Exporter-Bot'
+status: 'active'
+featured: true
+org: false
+---
+
+A batteries-included **Discord server dump tool**: the bot reads everything the
+API exposes — metadata, roles, channels, members, permissions, threads, forums,
+voice, stage, emoji, stickers, AutoMod, invites, bots, webhooks — and writes it
+all to structured files and a human-readable report.
+
+```python
+# async api calls, non-blocking, rate-limit friendly
+async with Client(intents=intents) as client:
+    await client.login(token)
+    guild = await client.fetch_guild(guild_id)
+    members = await guild.fetch_members(limit=max_members).flatten()
+```
+
+## Output
+
+Every export ends up in a `ServerName_YYYY-MM-DD.zip` containing:
+
+- **JSON dumps** for each domain (`server.json`, `roles.json`, `permissions.json`, …).
+- **`server.md`** — a human-readable report: overview, hierarchy, issues.
+- **`ai_summary.txt`** — a 0–100 health score across 6 dimensions + risk level.
+- **`ai_prompt.txt`** — a pre-built LLM audit prompt (I keep feeding these to
+  Claude and getting genuinely useful restructuring advice).
+
+## Design
+
+- **SOLID-split modules**: one exporter per domain (`exporter/roles.py`,
+  `exporter/channels.py`, …), so adding a domain doesn't touch the rest.
+- **Async everywhere** — rate limits handled with a configurable request delay.
+- **Error resilience**: partial exports survive individual module failures, and
+  permission gaps degrade to "skipped" instead of aborting.
+
+## Lessons
+
+- A good audit is mostly *organization* + *permissions*, not member count.
+- Structured, AI-ready dumps make a tool ten times more useful than a wall of
+  JSON in your terminal.
+- CLI flags (`--no-zip --no-markdown`) are the difference between a demo and a
+  tool people actually run.

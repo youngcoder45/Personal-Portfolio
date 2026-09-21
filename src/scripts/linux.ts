@@ -82,10 +82,10 @@ function tree(): CmdOut {
     '│   └── devops/',
     '├── projects/',
     '│   ├── niri-utils.mdx',
-    '│   ├── tonarchy.mdx',
+    '│   ├── codeversehub-website.mdx',
     '│   ├── eclipse-linux.mdx',
     '│   ├── eigen-bot.mdx',
-    '│   └── ... 6 more',
+    '│   └── ... 4 more',
     '└── notes/',
     '    ├── esp32-registers.mdx',
     '    ├── why-niri.mdx',
@@ -554,7 +554,7 @@ export function runLinux(cmd: string, args: string[], history: string[]): CmdOut
       ];
     case 'find':
       return args.join(' ').includes('*.mdx')
-        ? ['./projects/niri-utils.mdx', './projects/tonarchy.mdx', './projects/eclipse-linux.mdx', './projects/eigen-bot.mdx', './notes/esp32-registers.mdx', './notes/why-niri.mdx'].map((t) => r(t))
+        ? ['./projects/niri-utils.mdx', './projects/discord-server-exporter-bot.mdx', './projects/eclipse-linux.mdx', './projects/eigen-bot.mdx', './notes/esp32-registers.mdx', './notes/why-niri.mdx'].map((t) => r(t))
         : ['./about.md', './skills.txt', './contact.txt', './README.md'].map((t) => r(t));
     case 'du':
       return [r('4.0K    ./toolchain'), r('28K     ./projects'), r('16K     ./notes'), r('260K    .')];

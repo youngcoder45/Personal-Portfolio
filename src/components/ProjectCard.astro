@@ -36,9 +36,16 @@ const href = `/projects/${id}/`;
         <span class="gn">★ {data.stars}</span>
         <span>{data.year}</span>
       </span>
-      <a class="repo" href={data.repo} target="_blank" rel="noopener noreferrer">
-        ↗ repo
-      </a>
+      <span class="links">
+        {data.demo && (
+          <a class="repo" href={data.demo} target="_blank" rel="noopener noreferrer">
+            ↗ live
+          </a>
+        )}
+        <a class="repo" href={data.repo} target="_blank" rel="noopener noreferrer">
+          ↗ repo
+        </a>
+      </span>
     </div>
   </div>
 </article>

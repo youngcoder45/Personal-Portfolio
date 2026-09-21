@@ -11,11 +11,13 @@ export const identity = {
   site: 'https://aditya-verma.me',
   orcid: 'https://orcid.org/0009-0002-2090-9265',
   blog: 'https://aditya-verma.me',
+  discord: 'https://discord.gg/3xKFvKhuGR',
 } as const;
 
 export const socials: { label: string; href: string; hint: string }[] = [
   { label: 'github', href: 'https://github.com/youngcoder45', hint: 'youngcoder45' },
   { label: 'linkedin', href: 'https://www.linkedin.com/in/youngcoder45/', hint: 'youngcoder45' },
+  { label: 'instagram', href: 'https://www.instagram.com/youngcoder45/', hint: '@youngcoder45' },
   { label: 'x', href: 'https://x.com/youngcoder45', hint: '@youngcoder45' },
   { label: 'mastodon', href: 'https://mastodon.social/@youngcoder45', hint: '@youngcoder45' },
   { label: 'orcid', href: 'https://orcid.org/0009-0002-2090-9265', hint: '0009-0002-2090-9265' },

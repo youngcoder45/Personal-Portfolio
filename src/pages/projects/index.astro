@@ -32,12 +32,18 @@ const rest = projects.filter((p) => !p.data.featured);
       {featured.map((p) => <ProjectCard project={p} />)}
     </div>
 
-    <h2 class="sec-title" style="border-bottom:1px solid var(--border);padding-bottom:.5rem;margin:2.4rem 0 1rem">
-      <span class="underline">┬</span> the rest of the tree
-    </h2>
-    <div class="card-grid">
-      {rest.map((p) => <ProjectCard project={p} showBlurb={false} />)}
-    </div>
+    {
+      rest.length > 0 && (
+        <>
+          <h2 class="sec-title" style="border-bottom:1px solid var(--border);padding-bottom:.5rem;margin:2.4rem 0 1rem">
+            <span class="underline">┬</span> the rest of the tree
+          </h2>
+          <div class="card-grid">
+            {rest.map((p) => <ProjectCard project={p} showBlurb={false} />)}
+          </div>
+        </>
+      )
+    }
   </Section>
 
   <p style="font-size:.78rem;color:var(--fg-faint);margin-top:2.5rem">

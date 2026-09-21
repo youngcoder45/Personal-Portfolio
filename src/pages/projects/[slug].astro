@@ -70,6 +70,11 @@ const cat = stackLabels[data.category];
           <a class="btn" style="width:100%;justify-content:center;margin-top:.7rem" href={data.repo} target="_blank" rel="noopener noreferrer">
             git clone ↗
           </a>
+          {data.demo && (
+            <a class="btn" style="width:100%;justify-content:center;margin-top:.5rem" href={data.demo} target="_blank" rel="noopener noreferrer">
+              live demo ↗
+            </a>
+          )}
         </div>
       </div>
       <p style="color:var(--fg-faint);font-size:.72rem;margin-top:.8rem">

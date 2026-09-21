@@ -54,14 +54,12 @@ export const SEARCH_GROUPS: SearchGroup[] = [
     items: [
       { label: 'Student-Performance-Predictor', icon: 'file', href: '/projects/student-performance-predictor/' },
       { label: 'OpenCV-Math-Solver', icon: 'file', href: '/projects/opencv-math-solver/' },
-      { label: 'New-Niri-minimal-dots', icon: 'file', href: '/projects/new-niri-minimal-dots/' },
-      { label: 'My-KDE-Dotfiles', icon: 'file', href: '/projects/my-kde-dotfiles/' },
       { label: 'discord-matrix-bridge', icon: 'file', href: '/projects/discord-matrix-bridge/' },
       { label: 'EclipseLinux', icon: 'file', href: '/projects/eclipse-linux/' },
       { label: 'Eigen-Bot', icon: 'file', href: '/projects/eigen-bot/' },
-      { label: 'foundry', icon: 'file', href: '/projects/foundry/' },
       { label: 'niri-utils', icon: 'file', href: '/projects/niri-utils/' },
-      { label: 'tonarchy', icon: 'file', href: '/projects/tonarchy/' },
+      { label: 'Discord-Server-Exporter-Bot', icon: 'file', href: '/projects/discord-server-exporter-bot/' },
+      { label: 'CodeVerseHub-Website', icon: 'file', href: '/projects/codeversehub-website/' },
     ],
   },
   {

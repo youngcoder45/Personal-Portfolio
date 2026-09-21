@@ -1,0 +1,46 @@
+---
+title: 'CodeVerseHub-Website'
+blurb: 'Official website of The CodeVerse Hub — community, open-source projects, contributors, events and developer resources. Next.js 16, Tailwind v4, shadcn/ui.'
+year: 2026
+language: 'TypeScript'
+category: 'web'
+stack: ['Next.js', 'TypeScript', 'Tailwind', 'shadcn/ui', 'GSAP']
+tags: ['web', 'community', 'nextjs', 'frontend']
+stars: 13
+repo: 'https://github.com/TheCodeVerseHub/CodeVerseHub-Website'
+demo: 'https://thecodeversehub.tech/'
+status: 'active'
+featured: true
+org: true
+---
+
+The official site for **The CodeVerse Hub** — the open-source community org
+EclipseLinux and Eigen-Bot live under. Homepage, projects directory with live
+GitHub stats, team roster, contributing guide, learning resources and
+markdown-rendered content pages.
+
+```ts
+// real org stats on the homepage, pulled from the GitHub API
+const org = await fetch("https://api.github.com/orgs/TheCodeVerseHub").then(r => r.json());
+```
+
+## Stack
+
+- **Next.js 16** App Router, statically generated with ISR.
+- **Tailwind v4 + shadcn/ui** for a consistent, fast design system.
+- **GSAP / framer-motion / WebGL** backgrounds for the polish.
+- **GitHub REST API** cached at 10-minute intervals — live repo + contributor
+  stats without hammering rate limits.
+- RSS feed, sitemap, JSON-LD, Open Graph — the boring SEO bits are just there.
+
+## Why it matters
+
+It's how the community actually grows: contributors see the org's projects,
+read the contributing guide, and hit the ban-appeal form when they're already
+in trouble. More than a portfolio site — it's the front door of the org.
+
+## Status
+
+Deployed on Netlify and used in production by every TCVH member. It's the
+project I get the most "up for grabs?" messages about, which is the best
+metric a community site can have.

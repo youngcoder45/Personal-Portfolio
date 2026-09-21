@@ -1385,6 +1385,11 @@ section {
   color: var(--blue);
 }
 .card .repo:hover { color: var(--accent); }
+.card .meta .links {
+  display: inline-flex;
+  gap: 0.7rem;
+  align-items: center;
+}
 
 /* project detail layout */
 .project-layout {
@@ -1458,6 +1463,60 @@ section {
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 0.9rem;
 }
+.community-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-hi);
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, #5865f2 15%, var(--bg-2)),
+    var(--bg-2)
+  );
+  color: var(--fg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.community-card:hover {
+  border-color: #5865f2;
+  box-shadow: var(--glow);
+  text-decoration: none;
+  color: var(--fg);
+}
+.community-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 8px;
+  background: color-mix(in srgb, #5865f2 24%, var(--bg-3));
+  color: #5865f2;
+}
+.community-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+.community-title {
+  font-weight: 700;
+  color: var(--fg-strong);
+  letter-spacing: 0.02em;
+}
+.community-sub {
+  font-size: 0.78rem;
+  color: var(--fg-dim);
+}
+.community-card .arrow {
+  margin-left: auto;
+  color: var(--fg-faint);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+.community-card:hover .arrow { color: #5865f2; }
 .link-cell {
   display: flex;
   flex-direction: column;
