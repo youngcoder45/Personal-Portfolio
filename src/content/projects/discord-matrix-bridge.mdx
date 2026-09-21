@@ -1,0 +1,37 @@
+---
+title: 'discord-matrix-bridge'
+blurb: 'Discord ↔ Matrix bridge bot built with Node.js and TypeScript.'
+year: 2025
+language: 'TypeScript'
+category: 'backend'
+stack: ['Node.js', 'TypeScript', 'Matrix SDK', 'discord.js', 'WebSockets']
+tags: ['federation', 'bridge', 'typescript', 'protocols']
+stars: 1
+repo: 'https://github.com/youngcoder45/discord-matrix-bridge'
+status: 'experimental'
+featured: false
+org: false
+---
+
+Fediverse-adjacent curiosity project: a **bridge** that syncs messages between a
+Discord channel and a Matrix room, in both directions. Which is really an excuse
+to study how two very different chat protocols model presence, edits and
+reactions.
+
+```ts
+// one-way is easy; the hard part is edits/replies in flight
+matrix.on(RoomEvent.Timeline, (ev) => {
+  if (ev.getType() === 'm.room.message') relayToDiscord(bridgeMessage(ev));
+});
+```
+
+## Notes from the bridge
+
+- Matrix events are **stateful**; Discord messages are append-mostly. Mapping
+  edits means replaying state, not letting events fall through.
+- WebSocket reconnection makes or breaks it — exponential backoff is
+  non-negotiable.
+- Done in TypeScript because two SDKs in JavaScript would have been chaos.
+
+It taught me more about protocol design than a month of specs. Battle scars:
+gaps in message history when the bridge breathes.

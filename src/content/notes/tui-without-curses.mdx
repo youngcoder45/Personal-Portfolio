@@ -1,0 +1,63 @@
+---
+title: 'A TUI with zero curses: raw C and termios'
+description: 'Notes from writing tonarchy — an interactive installer where the UI is escape codes and /dev/tty.'
+pubDate: 2026-06-10
+tags: ['c', 'tui', 'termios', 'systems']
+---
+
+terminal UI frameworks are a luxery and a lie. For `tonarchy`, the Arch
+installer-in-C, I wanted the *fanciest-possible* thing with **no dependencies
+and no ncurses**. What you discover: a TUI is just escape codes and a raw tty.
+
+## Getting the terminal to shut up
+
+Terminals echo what you type. A TUI needs raw mode via `termios`:
+
+```c
+#include <termios.h>
+static struct termios oldtio;
+tcgetattr(STDIN_FILENO, &oldtio);
+
+struct termios raw = oldtio;
+raw.c_lflag &= ~(ICANON | ECHO | ISIG);
+raw.c_cc[VMIN] = 1;
+raw.c_cc[VTIME] = 0;
+tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+```
+
+Now one `read()` blocks per keystroke, with no newline buffet. Welcome to a
+game engine.
+
+## Drawing is `printf` with numbers
+
+Screen drawing = cursor control + colors:
+
+```c
+#define RESET  "\x1b[0m"
+#define GREEN  "\x1b[32m"
+#define HOME() printf("\x1b[H")
+```
+
+- `\x1b[H` — home cursor.
+- `\x1b[2K` — clear line.
+- Menus = a list of rows, one `printf` per row, redraw the whole thing.
+
+## The canvas discipline
+
+No flicker hack, just: don't draw before the screen clears. Render into a
+buffer, `write()` it once, flush. Reads on stdin, eats arrow keys from a 3-byte
+escape sequence.
+
+## What lessons came back
+
+- **Read the sequence, not the key**: arrows arrive as `ESC [ A`, not `A`.
+- `tcsetattr` restore in a signal handler if you don't want a corpse terminal.
+- Portability is a lie — Linux vs TERM shapes every escape you can trust.
+
+```c
+if (seq_len == 3 && seq[0]==27 && seq[1]=='[' && seq[2]=='A')
+    draw_arrow_up(); /* it's that simple and that fragile */
+```
+
+For the project this is pure joy. A C TUI with zero deps is the closest thing
+to a *firmware* you compile for your own terminal.

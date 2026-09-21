@@ -1,0 +1,41 @@
+---
+title: 'EclipseLinux'
+blurb: 'A lightweight, Void Linux-based distribution powered by the custom Dynamod init system.'
+year: 2025
+language: 'Lua'
+category: 'foss'
+stack: ['Void', 'runit', 'Dynamod', 'XBPS', 'Lua', 'bash']
+tags: ['linux', 'distro', 'init', 'foss', 'build']
+stars: 18
+repo: 'https://github.com/TheCodeVerseHub/EclipseLinux'
+status: 'active'
+featured: true
+org: true
+---
+
+`EclipseLinux` is a community distribution I help maintain over at
+**TheCodeVerseHub**: a minimal Void-Linux base, curated package set, and —
+the fun bit — an experimental **custom init** called `Dynamod`.
+
+The goal is the polar opposite of a kitchen-sink distro: boot fast, stay tiny,
+and give the curious user a config they can actually read.
+
+```sh
+# why void? xbps is fast, simple, and honest about binaries
+$ xbps-install -S base-minimal
+```
+
+## Dynamod
+
+`runit` and systemd are both fine, but building a small init from scratch for
+a hobby distro is a wild ride:
+
+- Service files are plain files in `/usr/lib/dynamic/services`.
+- Logging to the kernel ring buffer during early boot — proper low-level.
+- Tried to keep it POSIX-shell friendly so every service is greppable.
+
+## Status
+
+Boots on real hardware in the TCVH lab (i.e., my desk). Every commit is a
+lesson in "what Linux actually does before you even get a login prompt."
+That's the point.

@@ -1,0 +1,55 @@
+---
+title: 'niri-utils'
+blurb: 'A minimal, modular enhancement layer for the Niri Wayland compositor.'
+year: 2025
+language: 'Rust'
+category: 'systems'
+stack: ['Rust', 'Wayland', 'IPC', 'Niri']
+tags: ['wayland', 'compositor', 'tooling', 'ipc']
+stars: 17
+repo: 'https://github.com/youngcoder45/niri-utils'
+status: 'active'
+featured: true
+org: false
+---
+
+I started using **Niri**, the scrolling Wayland compositor, because it refuses to
+participate in the tiling-WM debate and scrolls windows into view instead. That
+weirdness is charming, but the ecosystem was missing some conveniences, so I
+started writing small utilities. `niri-utils` grew out of that: a modular layer
+that slots on top of the compositor without forking it.
+
+The design rule is simple — **compose, don't fork**.
+
+```rust
+// niri listens on a unix socket; utils talk to it.
+// connecting is just std::os::unix::net::UnixStream
+let stream = UnixStream::connect(socket_path())?;
+stream.write_all(b"ListWorkspaces\n")?;
+```
+
+## What it does
+
+- Talks to Niri over its IPC socket.
+- Exposes small, focused sub-commands (window / workspace helpers).
+- Keeps a `--help` that actually helps.
+- Zero dependencies beyond `rustc` where possible.
+
+## Why Rust
+
+`niri` itself is Rust, wayland-rs and friends are Rust — matching the ecosystem
+means matching the type system. Also: I wanted to write more Rust and this was
+the perfect excuse. "Rust won't spare me fr!!!" is a state of mind.
+
+## Lessons
+
+- **IPC first.** If your compositor exposes a socket, the world is your
+  oyster and your oyster is a unix socket.
+- Keep every sub-command independent so users can symlink only the pieces
+  they want.
+
+```bash
+$ niri-utils batch focus-next
+$ niri-utils --version
+niri-utils 0.1.0
+```

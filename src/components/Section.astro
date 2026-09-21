@@ -1,0 +1,19 @@
+---
+interface Props {
+  id?: string;
+  index: string;
+  title: string;
+  path: string;
+}
+
+const { id, index, title, path } = Astro.props as Props;
+---
+
+<section class="sec" {id}>
+  <header class="sec-head">
+    <span class="sec-index">[{index}]</span>
+    <h2 class="sec-title"><span class="underline">~/</span>{title}</h2>
+    <span class="sec-path">{path}</span>
+  </header>
+  <slot />
+</section>

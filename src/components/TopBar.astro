@@ -1,0 +1,40 @@
+---
+import { identity, nav } from '../lib/profile';
+
+interface Props {
+  path: string;
+}
+const { path } = Astro.props as Props;
+const current = path.split('#')[0] || '/';
+---
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/" aria-label="aditya@arch ~">
+      <span class="prompt">❯</span>
+      <span>{identity.handle}</span>
+      <span class="path">:~$</span>
+      <span class="cursor" aria-hidden="true"></span>
+    </a>
+    <nav class="nav" aria-label="primary">
+      {
+        nav.map((item) => {
+          const isRoute = item.path.startsWith('/');
+          const active = isRoute && current.startsWith(item.path);
+          return (
+            <a href={item.path} aria-current={active ? 'page' : undefined}>
+              <span class="nl">&gt;_ </span>{item.label}
+            </a>
+          );
+        })
+      }
+      <button
+        id="themeToggle"
+        class="icon-btn"
+        type="button"
+        aria-pressed="false"
+        aria-label="toggle light/dark theme"
+      >light</button>
+    </nav>
+  </div>
+</header>

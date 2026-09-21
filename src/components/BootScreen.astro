@@ -1,0 +1,56 @@
+---
+---
+
+<div id="bootScreen" class="boot-screen" role="status" aria-label="loading aditya-verma.me">
+  <div class="boot-inner">
+    <div class="boot-head">
+      <span class="boot-host">aditya@arch</span>
+      <span>tty1 · aditya-verma.me</span>
+    </div>
+    <ul class="boot-lines">
+      <li><span class="bl-ok">[  OK  ]</span>Mounted /home (pseudo-filesystem)</li>
+      <li><span class="bl-ok">[  OK  ]</span>Started aditya.service — Software Engineering</li>
+      <li><span class="bl-ok">[  OK  ]</span>Reached target Graphical Interface (niri, Wayland)</li>
+      <li><span class="bl-ok">[  OK  ]</span>Starting session …</li>
+    </ul>
+    <div class="boot-progress"><i></i></div>
+  </div>
+</div>
+
+<script>
+  const screen = document.getElementById('bootScreen');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function finish() {
+    if (!screen || screen.classList.contains('is-done')) return;
+    screen.classList.add('is-done');
+    let removed = false;
+    const remove = () => {
+      if (removed) return;
+      removed = true;
+      screen.remove();
+    };
+    screen.addEventListener('transitionend', remove, { once: true });
+    setTimeout(remove, 600);
+    try {
+      sessionStorage.setItem('av-booted', '1');
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (document.documentElement.classList.contains('booted')) {
+    screen?.remove();
+  } else if (reduced) {
+    finish();
+  } else {
+    const timer = window.setTimeout(finish, 1800);
+    const skip = (e: Event) => {
+      window.clearTimeout(timer);
+      if (e.type === 'pointerdown') e.preventDefault();
+      finish();
+    };
+    window.addEventListener('keydown', skip, { once: true });
+    window.addEventListener('pointerdown', skip, { once: true, passive: false });
+  }
+</script>

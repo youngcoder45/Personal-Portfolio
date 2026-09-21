@@ -1,0 +1,34 @@
+---
+title: 'My-KDE-Dotfiles'
+blurb: 'Personalized KDE Plasma dotfiles — custom KWin configs, Neovim, Fish, Kitty, Fastfetch.'
+year: 2024
+language: 'Lua'
+category: 'linux'
+stack: ['KDE Plasma', 'KWin', 'Lua', 'Neovim', 'Fish', 'Kitty']
+tags: ['kde', 'rice', 'neovim', 'standby']
+stars: 30
+repo: 'https://github.com/youngcoder45/My-KDE-Dotfiles'
+status: 'maintained'
+featured: true
+org: false
+---
+
+Before Niri, I lived inside **KDE Plasma**. These dotfiles are the polished
+product of that era: custom KWin rules, a Neovim setup I still pinch parts from,
+Fish configs, Kitty, and a Fastfetch that makes the login screen jealous.
+
+This repo is my "productivity workflow reference" — the serious half of the
+twins (the playful half is the Niri minimal rice).
+
+```lua
+-- neovim: the part I kept after leaving the taskbar walled garden
+vim.g.mapleader = ' '
+vim.keymap.set('n', '<C-s>', ':w<CR>', { silent = true })
+```
+
+## Highlights
+
+- KWin scripting for window behaviour that Plasma's GUI can't express.
+- `nvim/` — a hand-tuned LSP config, telescope-centric, sprite-free.
+- `fish/` and `kitty/` — the shell and terminal I keep coming back to.
+- Fastfetch config that prints the bird and the brain.

@@ -1,0 +1,80 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../components/Layout.astro';
+import { stackLabels } from '../../data/skills';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+type Props = { project: CollectionEntry<'projects'> };
+const { project } = Astro.props as Props;
+const { Content } = await render(project);
+const { data } = project;
+const cat = stackLabels[data.category];
+---
+
+<Layout path={`/projects/${project.id}/`} title={`${data.title} — Aditya Verma`} description={data.blurb}>
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">~</a>
+    <span>/</span>
+    <a href="/projects/">projects</a>
+    <span>/</span>
+    <span class="cw">{project.id}</span>
+  </nav>
+
+  <div class="win" style="margin-bottom:1.6rem">
+    <div class="win-bar">
+      <span class="dot r" aria-hidden="true"></span>
+      <span class="dot a" aria-hidden="true"></span>
+      <span class="dot g" aria-hidden="true"></span>
+      <span class="title">README.md · {data.language}</span>
+      <span class="meta">
+        {data.org ? 'org: TheCodeVerseHub' : 'personal'}
+        {data.status === 'active' ? ' · ● active' : ` · ${data.status}`}
+      </span>
+    </div>
+    <div style="padding:1.1rem 1.3rem">
+      <h1 style="margin:0 0 .3rem;font-size:1.6rem;color:var(--fg-strong)">&gt;_ {data.title}</h1>
+      <p style="color:var(--fg-dim);margin:0 0 .9rem;font-size:.9rem">{data.blurb}</p>
+      <div class="tags" style="display:flex;flex-wrap:wrap;gap:.35rem">
+        <span class="tag" data-cat={data.category}>{cat}</span>
+        {data.tags.map((t) => <span class="tag">#{t}</span>)}
+      </div>
+    </div>
+  </div>
+
+  <div class="project-layout">
+    <article class="prose">
+      <Content />
+    </article>
+
+    <aside class="p-side" style="font-size:.82rem">
+      <div class="win">
+        <div class="win-bar">
+          <span class="title">info — `stat`</span>
+        </div>
+        <div style="padding:.9rem 1rem">
+          <dl>
+            <dt class="k">language</dt><dd class="v">{data.language}</dd>
+            <dt class="k">year</dt><dd class="v">{data.year}</dd>
+            <dt class="k">stars</dt><dd class="v">★ {data.stars}</dd>
+            <dt class="k">stack</dt><dd class="v">{data.stack.join(', ')}</dd>
+            <dt class="k">status</dt><dd class="v">{data.status}</dd>
+            { data.org && <><dt class="k">org</dt><dd class="v"><a href="https://github.com/TheCodeVerseHub">TheCodeVerseHub</a></dd></> }
+          </dl>
+          <a class="btn" style="width:100%;justify-content:center;margin-top:.7rem" href={data.repo} target="_blank" rel="noopener noreferrer">
+            git clone ↗
+          </a>
+        </div>
+      </div>
+      <p style="color:var(--fg-faint);font-size:.72rem;margin-top:.8rem">
+        // stars rounded from GitHub at build time.
+      </p>
+    </aside>
+  </div>
+</Layout>

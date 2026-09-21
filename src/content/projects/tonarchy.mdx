@@ -1,0 +1,43 @@
+---
+title: 'tonarchy'
+blurb: 'A zero-dependency Arch Linux installer written in C, with a custom TUI.'
+year: 2025
+language: 'C'
+category: 'systems'
+stack: ['C', 'ncurses-free TUI', 'arch-chroot', 'syslinux/systemd-boot']
+tags: ['c', 'arch', 'installer', 'tui', 'shell-free']
+stars: 1
+repo: 'https://github.com/youngcoder45/tonarchy'
+status: 'experimental'
+featured: true
+org: false
+---
+
+`tonarchy` exists because I got tired of answering "which Arch installer
+should I use?" with "the one with a lot of Go in it". So I wrote the opposite:
+**a systems-installer in C with zero runtime dependencies.** No ncurses, no
+curses bindings, nothing but `printf`, `termios` and `/dev/tty`.
+
+Like the man page says: it reads your drive layout, prints a menu, and does
+`arch-chroot` under the hood — the same steps a human would type.
+
+```c
+static int wipe_and_partition(const char *disk) {
+    /* spawingly honest: a few ioctls + fdisk-style logic */
+}
+```
+
+## The fun parts
+
+- Raw TUI: escape codes hand-rolled, arrows handled in `termios` raw mode.
+- Reuses Arch's own packaging and bootstrap — it choreographs, not replaces.
+- Each step is a plain function. Death by segfault optional, on purpose.
+
+## Why
+
+Firmware installers, bootloaders and disk layout are where "high level" ends.
+Writing this in C kept every mistake visible. It's a learning project more than
+a product, but a surprisingly complete one.
+
+*No, you shouldn't use this to install Arch. You definitely should read its
+source though — it's mostly curses-free because curses is a state of mind.*

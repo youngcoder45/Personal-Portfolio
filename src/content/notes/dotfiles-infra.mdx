@@ -1,0 +1,48 @@
+---
+title: 'Version your brain: dotfiles as infrastructure'
+description: 'Why config files belong in git, how I structure mine, and the niri/KDE split.'
+pubDate: 2026-07-03
+tags: ['dotfiles', 'git', 'linux', 'workflow']
+---
+
+Your config files *are* software you wrote while it was cheap to write it. Most
+people treat them like a diary: read-only, private, and about to be lost. Treat
+them like infrastructure instead — versioned, documented, deployable.
+
+## Rule one: everything in git, browser or not
+
+If you've ever lost a `.zshrc` you spent a weekend tuning, you understand rule
+one. My dotfiles split into two repos:
+
+```text
+~/dotfiles/niri      # no, this isn't literal — it's the spirit
+  niri.nix          # compositor config
+  waybar/           # status bar
+  kanshi/           # monitor profiles
+  fastfetch/        # the flexes
+```
+
+## Rule two: no dotfile manager until you need one
+
+Stow-less is the fastest setup — hardlink the whole dir into `$HOME`. One
+`git clone` on a fresh Arch box gets me 90% productive in minutes. Managers
+(symlink wrappers, declarative Nix) are for when the repo exceeds "I regret
+nothing". Keep the moving parts few.
+
+## Rule three: comment the *why*
+
+```fish
+# fish: why is this here? kitty scrollback + fzf preview
+set -gx FZF_DEFAULT_OPTS '--preview "bat --color=always --line-range=:80 {}"'
+```
+
+Future you does not remember the workaround. Write the *why* next to the *what*.
+
+## The niri/KDE split
+
+- **niri** is the daily driver — small config, Wayland-native, scrolling freak.
+- **KDE Plasma** is the fallback — big config, GUI panels, exists for
+  compatibility days.
+
+Same rule governs both: if a config is confusing, delete it and re-add only
+what you actually miss.

@@ -1,0 +1,267 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../components/Layout.astro';
+import Term from '../components/Term.astro';
+import Section from '../components/Section.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import NoteRow from '../components/NoteRow.astro';
+import { identity, rig, socials, tagline } from '../lib/profile';
+import { levelTag, skillGroups } from '../data/skills';
+
+const featured = (await getCollection('projects')).filter((p) => p.data.featured).sort(
+  (a, b) => b.data.stars - a.data.stars,
+);
+const notes = (await getCollection('notes'))
+  .filter((n) => !n.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 4);
+---
+
+<Layout path="/">
+  <!-- ============ hero ============ -->
+  <section class="hero-label">boot /dev/aditya · systems-first</section>
+
+  <header class="hero">
+    <h1 class="hero-title">
+      Aditya <span class="ac">Verma</span>
+    </h1>
+    <p class="hero-sub">
+      <b>{identity.title}</b> — lives at the boundary between <b>software and silicon</b>.
+      Writes <b>C</b>, <b>C++</b>, <b>Rust</b> and <b>Python</b>. Tinkerers with ESP32s,
+      Arduinos and Raspberry Pis. Breathes Linux. Maintains
+      <a href="https://github.com/TheCodeVerseHub" target="_blank" rel="noopener noreferrer">@TheCodeVerseHub</a>.
+    </p>
+    <div class="hero-cta">
+      <a class="btn primary" href="#projects">ls ./projects</a>
+      <a class="btn" href={identity.issues} target="_blank" rel="noopener noreferrer">open an issue</a>
+      <a class="btn" href="https://github.com/{identity.handle}" target="_blank" rel="noopener noreferrer">github.com/{identity.handle}</a>
+    </div>
+    <div class="rail" aria-hidden="true">
+      {tagline.map((t, i) => (
+        <span class="r"><b>{t}</b>{i < tagline.length - 1 ? ' ·' : ''}</span>
+      ))}
+    </div>
+  </header>
+
+  <!-- ============ man page ============ -->
+  <Section id="about" index="01" title="man aditya" path="~/.local/share/man/man1/aditya(1)"><div class="man">
+      <div class="man-bar">
+        <span>ADITYA(1)</span>
+        <span>Systems Engineering Reference</span>
+        <span>aditya-verma.me</span>
+      </div>
+      <div class="man-body">
+        <div class="man-cols">
+          <span>ADITYA(1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Systems Engineering Reference&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADITYA(1)</span>
+          <span>/* the un-boring parts of the datasheet */</span>
+        </div>
+
+        <section class="man-sec">
+          <h3>NAME</h3>
+          <div class="body">
+            <p><b>aditya</b> — systems &amp; backend developer; electronics engineering student; maintainer of <b>@TheCodeVerseHub</b>.</p>
+          </div>
+        </section>
+
+        <section class="man-sec">
+          <h3>SYNOPSIS</h3>
+          <div class="body">
+            <p>
+              <b>aditya</b> [<b>--systems</b>] [<b>--embedded</b>] [<b>--backend</b>] [<b>--foss</b>] [<b>--web</b>]
+            </p>
+            <p class="flags">
+              <code>--systems</code><code>--embedded</code><code>--backend</code><code>--foss</code><code>--web</code><code>--coffee</code>
+            </p>
+          </div>
+        </section>
+
+        <section class="man-sec">
+          <h3>DESCRIPTION</h3>
+          <div class="body">
+            <p>
+              $whoami → <b>Aditya Verma</b>. Electronics Engineering student based in Mumbai, India (IST, UTC+05:30).
+              Codes at the <b>low level</b>: C, C++ and Rust for systems work; Python for backend services,
+              bots and data. Skims datasheets for fun, flashes ESP32s on a breadboard, and reads register maps
+              like bedtime stories.
+            </p>
+            <p>
+              A heavy user of <b>Linux</b> (Arch daily-driver, plus a Void-based <b>EclipseLinux</b> pet distro),
+              a tinkerer in the <b>Wayland</b> ecosystem (niri compositor, dotfiles, a compositor experiment),
+              and a believer that <b>web tech is one tool in the box</b> — not the identity.
+            </p>
+            <p>
+              Maintains <b>@TheCodeVerseHub</b>, an open community that builds and ships software together.
+              Learns by doing: <i>“Code. Study. Research. Repeat.”</i> Long-term: <b>AI × embedded</b>, useful
+              software, and giving back to FOSS.
+            </p>
+          </div>
+        </section>
+
+        <section class="man-sec">
+          <h3>DEPENDENCIES</h3>
+          <div class="body">
+            <p class="deps">
+              gcc · clang · <span class="dep">rustc</span> · <span class="dep">python3</span> · vim/neovim ·
+              git · zsh · kitty · systemd · usb-serial · solder · breadboard · caffeine
+            </p>
+          </div>
+        </section>
+
+        <section class="man-sec">
+          <h3>ENVIRONMENT</h3>
+          <div class="body terms" style="display:grid;grid-template-columns:auto 1fr;gap:.2rem 1.4rem">
+            <span class="k">ARCH</span><span>x86_64 · amd64</span>
+            <span class="k">OS</span><span>Arch Linux · Void (EclipseLinux)</span>
+            <span class="k">WM</span><span>niri (Wayland) · KDE Plasma</span>
+            <span class="k">SHELL</span><span>zsh + fish</span>
+            <span class="k">EDITOR</span><span>neovim · zed · vs code</span>
+            <span class="k">BOARD</span><span>esp32 · arduino · raspberry pi</span>
+            <span class="k">TZ</span><span>Asia/Kolkata</span>
+          </div>
+        </section>
+
+        <section class="man-sec">
+          <h3>BUGS</h3>
+          <div class="body">
+            <p>
+              Known to reinstall the desktop environment at 02:00. Occasionally emits
+              <i>“Rust won't spare me fr!!!”</i>. Probably ricing something right now.
+              Patchable via issues on {identity.github}.
+            </p>
+          </div>
+        </section>
+
+        <section class="man-sec">
+          <h3>SEE ALSO</h3>
+          <div class="body">
+            <p class="deps">
+              senior_report may follow. Merge requests welcome at
+              <a href="https://github.com/youngcoder45" target="_blank" rel="noopener noreferrer">github.com/youngcoder45</a>.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </Section>
+
+  <!-- ============ toolchain ============ -->
+  <Section id="toolchain" index="02" title="toolchain" path="~/.config/aditya/toolchain.json">
+    <p class="tc-note">
+      <span aria-hidden="true">＄</span> <code>aditya --manifest</code> · 5 bundles ·
+      {skillGroups.reduce((n, g) => n + g.skills.length, 0)} packages ·
+      proficiency is tagged honestly:
+      <span class="tc-tag lv-5">expert</span>
+      <span class="tc-tag lv-4">strong</span>
+      <span class="tc-tag lv-3">working</span>
+      <span class="tc-tag lv-2">learning</span>
+    </p>
+
+    <div class="tc">
+      <div class="win-bar">
+        <span class="dot r" aria-hidden="true"></span>
+        <span class="dot a" aria-hidden="true"></span>
+        <span class="dot g" aria-hidden="true"></span>
+        <span class="title">~/.config/aditya/toolchain</span>
+        <span class="meta">manifest · compiled per bundle</span>
+      </div>
+      <div class="tc-body">
+        {
+          skillGroups.map((g, i) => (
+            <article class="tc-group">
+              <header class="tc-head">
+                <span class="tc-idx">[{String(i + 1).padStart(2, '0')}]</span>
+                <h3>{g.title}</h3>
+                <span class="tc-path" title={g.path}>{g.path}</span>
+              </header>
+              <p class="tc-blurb">{g.blurb}</p>
+              <ul class="tc-list">
+                {g.skills.map((s) => (
+                  <li class="tc-item">
+                    <span class="tc-name">{s.name}</span>
+                    <span class="tc-lead" aria-hidden="true"></span>
+                    <span class={`tc-tag lv-${s.level}`} title={`${s.name}: ${levelTag(s.level)}`}>
+                      {levelTag(s.level)}
+                    </span>
+                    <span class="tc-spec">{s.spec}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <!-- ============ projects ============ -->
+  <Section id="projects" index="03" title="projects" path="~/projects/*.mdx">
+    <div class="card-grid">
+      {
+        featured.map((p) => (
+          <ProjectCard project={p} />
+        ))
+      }
+    </div>
+    <p style="margin-top:1rem;font-size:.82rem;color:var(--fg-dim)">
+      <a href="/projects/">&gt;_ ls ./projects --all</a> — full directory with write-ups.
+    </p>
+  </Section>
+
+  <!-- ============ notes ============ -->
+  <Section id="notes" index="04" title="notes" path="~/notes/{registry,field,postmortem}.mdx">
+    <div class="win" style="padding:.2rem 1rem">
+      <ul style="list-style:none;margin:0;padding:0">
+        {notes.map((n) => <NoteRow note={n} />)}
+      </ul>
+    </div>
+    <p style="margin-top:1rem;font-size:.82rem;color:var(--fg-dim)">
+      <a href="/notes/">&gt;_ cat ./notes --all</a> — more field notes, rants and postmortems.
+    </p>
+  </Section>
+
+  <!-- ============ env ============ -->
+  <Section index="05" title="environment" path="/proc/aditya/environ">
+    <div class="win">
+      <div class="win-bar">
+        <span class="dot r" aria-hidden="true"></span>
+        <span class="dot a" aria-hidden="true"></span>
+        <span class="dot g" aria-hidden="true"></span>
+        <span class="title">/proc/aditya/environ</span>
+        <span class="meta">current rig</span>
+      </div>
+      <div style="padding:1rem 1.2rem;display:grid;grid-template-columns:auto 1fr;gap:.28rem 1.6rem;font-size:.84rem">
+        {
+          rig.map(([k, v]) => (
+            <>
+              <span style="color:var(--cyan)">{k.padEnd(10)}</span>
+              <span>{v}</span>
+            </>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <!-- ============ contact ============ -->
+  <Section id="contact" index="06" title="contact" path="~/.local/share/aditya/contact">
+    <div class="link-grid">
+      {
+        socials.map((s) => (
+          <a class="link-cell" href={s.href} target="_blank" rel="noopener noreferrer">
+            <span class="ln">{s.label}</span>
+            <span class="pv">{s.hint}</span>
+            <span class="arrow">↗ open channel</span>
+          </a>
+        ))
+      }
+    </div>
+    <p style="margin-top:1.2rem;font-size:.8rem;color:var(--fg-dim)">
+      &gt;_ open for: systems &amp; embedded internships · FOSS collabs · “help i bricked my ESP32” –
+      reach me via <a href={identity.issues} target="_blank" rel="noopener noreferrer">github issues</a> or the
+      <a href="https://github.com/TheCodeVerseHub" target="_blank" rel="noopener noreferrer">CodeVerseHub</a> community.
+      Replies land in the inbox interrupt queue (usually &lt; 24h).
+    </p>
+  </Section>
+
+  <Term />
+</Layout>

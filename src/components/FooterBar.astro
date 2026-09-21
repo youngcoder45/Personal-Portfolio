@@ -1,0 +1,54 @@
+---
+import { identity, socials } from '../lib/profile';
+---
+
+<footer class="ubar" aria-label="status bar">
+  <div class="ubar-inner">
+    <div class="u-group">
+      <span class="u star">
+        <a href={identity.repo} target="_blank" rel="noopener noreferrer">
+          <span class="box amber">★</span> star this repo
+        </a>
+      </span>
+      <span class="u">
+        <span class="box accent">[{identity.handle}@arch]</span>
+        <span>~</span>
+      </span>
+      <span class="u more">
+        <span class="box">rust</span>
+        <span class="box">niri</span>
+        <span class="box">zsh</span>
+      </span>
+    </div>
+    <div class="u-group">
+      <span class="u more">
+        <a href={socials[0].href} target="_blank" rel="noopener noreferrer">gh/{socials[0].hint}</a>
+      </span>
+      <span class="u">
+        <span class="box amber">IST</span>
+        <span id="ubarClock" class="clock">--:--:--</span>
+      </span>
+    </div>
+  </div>
+  <script is:inline>
+    (function () {
+      function tick() {
+        var el = document.getElementById('ubarClock');
+        if (!el) return;
+        try {
+          el.textContent = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Asia/Kolkata',
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          }).format(new Date());
+        } catch (e) {
+          el.textContent = new Date().toTimeString().slice(0, 8);
+        }
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+</footer>

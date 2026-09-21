@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  note: CollectionEntry<'notes'>;
+}
+
+const { note } = Astro.props as Props;
+const { data, id } = note;
+const href = `/notes/${id}/`;
+const fmt = new Intl.DateTimeFormat('en-CA', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+---
+
+<li class="note-row">
+  <time class="note-date" datetime={data.pubDate.toISOString()}>
+    {fmt.format(data.pubDate)}
+  </time>
+  <div class="note-main">
+    <h3>
+      <a href={href}>./{id}.mdx</a> <span class="note-arrow">▸</span> {data.title}
+    </h3>
+    <p>{data.description}</p>
+    <div class="tags">
+      {data.tags.map((t) => <span class="chip">#{t}</span>)}
+    </div>
+  </div>
+</li>

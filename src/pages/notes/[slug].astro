@@ -1,0 +1,51 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../components/Layout.astro';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes
+    .filter((n) => !n.data.draft)
+    .map((note) => ({
+      params: { slug: note.id },
+      props: { note },
+    }));
+}
+
+type Props = { note: CollectionEntry<'notes'> };
+const { note } = Astro.props as Props;
+const { Content } = await render(note);
+const { data } = note;
+const fmt = new Intl.DateTimeFormat('en-CA', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+---
+
+<Layout path={`/notes/${note.id}/`} title={`${data.title} — Aditya Verma`} description={data.description}>
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">~</a>
+    <span>/</span>
+    <a href="/notes/">notes</a>
+    <span>/</span>
+    <span class="cw">{note.id}</span>
+  </nav>
+
+  <header style="margin-bottom:2rem;border-bottom:1px solid var(--border);padding-bottom:1.1rem">
+    <time datetime={data.pubDate.toISOString()} style="color:var(--fg-faint);font-size:.78rem">
+      {fmt.format(data.pubDate)} IST
+    </time>
+    <h1 style="margin:.3rem 0 .5rem;font-size:1.7rem;color:var(--fg-strong);line-height:1.25">
+      &gt;_ {data.title}
+    </h1>
+    <p style="color:var(--fg-dim);font-size:.9rem;margin:0 0 .8rem">{data.description}</p>
+    <div class="tags" style="display:flex;flex-wrap:wrap;gap:.35rem">
+      {data.tags.map((t) => <span class="tag">#{t}</span>)}
+    </div>
+  </header>
+
+  <article class="prose">
+    <Content />
+  </article>
+</Layout>

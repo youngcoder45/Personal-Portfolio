@@ -1,0 +1,127 @@
+---
+import { neofetch } from '../lib/profile';
+
+interface Props {
+  title?: string;
+  meta?: string;
+}
+
+const {
+  title = 'aditya@arch: ~/dev/portfolio',
+  meta = 'interactive · try `help`',
+} = Astro.props as Props;
+---
+
+<div class="term-dock" id="termDock">
+  <button
+    class="term-toggle"
+    id="termToggle"
+    type="button"
+    aria-controls="termPanel"
+    aria-expanded="false"
+    aria-label="open terminal"
+    title="open terminal"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="2.5" y="4" width="19" height="16" rx="2.4"></rect>
+      <path d="M6.5 9.5 9.5 12l-3 2.5"></path>
+      <path d="M12.5 15h5"></path>
+    </svg>
+  </button>
+
+  <div class="term-panel" id="termPanel" hidden>
+    <figure class="win term">
+      <div class="win-bar">
+        <span class="dot r" aria-hidden="true"></span>
+        <span class="dot a" aria-hidden="true"></span>
+        <span class="dot g" aria-hidden="true"></span>
+        <span class="title">{title}</span>
+        <span class="meta">{meta}</span>
+        <button class="term-close" id="termClose" type="button" aria-label="close terminal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="term-body" id="termBody" role="group" aria-label="interactive terminal">
+        <noscript>
+          <div class="neo">
+            <pre class="neo-art magenta">{
+              neofetch.art.join('\n')
+            }</pre>
+            <div class="neofetch">
+              <div class="row"><strong class="lbl">{neofetch.label}</strong>  ───────────────────</div>
+              {neofetch.info.map((line) => {
+                const [k, ...rest] = line.split(/ {2,}/);
+                return (
+                  <div class="row">
+                    <span class="lbl">{k.padEnd(9)} </span>
+                    <span>{rest.join(' ')}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div class="noscript-term">{`
+aditya@arch:~$ whoami
+systems & backend developer — C, C++, Rust, Python, Linux, embedded.`}</div>
+        </noscript>
+      </div>
+    </figure>
+  </div>
+
+  <noscript>
+    <style>
+      #termToggle { display: none !important; }
+      #termPanel[hidden] { display: block !important; }
+      #termPanel { position: static; width: auto; }
+    </style>
+  </noscript>
+</div>
+
+<script>
+  import '../scripts/shell.ts';
+
+  const toggle = document.getElementById('termToggle');
+  const panel = document.getElementById('termPanel');
+  const close = document.getElementById('termClose');
+
+  const isOpen = () => panel !== null && !panel.hidden;
+
+  function focusInput() {
+    document.querySelector<HTMLInputElement>('#termBody input.tty-input')?.focus();
+  }
+
+  function open() {
+    if (!panel || !toggle) return;
+    panel.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'close terminal');
+    toggle.setAttribute('title', 'close terminal');
+    requestAnimationFrame(focusInput);
+  }
+
+  function closePanel() {
+    if (!panel || !toggle) return;
+    panel.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'open terminal');
+    toggle.setAttribute('title', 'open terminal');
+    toggle.focus();
+  }
+
+  toggle?.addEventListener('click', () => (isOpen() ? closePanel() : open()));
+  close?.addEventListener('click', closePanel);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen()) closePanel();
+  });
+</script>

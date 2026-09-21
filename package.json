@@ -1,0 +1,24 @@
+{
+  "name": "aditya-verma-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aditya Verma — Systems & Backend Developer. A terminal-flavoured personal site built with Astro, TypeScript, Vanilla CSS and MDX.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.2.5",
+    "@astrojs/rss": "^4.0.11",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^5.15.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.8.3"
+  }
+}

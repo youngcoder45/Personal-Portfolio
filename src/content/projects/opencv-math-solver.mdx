@@ -1,0 +1,42 @@
+---
+title: 'OpenCV-Math-Solver'
+blurb: 'Real-time gesture-controlled math solver built with OpenCV and MediaPipe.'
+year: 2025
+language: 'Python'
+category: 'embedded'
+stack: ['Python', 'OpenCV', 'MediaPipe', 'sympy', 'camera feed']
+tags: ['computer-vision', 'cv', 'gestures', 'hardware-adjacent']
+stars: 5
+repo: 'https://github.com/youngcoder45/OpenCV-Math-Solver'
+status: 'experimental'
+featured: true
+org: false
+---
+
+Point your webcam at a whiteboard, raise a hand, and solve the equation on
+screen. `OpenCV-Math-Solver` is a gesture-driven math solver: **MediaPipe**
+tracks hand landmarks, gestures select & solve, and the expression is re-injected
+into the frame like a sadistic TI-84.
+
+```python
+import mediapipe as mp
+
+hands = mp.solutions.hands.Hands(
+    max_num_hands=1,
+    min_detection_confidence=0.6,
+)
+```
+
+## Pipeline
+
+1. Grab frame from the camera (OpenCV `VideoCapture`).
+2. Run hand-landmark inference.
+3. Classify the gesture (index-thumb pinch to `solve`, palm to `clear`).
+4. OCR-lite the written expression, evaluate, overlay the result.
+
+## Why it matters
+
+It was my first real run of CV + media pipe on a face-flapping webcam, and it
+proved to me that **hardware-adjacent Python can feel immediate**. The same
+frame-loop skills transfer directly to the ESP32-CAM and Pi-Cam world I'm
+moving into.

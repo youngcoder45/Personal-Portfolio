@@ -1,0 +1,43 @@
+---
+title: 'Eigen-Bot'
+blurb: 'A modular utility bot for Discord communities — plugin environment, moderation, automations, SQLite-backed.'
+year: 2024
+language: 'Python'
+category: 'backend'
+stack: ['Python', 'discord.py', 'SQLite', 'asyncio', 'plugins']
+tags: ['discord', 'backend', 'plugins', 'community']
+stars: 14
+repo: 'https://github.com/TheCodeVerseHub/Eigen-Bot'
+status: 'active'
+featured: true
+org: true
+---
+
+`Eigen-Bot` is the community workhorse of **TheCodeVerseHub**: a modular
+Discord bot built with `discord.py` and SQLite, designed around a **plugin
+system** so anyone in the community can contribute a feature without touching
+core bot logic.
+
+```python
+@plugin.command("status", "query the bot's health")
+async def cmd_status(bot, ctx):
+    rows = ctx.db.execute("SELECT COUNT(*) FROM history").fetchone()
+    return f"`{db_path}` · {rows[0]} rows logged"
+```
+
+## Architecture
+
+- **Core** stays slim: connection, auth, resolver.
+- Each feature lives in `plugins/` and self-registers commands + events.
+- Every plugin gets its own SQLite table — schema-on-write, no migrations
+  tourism.
+- Leveling, moderation, "quality-of-life" automation, plus the fun stuff.
+
+## Why SQlite over Postgres for this
+
+For a community bot, SQLite means: no DB server to babysit, backups are a file
+copy, and it survives a VM bump intact. `Miku` gets Postgres+FastAPI where the
+scale actually needs it; `Eigen` is the file-cabinet architecture.
+
+The plugin contract is the real product: it's how 15 community contributors
+ship to one bot without stepping on each other.

@@ -1,0 +1,80 @@
+---
+title: 'GPIO as a state machine: bare-metal ESP32 in C vs Rust'
+description: 'Flash an LED the hard way — registers, datasheets, and what Rust adds (and costs) at the metal.'
+pubDate: 2026-09-14
+tags: ['esp32', 'embedded', 'rust', 'c', 'registers']
+---
+
+Flashing an LED is the "hello world" of hardware. Everyone does it with the
+Arduino framework's `digitalWrite` and moves on. Boring. So this week I did it
+*from the datasheet* on an ESP32 — first in C, then in Rust, both without the
+Arduino runtime.
+
+## Reading the register map
+
+Somewhere in the ESP32 TRM there's a table that says roughly: to drive GPIO20
+as output, you touch two registers. The flow is:
+
+```c
+// 1. route the pin (peripheral == simple GPIO)
+gpio_pad_select_gpio(GPIO_NUM_20);
+
+// 2. set direction: bits [9:0] of GPIO_ENABLE_REG
+REG_WRITE(GPIO_OUT_W1TS_REG, (1u << 20); // actually: set the OUT register
+
+// 3. blink by writing the output set/clear registers
+while (1) {
+    REG_WRITE(GPIO_OUT_W1TS_REG, (1u << 20));
+    delay(500);
+    REG_WRITE(GPIO_OUT_W1TC_REG, (1u << 20));
+    delay(500);
+}
+```
+
+The satisfaction is real: you fps-drift into the pin individually.
+
+## The same thing in Rust
+
+On the `no_std` side you hit the classic trio: `esp32-hal` brings `RegisterBlock`
+styled CRATE, `borrow`, and `Peripherals::take()`. The equivalent:
+
+```rust
+#![no_std]
+#![no_main]
+
+use esp32_hal::{clock, gpio};
+use esp_backtrace as _;
+
+#[entry]
+fn main() -> ! {
+    let peripherals = esp32_hal::Peripherals::take().unwrap();
+    let io = peripherals.GPIO.split();
+    let mut led = io.pins.gpio20.into_output();
+    let mut delay = ...;
+    loop {
+        led.toggle().unwrap();
+        delay.delay_ms(500u32);
+    }
+}
+```
+
+## What Rust actually costs
+
+- **Compile times** you can watch. The chip target drags in a lot.
+- **`no_std` culture shock**: no `Vec` by default, no panic-to-stdout.
+- But: type-safe pin ownership and zero-cost `toggle` once it compiles.
+
+## What it buys back
+
+The borrow checker is a surprisingly good **hardware interlock**: it refuses to
+hand the same pin to two timers the way C happily lets you. That's one less
+class of "why is my drone spinning?" bug.
+
+**Takeaway:** the Arduino/C dialect will ship your prototype fastest. The Rust
+dialect will refuse a thousand little footguns. Knowing both is the actual
+superpower for robotics work.
+
+```sh
+# probably the most useful terminal command this week
+$ esptool.py -p /dev/ttyUSB0 erase_flash
+```

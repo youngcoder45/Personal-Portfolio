@@ -1,0 +1,37 @@
+---
+title: 'foundry'
+blurb: 'A CLI-based project manager for a much better development flow.'
+year: 2025
+language: 'Go'
+category: 'devtools'
+stack: ['Go', 'cobra', 'git', 'templates']
+tags: ['cli', 'devtools', 'go', 'productivity']
+stars: 1
+repo: 'https://github.com/youngcoder45/foundry'
+status: 'experimental'
+featured: false
+org: false
+---
+
+`foundry` is the TUI I wished I had: a **project manager for the terminal** that
+scaffolds, tracks and opens my repos without leaving the shell. Written in Go
+because a single binary, zero runtime, and a fast `--help` is exactly the tool
+story I want.
+
+```go
+foundry new --lang rust --features cli my-project
+→ created ./my-project (cargo + clippy + CI stub)
+```
+
+## What it does today
+
+- `foundry init` in an existing repo.
+- `foundry new` with language templates (rust, c, python, go).
+- `foundry up` → opens the repo in nvim + starts dev command, tmux-split.
+- Sticks to the system git; never wraps its own abstractions.
+
+## Design constraint
+
+Every command prints something useful to stdout and *nothing* to stderr on
+success. CLI hygiene is a feature. The plan is Dovecot-level docs; the reality
+is focused, tiny, and honest about what it doesn't do.

@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  showBlurb?: boolean;
+}
+
+const { project, showBlurb = true } = Astro.props as Props;
+const { data, id } = project;
+const href = `/projects/${id}/`;
+---
+
+<article class="card">
+  <div class="win-bar">
+    <span class="lang">◆</span>
+    <span class="title">{data.language}</span>
+    <span class="meta">
+      {data.org ? 'org · TCVH' : 'personal'}
+      {data.status === 'active' ? <span class="st">● active</span> : <span>{data.status}</span>}
+    </span>
+  </div>
+  <div class="cbody">
+    <h3>
+      <a href={href}>
+        <span class="nl">&gt;_ </span>{data.title}
+      </a>
+    </h3>
+    {showBlurb && <p class="blurb">{data.blurb}</p>}
+    <div class="tags" aria-label="tags">
+      <span class="tag" data-cat={data.category}>{data.category}</span>
+      {data.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}
+    </div>
+    <div class="meta">
+      <span class="r">
+        <span class="gn">★ {data.stars}</span>
+        <span>{data.year}</span>
+      </span>
+      <a class="repo" href={data.repo} target="_blank" rel="noopener noreferrer">
+        ↗ repo
+      </a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../components/Layout.astro';
+import Section from '../../components/Section.astro';
+import NoteRow from '../../components/NoteRow.astro';
+
+const notes = (await getCollection('notes'))
+  .filter((n) => !n.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout path="/notes" title="~/notes — Aditya Verma" description="Field notes, postmortems and technical writing from Aditya Verma.">
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">~</a>
+    <span>/</span>
+    <span class="cw">notes</span>
+  </nav>
+
+  <Section index="01" title="notes" path="~/notes/{registry,field,postmortem}.mdx">
+    <p style="color:var(--fg-dim);font-size:.86rem;margin-top:-.4rem;margin-bottom:1.6rem">
+      <code style="color:var(--green)">$ tree ~/notes</code> — loose engineering notes.
+      Not a blog. Unpolished, rough around the edges, occasionally wrong — but honest.
+    </p>
+    <div class="win" style="padding:.2rem 1rem">
+      <ul style="list-style:none;margin:0;padding:0">
+        {notes.map((n) => <NoteRow note={n} />)}
+      </ul>
+    </div>
+  </Section>
+</Layout>

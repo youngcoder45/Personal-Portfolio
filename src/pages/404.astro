@@ -1,0 +1,30 @@
+---
+import Layout from '../components/Layout.astro';
+---
+
+<Layout path="/404" title="404 — page not found — Aditya Verma">
+  <div class="win" style="max-width:640px;margin:4rem auto">
+    <div class="win-bar">
+      <span class="dot r" aria-hidden="true"></span>
+      <span class="dot a" aria-hidden="true"></span>
+      <span class="dot g" aria-hidden="true"></span>
+      <span class="title">aditya@arch: ~/dev/portfolio</span>
+      <span class="meta">segfault</span>
+    </div>
+    <div style="padding:1.3rem 1.4rem;font-size:.9rem">
+      <p style="color:var(--red)">segmentation fault (core dumped)</p>
+      <pre aria-hidden="true" style="color:var(--fg-dim);margin:.5rem 0 1rem">$ cat ./requested-page
+cat: ./requested-page: No such file or directory</pre>
+      <p style="color:var(--fg-dim)">
+        404 — the page you wanted isn't in the page table.<br />
+        Try one of these known-good addresses:
+      </p>
+      <ul style="margin:.6rem 0 0;padding-left:1.3rem">
+        <li><a href="/">~/ — index</a></li>
+        <li><a href="/projects/">~/projects</a></li>
+        <li><a href="/notes/">~/notes</a></li>
+        <li><a href="/#contact">~/contact</a></li>
+      </ul>
+    </div>
+  </div>
+</Layout>

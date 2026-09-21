@@ -1,0 +1,43 @@
+---
+title: 'Student-Performance-Predictor'
+blurb: 'End-to-end ML project predicting student performance — preprocessing, feature engineering, training, Streamlit web app.'
+year: 2025
+language: 'Python'
+category: 'data'
+stack: ['Python', 'NumPy', 'Pandas', 'scikit-learn', 'Streamlit']
+tags: ['ml', 'data', 'feature-engineering', 'streamlit']
+stars: 13
+repo: 'https://github.com/youngcoder45/Student-Performance-Predictor'
+status: 'maintained'
+featured: true
+org: false
+---
+
+This is the ML project I finally let become a *pipeline* instead of a chaotic
+notebook. It predicts student academic performance from survey-style features,
+end to end: raw CSV → cleaned DataFrame → engineered features → trained model
+→ interactive Streamlit app.
+
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestRegressor
+
+pipeline = Pipeline([
+    ("scale", StandardScaler()),
+    ("model", RandomForestRegressor(n_estimators=120, random_state=42)),
+])
+```
+
+## Structure
+
+- `data/` — raw + processed.
+- `notebooks/` — EDA done once, then frozen into modules.
+- `src/` — the pipeline as functions, so the app reuses the same code.
+- `app.py` — Streamlit frontend with a slider board for each feature.
+
+## Lessons
+
+- **Version your data, then your model, then your vibes.**
+- Feature engineering beats model choice 9 times out of 10 at this scale.
+- Streamlit makes "show the work" trivial — a good demo is a feature.

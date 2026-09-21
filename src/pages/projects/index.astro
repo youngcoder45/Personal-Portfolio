@@ -1,0 +1,47 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../components/Layout.astro';
+import Section from '../../components/Section.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects: CollectionEntry<'projects'>[] = (await getCollection('projects'))
+  .sort((a, b) => b.data.stars - a.data.stars);
+
+const featured = projects.filter((p) => p.data.featured);
+const rest = projects.filter((p) => !p.data.featured);
+---
+
+<Layout path="/projects" title="~/projects — Aditya Verma" description="Selected systems, embedded, backend and FOSS projects by Aditya Verma.">
+  <nav class="crumb" aria-label="breadcrumb">
+    <a href="/">~</a>
+    <span>/</span>
+    <span class="cw">projects</span>
+  </nav>
+
+  <Section index="01" title="projects" path="~/projects — 47 repos · 9 write-ups">
+    <p style="color:var(--fg-dim);font-size:.86rem;margin-top:-.4rem;margin-bottom:1.6rem">
+      <code style="color:var(--green)">find ~/projects -name '*.mdx' -print</code>
+      — systems, hardware, backend and FOSS. Web stuff lives at the back of this
+      directory for a reason.
+    </p>
+
+    <h2 class="sec-title" style="border-bottom:1px solid var(--border);padding-bottom:.5rem;margin-bottom:1rem">
+      <span class="underline">★</span> featured
+    </h2>
+    <div class="card-grid">
+      {featured.map((p) => <ProjectCard project={p} />)}
+    </div>
+
+    <h2 class="sec-title" style="border-bottom:1px solid var(--border);padding-bottom:.5rem;margin:2.4rem 0 1rem">
+      <span class="underline">┬</span> the rest of the tree
+    </h2>
+    <div class="card-grid">
+      {rest.map((p) => <ProjectCard project={p} showBlurb={false} />)}
+    </div>
+  </Section>
+
+  <p style="font-size:.78rem;color:var(--fg-faint);margin-top:2.5rem">
+    the full 47-repo tree lives on
+    <a href="https://github.com/youngcoder45" target="_blank" rel="noopener noreferrer">github.com/youngcoder45</a>.
+  </p>
+</Layout>

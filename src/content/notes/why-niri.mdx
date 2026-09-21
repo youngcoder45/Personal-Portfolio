@@ -1,0 +1,50 @@
+---
+title: 'What a compositor actually is (and why I run niri)'
+description: 'Compositors, Wayland, X11, and the odd scroll-everything compositor I ended up defaulting to.'
+pubDate: 2026-08-22
+tags: ['linux', 'wayland', 'niri', 'compositor']
+---
+
+People assume "Linux desktop" means a window manager. It doesn't — unless by
+"manage" you mean "*nobody answered when the app asked for pixels*". The thing
+that actually owns your screen on Wayland is a **compositor**, and it's only
+*sort of* optional.
+
+## The pipeline
+
+Applications don't draw to your screen. They send buffers to the compositor;
+it composites them with everything else and scans them out. On X11 that flow is
+ancient and chatty. On Wayland it's a protocol with buffer-sharing and
+lease-ability (laptops: this is how smooth scrolling "just works").
+
+```text
+ app buffer ──► compositor ──► scanout ──► GPU / display
+      ▲              │
+      └── protocol ◄─┘   (wayland: wl_surface, layer-shell, xdg-shell)
+```
+
+## So why niri?
+
+I tried the usual suspects — i3-with-scrollbars, sway, hyprland — and kept
+feeling like the WM was *negotiating* with me. Niri skips the negotiation by
+design: everything lives on one infinitely scrolling column. Your "workspaces"
+are vertical space; switch with two fingers.
+
+```text
+$ niri msg action focus-column --direction down
+$ niri msg action spawn-floor --scratchpad
+```
+
+The nested-quote protocol isn't the point. The **philosophy** is: compositor
+positions windows, and config *code tells it exactly how* instead of
+negotiating a tiling arrangement.
+
+## Xwayland: the compatibility crutch
+
+Some apps still demand X11. Xwayland translates them into a Wayland surface.
+It works because pragmatic beats pure — same reason I keep a KDE Plasma config
+around as a Plan B.
+
+If you're curious where "system construction" meets day-to-day Linux, the
+compositor layer is the spot. It's the graphics backend wearing a window
+manager's jacket.

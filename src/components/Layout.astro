@@ -1,0 +1,71 @@
+---
+import '../styles/global.css';
+import { identity } from '../lib/profile';
+import TopBar from './TopBar.astro';
+import FooterBar from './FooterBar.astro';
+import BootScreen from './BootScreen.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path: string;
+}
+
+const {
+  title = `${identity.name} — ${identity.title}`,
+  description = `Systems & backend developer. C, C++, Rust, Python. Linux, embedded, ESP32, robotics & open source.`,
+  path,
+} = Astro.props as Props;
+
+const canonical = new URL(path, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="aditya · notes" href="/rss.xml" />
+
+    <script is:inline>
+      (function () {
+        var t = 'dark';
+        try { t = localStorage.getItem('av-theme') === 'paper' ? 'paper' : 'dark'; } catch (e) {}
+        document.documentElement.dataset.theme = t;
+        try { if (sessionStorage.getItem('av-booted')) document.documentElement.classList.add('booted'); } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <BootScreen />
+    <TopBar path={path} />
+    <main>
+      <div class="page">
+        <slot />
+      </div>
+    </main>
+    <FooterBar />
+    <script>
+      import '../scripts/theme.ts';
+    </script>
+  </body>
+</html>
