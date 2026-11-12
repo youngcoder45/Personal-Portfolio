@@ -14,6 +14,17 @@ export const identity = {
   discord: "https://discord.gg/3xKFvKhuGR",
 } as const;
 
+/**
+ * Snapshot of GitHub counts confirmed by the owner on 2026-11-12.
+ * Phase 4 replaces the public repo count with a build-time fetch when a
+ * GITHUB_TOKEN is available; until then the UI labels it with `asOf`.
+ */
+export const githubStats = {
+  publicRepos: 52,
+  totalRepos: 78,
+  asOf: "November 2026",
+} as const;
+
 export const socials: { label: string; href: string; hint: string }[] = [
   {
     label: "Github",
@@ -53,13 +64,21 @@ export const socials: { label: string; href: string; hint: string }[] = [
   },
 ] as const;
 
-export const nav = [
-  { id: "about", label: "whoami", path: "/about" },
-  { id: "toolchain", label: "toolchain", path: "/#toolchain" },
-  { id: "projects", label: "projects", path: "/projects" },
-  { id: "notes", label: "notes", path: "/notes" },
-  { id: "contact", label: "contact", path: "/#contact" },
-] as const;
+export type NavItem = {
+  id: string;
+  label: string;
+  path: string;
+  /** `route` navigates to a page; `anchor` targets a section on the homepage. */
+  kind: "route" | "anchor";
+};
+
+export const nav: NavItem[] = [
+  { id: "about", label: "whoami", path: "/about", kind: "route" },
+  { id: "toolchain", label: "toolchain", path: "/#toolchain", kind: "anchor" },
+  { id: "projects", label: "projects", path: "/projects", kind: "route" },
+  { id: "notes", label: "notes", path: "/notes", kind: "route" },
+  { id: "contact", label: "contact", path: "/#contact", kind: "anchor" },
+];
 
 export const tagline = ["Code.", "Study.", "Research.", "Repeat."] as const;
 

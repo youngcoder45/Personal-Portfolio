@@ -1,14 +1,16 @@
 // Generates public/og.png — the 1200x630 social preview card.
 // Rendered from an inline SVG using the site's design tokens (see global.css).
 // Run automatically before `astro build` via the `prebuild` npm script.
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, mkdir, readFile } from 'node:fs/promises';
 
 let sharp;
 try {
   sharp = (await import('sharp')).default;
 } catch {
-  console.warn('sharp unavailable — keeping existing public/og.png');
-  process.exit(0);
+  console.error(
+    'sharp is required to generate public/og.png. Install dev dependencies with `npm ci`.',
+  );
+  process.exit(1);
 }
 
 const W = 1200;
@@ -91,5 +93,11 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 
 await mkdir('public', { recursive: true });
 const png = await sharp(Buffer.from(svg)).png().toBuffer();
-await writeFile('public/og.png', png);
-console.log(`og.png written: ${png.length} bytes`);
+const existing = await readFile('public/og.png').catch(() => null);
+
+if (existing && existing.equals(png)) {
+  console.log(`og.png unchanged: ${png.length} bytes`);
+} else {
+  await writeFile('public/og.png', png);
+  console.log(`og.png written: ${png.length} bytes`);
+}

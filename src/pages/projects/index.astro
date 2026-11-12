@@ -3,12 +3,15 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../../components/Layout.astro';
 import Section from '../../components/Section.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import { githubStats } from '../../lib/profile';
 
 const projects: CollectionEntry<'projects'>[] = (await getCollection('projects'))
   .sort((a, b) => b.data.stars - a.data.stars);
 
 const featured = projects.filter((p) => p.data.featured);
 const rest = projects.filter((p) => !p.data.featured);
+const writeUpCount = projects.length;
+const repoCountLabel = `${githubStats.publicRepos} public repos · ${writeUpCount} write-ups`;
 ---
 
 <Layout path="/projects" title="~/projects — Aditya Verma" description="Systems, embedded, backend and open-source projects by Aditya Verma — Rust, C/C++, Python, ESP32, Linux tooling and FOSS software.">
@@ -20,7 +23,7 @@ const rest = projects.filter((p) => !p.data.featured);
 
   <h1 class="sr-only">~/projects — Aditya Verma</h1>
 
-  <Section index="01" title="projects" path="~/projects — 47 repos · 9 write-ups">
+  <Section index="01" title="projects" path={`~/projects — ${repoCountLabel}`}>
     <p style="color:var(--fg-dim);font-size:.86rem;margin-top:-.4rem;margin-bottom:1.6rem">
       <code style="color:var(--green)">find ~/projects -name '*.mdx' -print</code>
       — systems, hardware, backend and FOSS. Web stuff lives at the back of this
@@ -48,8 +51,11 @@ const rest = projects.filter((p) => !p.data.featured);
     }
   </Section>
 
-  <p style="font-size:.78rem;color:var(--fg-faint);margin-top:2.5rem">
-    the full 47-repo tree lives on
+  <p
+    style="font-size:.78rem;color:var(--fg-faint);margin-top:2.5rem"
+    title={`${githubStats.publicRepos} public repositories as of ${githubStats.asOf}`}
+  >
+    the full {githubStats.publicRepos}-public-repo tree lives on
     <a href="https://github.com/youngcoder45" target="_blank" rel="noopener noreferrer">github.com/youngcoder45</a>.
   </p>
 </Layout>

@@ -1,5 +1,4 @@
 ---
-import { execSync } from 'node:child_process';
 import { identity, nav } from '../lib/profile';
 import { themes } from '../data/themes';
 
@@ -8,12 +7,15 @@ interface Props {
 }
 const { path } = Astro.props as Props;
 const current = path.split('#')[0] || '/';
-let COMMIT = 'dev';
-try {
-  COMMIT = execSync('git rev-parse --short HEAD').toString().trim() || 'dev';
-} catch {
-  /* not a git checkout */
-}
+
+// Prefer the hosting provider's commit environment variable. This keeps the
+// build working from a tarball or a checkout without `.git`.
+const commitRef =
+  process.env.COMMIT_REF ||
+  process.env.GITHUB_SHA ||
+  process.env.CF_PAGES_COMMIT_SHA ||
+  '';
+const COMMIT = commitRef ? commitRef.slice(0, 7) : 'dev';
 ---
 
 <header class="topbar">
@@ -48,8 +50,16 @@ try {
       <nav id="siteNav" class="nav" aria-label="primary">
         {
           nav.map((item) => {
-            const isRoute = item.path.startsWith('/');
-            const active = isRoute && current.startsWith(item.path);
+            if (item.kind === 'anchor') {
+              const anchorId = item.path.split('#')[1] ?? '';
+              return (
+                <a href={item.path} data-nav-anchor={anchorId}>
+                  <span class="nl">&gt;_ </span>{item.label}
+                </a>
+              );
+            }
+            const active =
+              current === item.path || current.startsWith(`${item.path}/`);
             return (
               <a href={item.path} aria-current={active ? 'page' : undefined}>
                 <span class="nl">&gt;_ </span>{item.label}

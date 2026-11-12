@@ -1,0 +1,112 @@
+---
+import Section from '../Section.astro';
+import { identity } from '../../lib/profile';
+import type { PortfolioSection } from '../../data/sections';
+
+interface Props {
+  section: PortfolioSection;
+}
+
+const { section } = Astro.props as Props;
+---
+
+<Section id={section.id} index={section.index} title={section.title} path={section.path}>
+  <div class="man">
+    <div class="man-bar">
+      <span>ADITYA(1)</span>
+      <span>Systems Engineering Reference</span>
+      <span>aditya-verma.me</span>
+    </div>
+    <div class="man-body">
+      <div class="man-cols">
+        <span>ADITYA(1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Systems Engineering Reference&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADITYA(1)</span>
+        <!-- <span>/* the un-boring parts of the datasheet */</span> -->
+      </div>
+
+      <section class="man-sec">
+        <h3>NAME</h3>
+        <div class="body">
+          <p><b>aditya</b> — systems &amp; backend developer; electronics engineering student; maintainer of <b>@TheCodeVerseHub</b>.</p>
+        </div>
+      </section>
+
+      <section class="man-sec">
+        <h3>SYNOPSIS</h3>
+        <div class="body">
+          <p>
+            <b>aditya</b> [<b>--systems</b>] [<b>--embedded</b>] [<b>--backend</b>] [<b>--foss</b>] [<b>--web</b>]
+          </p>
+          <p class="flags">
+            <code>--systems</code><code>--embedded</code><code>--backend</code><code>--foss</code><code>--web</code><code>--coffee</code>
+          </p>
+        </div>
+      </section>
+
+      <section class="man-sec">
+        <h3>DESCRIPTION</h3>
+        <div class="body">
+          <p>
+            $whoami → <b>Aditya Verma</b>. Electronics Engineering student based in Mumbai, India (IST, UTC+05:30).
+            Codes at the <b>low level</b>: C, C++ and Rust for systems work; Python for backend services,
+            bots and data. Skims datasheets for fun, flashes ESP32s on a breadboard, and reads register maps
+            like bedtime stories.
+          </p>
+          <p>
+            A heavy user of <b>Linux</b> (Arch daily-driver, plus a Void-based <b>EclipseLinux</b> pet distro),
+            a tinkerer in the <b>Wayland</b> ecosystem (niri compositor, dotfiles, a compositor experiment),
+            and a believer that <b>web tech is one tool in the box</b> — not the identity.
+          </p>
+          <p>
+            Maintains <b>@TheCodeVerseHub</b>, an open community that builds and ships software together.
+            Learns by doing: <i>“Code. Study. Research. Repeat.”</i> Long-term: <b>AI × embedded</b>, useful
+            software, and giving back to FOSS.
+          </p>
+        </div>
+      </section>
+
+      <section class="man-sec">
+        <h3>DEPENDENCIES</h3>
+        <div class="body">
+          <p class="deps">
+            gcc · clang · <span class="dep">rustc</span> · <span class="dep">python3</span> · vim/neovim ·
+            git · zsh · kitty · systemd · usb-serial · solder · breadboard · caffeine
+          </p>
+        </div>
+      </section>
+
+      <section class="man-sec">
+        <h3>ENVIRONMENT</h3>
+        <div class="body terms" style="display:grid;grid-template-columns:auto 1fr;gap:.2rem 1.4rem">
+          <span class="k">ARCH</span><span>x86_64 · amd64</span>
+          <span class="k">OS</span><span>Arch Linux · Void (EclipseLinux)</span>
+          <span class="k">WM</span><span>niri (Wayland) · KDE Plasma</span>
+          <span class="k">SHELL</span><span>zsh + fish</span>
+          <span class="k">EDITOR</span><span>neovim · zed · vs code</span>
+          <span class="k">BOARD</span><span>esp32 · arduino · raspberry pi</span>
+          <span class="k">TZ</span><span>Asia/Kolkata</span>
+        </div>
+      </section>
+
+      <section class="man-sec">
+        <h3>BUGS</h3>
+        <div class="body">
+          <p>
+            Known to reinstall the desktop environment at 02:00. Occasionally emits
+            <i>“Rust won't spare me fr!!!”</i>. Probably ricing something right now.
+            Patchable via issues on {identity.github}.
+          </p>
+        </div>
+      </section>
+
+      <section class="man-sec">
+        <h3>SEE ALSO</h3>
+        <div class="body">
+          <p class="deps">
+            senior_report may follow. Merge requests welcome at
+            <a href="https://github.com/youngcoder45" target="_blank" rel="noopener noreferrer">github.com/youngcoder45</a>.
+          </p>
+        </div>
+      </section>
+    </div>
+  </div>
+</Section>

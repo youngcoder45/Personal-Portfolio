@@ -26,7 +26,7 @@ const metaTitle = `${data.title} — Aditya Verma`.length <= 62
   : data.title;
 ---
 
-<Layout path={`/notes/${note.id}/`} title={metaTitle} description={data.description}>
+<Layout path={`/notes/${note.id}/`} title={metaTitle} description={data.description} progress>
   <nav class="crumb" aria-label="breadcrumb">
     <a href="/">~</a>
     <span>/</span>

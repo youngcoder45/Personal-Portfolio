@@ -1,0 +1,23 @@
+---
+import { enabledSections, heroSection } from '../data/sections';
+---
+
+<details class="mobile-sections">
+  <summary>
+    <span class="ms-prompt" aria-hidden="true">❯</span>
+    <span>sections</span>
+    <span class="ms-count" aria-hidden="true">{enabledSections.length + 1}</span>
+  </summary>
+  <nav aria-label="Page sections">
+    <a href={`#${heroSection.id}`} data-section-link={heroSection.id}>
+      <span aria-hidden="true">{heroSection.index}</span>{heroSection.label}
+    </a>
+    {
+      enabledSections.map((section) => (
+        <a href={`#${section.id}`} data-section-link={section.id}>
+          <span aria-hidden="true">{section.index}</span>{section.label}
+        </a>
+      ))
+    }
+  </nav>
+</details>

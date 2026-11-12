@@ -10,6 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "check:links": "node scripts/check-links.mjs",
+    "verify": "npm run check && npm run build && npm run check:links",
     "og": "node scripts/generate-og.mjs",
     "astro": "astro"
   },
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "sharp": "^0.34.5",
     "typescript": "^5.8.3"
   }
 }

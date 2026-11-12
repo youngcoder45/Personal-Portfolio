@@ -5,6 +5,7 @@ import { identity, socials } from '../lib/profile';
 import TopBar from './TopBar.astro';
 import FooterBar from './FooterBar.astro';
 import BootScreen from './BootScreen.astro';
+import ReadingProgress from './ReadingProgress.astro';
 
 interface Props {
   title?: string;
@@ -12,6 +13,8 @@ interface Props {
   path: string;
   /** emit a Person schema.org block (home + about) */
   person?: boolean;
+  /** show the fixed reading-progress bar on long-form pages */
+  progress?: boolean;
 }
 
 const {
@@ -19,6 +22,7 @@ const {
   description = 'Aditya Verma — systems & backend developer and electronics engineering student from Mumbai. Rust, C, C++, Python for Linux, embedded ESP32 & open source.',
   path,
   person = false,
+  progress = false,
 } = Astro.props as Props;
 
 const site = (Astro.site?.toString().replace(/\/$/, '')) ?? 'https://aditya-verma.me';
@@ -159,9 +163,11 @@ const schema = JSON.stringify({
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    {progress && <ReadingProgress />}
     <BootScreen />
     <TopBar path={path} />
-    <main>
+    <main id="main-content" tabindex="-1">
       <div class="page">
         <slot />
       </div>

@@ -1,0 +1,44 @@
+---
+import Section from '../Section.astro';
+import { neofetch } from '../../lib/profile';
+import type { PortfolioSection } from '../../data/sections';
+
+interface Props {
+  section: PortfolioSection;
+}
+
+const { section } = Astro.props as Props;
+---
+
+<Section id={section.id} index={section.index} title={section.title} path={section.path}>
+  <div class="win">
+    <div class="win-bar">
+      <span class="dot r" aria-hidden="true"></span>
+      <span class="dot a" aria-hidden="true"></span>
+      <span class="dot g" aria-hidden="true"></span>
+      <span class="title">/proc/aditya/environ</span>
+      <span class="meta">current rig</span>
+    </div>
+    <div class="neofetch" style="padding:1rem 1.2rem;max-width:560px">
+      <div class="row">
+        <strong class="lbl">{neofetch.label}</strong>
+        <span class="sep">  ───────────────────</span>
+      </div>
+      {neofetch.info.map((line) => {
+        const [k, ...rest] = line.split(/ {2,}/);
+        return (
+          <div class="row">
+            <span class="lbl">{k.padEnd(9)} </span>
+            <span>{rest.join(' ')}</span>
+          </div>
+        );
+      })}
+      <div class="row">
+        <span class="cdot">{'Colors'.padEnd(12)}</span>
+        {neofetch.colors.map((c) => (
+          <span style={`color:${c}`} aria-hidden="true">●</span>
+        ))}
+      </div>
+    </div>
+  </div>
+</Section>

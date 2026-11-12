@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Section from '../Section.astro';
+import ProjectCard from '../ProjectCard.astro';
+import type { PortfolioSection } from '../../data/sections';
+
+interface Props {
+  section: PortfolioSection;
+}
+
+const { section } = Astro.props as Props;
+
+const featured = (await getCollection('projects')).filter((p) => p.data.featured).sort(
+  (a, b) => b.data.stars - a.data.stars,
+);
+---
+
+<Section id={section.id} index={section.index} title={section.title} path={section.path}>
+  <div class="card-grid">
+    {
+      featured.map((p) => (
+        <ProjectCard project={p} />
+      ))
+    }
+  </div>
+  <p style="margin-top:1rem;font-size:.82rem;color:var(--fg-dim)">
+    <a href="/projects/">&gt;_ ls ./projects --all</a> — full directory with write-ups.
+  </p>
+</Section>

@@ -1,0 +1,30 @@
+---
+import { railSections } from '../data/sections';
+---
+
+<nav class="section-rail" aria-label="Page sections" data-section-rail>
+  <span class="rail-head" aria-hidden="true">fd</span>
+  <ol class="rail-list">
+    {
+      railSections.map((section) => (
+        <li>
+          <a
+            class="rail-item"
+            href={`#${section.id}`}
+            data-section-link={section.id}
+            title={section.path}
+            aria-label={`${section.index} ${section.label}`}
+          >
+            <span class="rail-dash" aria-hidden="true"></span>
+            <span class="rail-index" aria-hidden="true">{section.index}</span>
+            <span class="rail-label">{section.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<script>
+  import '../scripts/rail.ts';
+</script>

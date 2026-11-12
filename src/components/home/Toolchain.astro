@@ -1,0 +1,59 @@
+---
+import Section from '../Section.astro';
+import { levelTag, skillGroups } from '../../data/skills';
+import type { PortfolioSection } from '../../data/sections';
+
+interface Props {
+  section: PortfolioSection;
+}
+
+const { section } = Astro.props as Props;
+---
+
+<Section id={section.id} index={section.index} title={section.title} path={section.path}>
+  <p class="tc-note">
+    <span aria-hidden="true">＄</span> <code>aditya --manifest</code> · 6 bundles ·
+    {skillGroups.reduce((n, g) => n + g.skills.length, 0)} packages ·
+    proficiency is tagged honestly:
+    <span class="tc-tag lv-5">expert</span>
+    <span class="tc-tag lv-4">strong</span>
+    <span class="tc-tag lv-3">working</span>
+    <span class="tc-tag lv-2">learning</span>
+  </p>
+
+  <div class="tc">
+    <div class="win-bar">
+      <span class="dot r" aria-hidden="true"></span>
+      <span class="dot a" aria-hidden="true"></span>
+      <span class="dot g" aria-hidden="true"></span>
+      <span class="title">~/.config/aditya/toolchain</span>
+      <span class="meta">manifest · compiled per bundle</span>
+    </div>
+    <div class="tc-body">
+      {
+        skillGroups.map((g, i) => (
+          <article class="tc-group">
+            <header class="tc-head">
+              <span class="tc-idx">[{String(i + 1).padStart(2, '0')}]</span>
+              <h3>{g.title}</h3>
+              <span class="tc-path" title={g.path}>{g.path}</span>
+            </header>
+            <p class="tc-blurb">{g.blurb}</p>
+            <ul class="tc-list">
+              {g.skills.map((s) => (
+                <li class="tc-item">
+                  <span class="tc-name">{s.name}</span>
+                  <span class="tc-lead" aria-hidden="true"></span>
+                  <span class={`tc-tag lv-${s.level}`} title={`${s.name}: ${levelTag(s.level)}`}>
+                    {levelTag(s.level)}
+                  </span>
+                  <span class="tc-spec">{s.spec}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</Section>
