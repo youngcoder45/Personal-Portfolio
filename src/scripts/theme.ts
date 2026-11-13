@@ -15,7 +15,7 @@ function syncIcon(t: string) {
   btn.innerHTML = th?.mode === 'light' ? '&#9788;' : '&#9790;';
 }
 
-function apply(t: string) {
+export function apply(t: string) {
   root.dataset.theme = t;
   try {
     localStorage.setItem(KEY, t);

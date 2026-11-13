@@ -37,7 +37,12 @@ const searchContent = JSON.stringify([
       await getCollection('notes')
     )
       .filter((n) => !n.data.draft)
-      .map((n) => ({ label: n.data.title, icon: 'note', href: `/notes/${n.id}/` })),
+      .map((n) => ({
+        label: n.data.title,
+        icon: 'note',
+        href: `/notes/${n.id}/`,
+        keywords: [n.data.description, ...n.data.tags].filter((k) => typeof k === 'string' && k.length > 0),
+      })),
   },
   {
     title: 'Projects',
@@ -45,7 +50,14 @@ const searchContent = JSON.stringify([
       await getCollection('projects')
     )
       .sort((a, b) => b.data.stars - a.data.stars)
-      .map((p) => ({ label: p.data.title, icon: 'file', href: `/projects/${p.id}/` })),
+      .map((p) => ({
+        label: p.data.title,
+        icon: 'file',
+        href: `/projects/${p.id}/`,
+        keywords: [p.data.category, p.data.language, ...p.data.tags, ...p.data.stack].filter(
+          (k) => typeof k === 'string' && k.length > 0,
+        ),
+      })),
   },
 ]).replace(/</g, '\\u003c');
 const knowsAbout = [
@@ -212,10 +224,13 @@ const schema = JSON.stringify({
           <kbd>ESC</kbd>
         </div>
         <div id="cmd-palette-results" class="cmd-palette-results" role="listbox" aria-label="Results"></div>
+        <div id="cmd-palette-status" class="sr-only" aria-live="polite"></div>
         <div class="cmd-palette-footer">
           <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
           <span><kbd>↵</kbd> Open</span>
           <span><kbd>ESC</kbd> Close</span>
+          <button type="button" id="cmd-palette-back" class="cmd-back" data-cmd-action="back">← back</button>
+          <button type="button" id="cmd-palette-clear" class="cmd-clear" data-cmd-action="clear">clear recents</button>
         </div>
       </div>
     </div>

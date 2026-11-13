@@ -92,6 +92,13 @@ const COMMIT = commitRef ? commitRef.slice(0, 7) : 'dev';
           </svg>
           <kbd>Cmd&#8202;K</kbd>
         </button>
+        <script is:inline>
+          // No-JS fallback: without the module bundle the palette cannot open, so
+          // the trigger degrades to the project explorer (the full, filterable list).
+          document.getElementById('paletteToggle')?.addEventListener('click', function () {
+            if (!document.documentElement.classList.contains('js')) window.location.assign('/projects/');
+          });
+        </script>
         <div class="theme-picker">
           <button
             id="themeToggle"

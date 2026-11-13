@@ -2,7 +2,9 @@ export type SearchItem = {
   label: string;
   icon: string;
   href?: string;
-  action?: 'view-source' | 'copy';
+  action?: 'view-source' | 'copy' | 'open-rss' | 'cycle-theme';
+  /** extra haystack fields for fuzzy matching (stack, tags, category, ...) */
+  keywords?: string[];
 };
 
 export type SearchGroup = {
@@ -29,6 +31,8 @@ export const SEARCH_GROUPS: SearchGroup[] = [
     items: [
       { label: 'View Source', icon: 'terminal', action: 'view-source' },
       { label: 'Copy page URL', icon: 'copy', action: 'copy' },
+      { label: 'Open RSS feed', icon: 'rss', href: '/rss.xml' },
+      { label: 'Toggle theme', icon: 'theme', action: 'cycle-theme' },
       { label: 'Open GitHub', icon: 'github', href: 'https://github.com/youngcoder45' },
     ],
   },

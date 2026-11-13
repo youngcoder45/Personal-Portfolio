@@ -4,10 +4,11 @@
 > portfolio. This document is the implementation contract: scope, sequence,
 > acceptance criteria, and the questions that must be answered before code moves.
 
-- **Status:** Phase 2 complete; Phase 3 awaiting go-ahead
+- **Status:** Phase 3 complete; Phase 4 awaiting go-ahead
 - **Phase 0 completed:** 2026-11-12
 - **Phase 1 completed:** 2026-11-12
 - **Phase 2 completed:** 2026-11-12
+- **Phase 3 completed:** 2026-11-13
 - **Companion documents:** `docs/AKODER-RESEARCH.md`, `docs/PORTFOLIO-ARCHITECTURE.md`
 - **Constraint:** implement one phase at a time; verify before moving on
 - **Stack:** Astro 5, TypeScript, vanilla CSS, MDX, Netlify — unchanged
@@ -277,7 +278,7 @@ Tasks:
 
 ---
 
-### Phase 3 — Command palette depth (P1)
+### Phase 3 — Command palette depth (P1) — **complete**
 
 **Objective:** make the palette the fastest route through the whole site.
 
@@ -319,9 +320,40 @@ Tasks:
 
 **Effort:** M. **Depends on:** Phase 0.
 
+**Outcome (2026-11-13):**
+
+- `src/scripts/palette.ts` gained persistent recents (`av-palette-recents`, cap 5,
+  most-recent-first, deduped) rendered as a leading “Recent” group on empty query,
+  plus a footer clear control.
+- Palette actions expanded: “Open RSS feed” and “Toggle theme” joined “View
+  Source”, “Copy page URL”, and “Open GitHub”. Theme cycling reuses the exported
+  `apply` from `scripts/theme.ts`.
+- Matching upgraded to multi-token (all tokens must match) with relevance tiers
+  (exact > prefix > substring > fuzzy), keyword haystack (stack/tags/category/
+  language from the embedded content index), and character highlighting.
+- Added a polite live region (`#cmd-palette-status`) announcing the result count.
+- Added a visible back affordance (`← back` footer button and `←` key) that
+  returns to the site root from drill-down context.
+- `TopBar.astro` gained a no-JS fallback: the palette toggle links to
+  `/projects/` when the module bundle is unavailable.
+
+**Verification (2026-11-13):**
+
+- `npm run verify`: 0/0/0 diagnostics, 18 pages, 312 local references, clean build.
+- Firefox WebDriver interaction suite (`/tmp/opencode/wd-phase3.mjs`):
+  **15/15 checks passed**.
+
+  - Palette opens via toggle with focus; typing narrows with highlights and a
+    live count; multi-token queries work; empty result sets announce zero.
+  - Selecting a result persists a recent; Recent group renders and clears.
+  - Back affordance returns to the root; toggle-theme action cycles the theme.
+  - Mobile palette renders as a full-screen sheet without overflow.
+- Palette bundle: 4.50 kB gzip (was 3.76 kB) → **+0.74 kB**, within the +3 kB
+  Phase 3 budget.
+
 ---
 
-### Phase 4 — GitHub telemetry with honest fallback (P2, optional)
+### Phase 4 — GitHub telemetry with honest fallback (P2, optional) — **next gate**
 
 **Objective:** show real activity and project metadata without making the build
 depend on a secret or fabricating data.

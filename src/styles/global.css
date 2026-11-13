@@ -2319,6 +2319,40 @@ html.js .explorer-controls {
   font-size: 0.66rem;
   color: var(--fg-dim);
 }
+.cmd-palette-footer .cmd-back,
+.cmd-palette-footer .cmd-clear {
+  margin-left: auto;
+  padding: 0.14rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-inset);
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.cmd-palette-footer .cmd-back:hover,
+.cmd-palette-footer .cmd-clear:hover {
+  color: var(--fg-strong);
+  border-color: var(--border-hi);
+}
+.cmd-palette-footer .cmd-clear { margin-left: 0; }
+@media (max-width: 720px) {
+  .cmd-palette-overlay {
+    align-items: stretch;
+    padding: 0;
+  }
+  .cmd-palette-modal {
+    width: 100%;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
+  .cmd-palette-results { max-height: 46dvh; }
+}
 
 /* ---------- section rail ---------- */
 .section-rail {

@@ -186,7 +186,7 @@ Current inventory: **4 published notes**.
 | Module | Entry | Responsibility |
 | --- | --- | --- |
 | `scripts/theme.ts` | `Layout.astro` | Apply theme, persist to `localStorage`, sync theme menu and icon |
-| `scripts/palette.ts` | `Layout.astro` | `⌘/Ctrl+K` palette, fuzzy search, keyboard selection, actions |
+| `scripts/palette.ts` | `Layout.astro` | `⌘/Ctrl+K` palette, fuzzy search, keyboard selection, actions, recents, drill-back |
 | `scripts/rail.ts` | `SectionRail.astro` | Centre-band section tracking, `aria-current`, top-nav anchor sync |
 | `scripts/progress.ts` | `ReadingProgress.astro` | Fixed-bar reading progress on long-form pages |
 | `scripts/explorer.ts` | `ProjectExplorer.astro` | Facet filtering, year-group visibility, URL sync, stored filter set |
@@ -492,3 +492,45 @@ No horizontal overflow at 1440, 1024, 768, or 390
 Primary card action ≥ 9.68:1 and status/chip/CTA ≥ 3.66:1 in all 14 themes
 Reduced motion disables card and caret transitions
 ```
+
+## 18. Phase 3 verification
+
+Phase 3 changes:
+
+- `src/scripts/palette.ts` now persists recents under `av-palette-recents`
+  (cap 5, most-recent-first, deduped), renders a leading “Recent” group on empty
+  query, clears via a footer control, and exposes a visible back affordance
+  (`← back` button and `←` key → site root).
+- Search actions expanded: “Open RSS feed” and “Toggle theme” added alongside
+  “View Source”, “Copy page URL”, and “Open GitHub”. Theme cycling uses the now
+  exported `apply` from `scripts/theme.ts`.
+- Matching upgraded to multi-token (all tokens must match) with exact/prefix/
+  substring/fuzzy tiers, keyword haystack (stack/tags/category/language), and
+  character highlighting; result count is announced through
+  `#cmd-palette-status` (`aria-live="polite"`).
+- `src/components/TopBar.astro` gained a no-JS fallback: the palette toggle
+  navigates to `/projects/` when the module bundle is unavailable.
+
+Verification result:
+
+```text
+astro check: 0 errors, 0 warnings, 0 hints
+build:       18 pages
+link audit:  312 local references across 18 pages, no missing targets
+
+firefox webdriver interaction suite (phase 3):  15/15 checks passed
+```
+
+Browser checks (Firefox, WebDriver):
+
+```text
+15/15 Phase 3 interaction checks passed
+Palette opens via toggle with focus; typing narrows with highlights and a
+live count; multi-token queries work; empty result sets announce zero
+Selecting a result persists a recent; Recent group renders and clears
+Back affordance returns to the root; toggle-theme action cycles the theme
+Mobile palette renders as a full-screen sheet without overflow
+```
+
+Palette bundle budget: 4.50 kB gzip after Phase 3 (baseline 3.76 kB before) →
++0.74 kB gzip, within the +3 kB Phase 3 target.

@@ -1,4 +1,6 @@
 import { SEARCH_GROUPS, type SearchGroup, type SearchItem } from '../data/search';
+import { themes } from '../data/themes';
+import { apply as applyTheme } from './theme';
 
 function loadContentGroups(): SearchGroup[] {
   const el = document.getElementById('search-content');
@@ -18,6 +20,9 @@ const SEARCH_GROUPS_ORDERED: SearchGroup[] = (() => {
   return base;
 })();
 
+const RECENTS_KEY = 'av-palette-recents';
+const RECENTS_CAP = 5;
+
 const ICONS: Record<string, string> = {
   home: '<path d="m3 11 9-7 9 7"/><path d="M5 10v11h14V10"/>',
   dir: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
@@ -28,6 +33,8 @@ const ICONS: Record<string, string> = {
   copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
   github:
     '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>',
+  theme:
+    '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 };
 
 function svgIcon(name: string, size = 16): string {
@@ -45,31 +52,53 @@ function escapeHtml(s: string): string {
     .replace(/"/g, '&quot;');
 }
 
-function fuzzyMatch(query: string, label: string): Match | null {
-  const q = query.toLowerCase();
-  const t = label.toLowerCase();
-  if (q.length === 0) return { score: 0, indices: new Set() };
+/** Relevance tier for a token inside a haystack field; null when not found. */
+function matchToken(token: string, field: string): number | null {
+  const t = field.toLowerCase();
+  const q = token.toLowerCase();
+  if (q.length === 0) return 0;
+  if (t === q) return 100;
+  if (t.startsWith(q)) return 85;
   const sub = t.indexOf(q);
-  if (sub !== -1) {
-    const indices = new Set<number>();
-    for (let i = 0; i < q.length; i++) indices.add(sub + i);
-    return { score: 100 + q.length, indices };
-  }
+  if (sub !== -1) return 70;
   let qi = 0;
   let score = 0;
   let prev = -2;
-  const indices = new Set<number>();
   for (let i = 0; i < t.length && qi < q.length; i++) {
     if (t[i] !== q[qi]) continue;
     if (i === prev + 1) score += 2;
     else if (i === 0 || t[i - 1] === ' ' || t[i - 1] === '-' || t[i - 1] === '.') score += 3;
     else score += 1;
     if (i === t.length - 1) score += 1;
-    indices.add(i);
     prev = i;
     qi++;
   }
   if (qi < q.length) return null;
+  return 40 + Math.min(score, 25);
+}
+
+function fuzzyMatch(query: string, label: string, keywords: string[] = []): Match | null {
+  const q = query.trim().toLowerCase();
+  if (q === '') return { score: 0, indices: new Set<number>() };
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const fields = [label, ...(keywords ?? [])].map((s) => s.toLowerCase());
+  let score = 0;
+  const indices = new Set<number>();
+  const labelLower = label.toLowerCase();
+  for (const token of tokens) {
+    let bestTier = -1;
+    for (const field of fields) {
+      const tier = matchToken(token, field);
+      if (tier === null) continue;
+      if (tier > bestTier) bestTier = tier;
+    }
+    if (bestTier < 0) return null;
+    score += bestTier;
+    const start = labelLower.indexOf(token);
+    for (let idx = start; idx !== -1; idx = labelLower.indexOf(token, idx + token.length)) {
+      for (let i = 0; i < token.length; i++) indices.add(idx + i);
+    }
+  }
   return { score, indices };
 }
 
@@ -80,17 +109,57 @@ function isTypingTarget(t: EventTarget | null): boolean {
   return t.isContentEditable;
 }
 
+type Entry = { item: SearchItem; score: number; indices: Set<number> };
+
 export function initCommandPalette(): void {
   const overlay = document.getElementById('cmd-palette') as HTMLElement;
   const input = document.getElementById('cmd-palette-input') as HTMLInputElement;
   const results = document.getElementById('cmd-palette-results') as HTMLElement;
+  const status = document.getElementById('cmd-palette-status');
+  const clear = document.getElementById('cmd-palette-clear') as HTMLButtonElement | null;
+  const back = document.getElementById('cmd-palette-back') as HTMLButtonElement | null;
   if (!overlay || !input || !results) return;
 
   let selectedIndex = 0;
   let items: HTMLAnchorElement[] = [];
   let lastFocused: HTMLElement | null = null;
+  let recents: SearchItem[] = [];
 
   const isOpen = () => overlay.classList.contains('active');
+
+  function loadRecents(): SearchItem[] {
+    try {
+      const raw = JSON.parse(localStorage.getItem(RECENTS_KEY) ?? '[]') as SearchItem[];
+      return Array.isArray(raw) ? raw.slice(0, RECENTS_CAP) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function persistRecents(): void {
+    try {
+      localStorage.setItem(RECENTS_KEY, JSON.stringify(recents.slice(0, RECENTS_CAP)));
+    } catch {
+      /* private mode */
+    }
+  }
+
+  function pushRecent(item: SearchItem): void {
+    const key = item.href ?? item.action ?? item.label;
+    recents = [item, ...recents.filter((r) => (r.href ?? r.action ?? r.label) !== key)].slice(0, RECENTS_CAP);
+    persistRecents();
+  }
+
+  function clearRecents(): void {
+    try {
+      localStorage.removeItem(RECENTS_KEY);
+    } catch {
+      /* private mode */
+    }
+    recents = [];
+    input.value = '';
+    renderResults();
+  }
 
   function makeItem(item: SearchItem, indices: Set<number>): HTMLAnchorElement {
     const a = document.createElement('a');
@@ -133,20 +202,31 @@ export function initCommandPalette(): void {
     items = [];
     selectedIndex = 0;
     const q = input.value.trim();
+    const rendered: { title: string; entries: Entry[] }[] = [];
 
-    for (const group of SEARCH_GROUPS_ORDERED) {
-      const matched: { item: SearchItem; score: number; indices: Set<number> }[] = [];
-      for (const item of group.items) {
-        const m = fuzzyMatch(q, item.label);
-        if (m) matched.push({ item, score: m.score, indices: m.indices });
+    const addGroup = (title: string, list: SearchItem[]) => {
+      const entries: Entry[] = [];
+      for (const item of list) {
+        const m = q === '' ? { score: 0, indices: new Set<number>() } : fuzzyMatch(q, item.label, item.keywords);
+        if (q !== '' && !m) continue;
+        entries.push({ item, score: m?.score ?? 0, indices: m?.indices ?? new Set<number>() });
       }
-      if (matched.length === 0) continue;
-      matched.sort((a, b) => b.score - a.score || a.item.label.localeCompare(b.item.label));
+      if (entries.length === 0) return;
+      entries.sort((a, b) => b.score - a.score || a.item.label.localeCompare(b.item.label));
+      rendered.push({ title, entries });
+    };
+
+    if (q === '') {
+      if (recents.length > 0) addGroup('Recent', recents);
+    }
+    for (const group of SEARCH_GROUPS_ORDERED) addGroup(group.title, group.items);
+
+    for (const group of rendered) {
       const head = document.createElement('div');
       head.className = 'cmd-group-head';
       head.textContent = group.title;
       results.appendChild(head);
-      for (const { item, indices } of matched) results.appendChild(makeItem(item, indices));
+      for (const entry of group.entries) results.appendChild(makeItem(entry.item, entry.indices));
     }
 
     if (q !== '' && items.length === 0) {
@@ -156,6 +236,8 @@ export function initCommandPalette(): void {
       results.appendChild(empty);
     }
 
+    if (status) status.textContent = `${items.length} result${items.length === 1 ? '' : 's'}`;
+    if (clear) clear.hidden = !(q === '' && recents.length > 0);
     updateSelection();
   }
 
@@ -179,6 +261,11 @@ export function initCommandPalette(): void {
       window.open('view-source:' + window.location.href, '_blank', 'noopener,noreferrer');
     } else if (name === 'copy') {
       void navigator.clipboard?.writeText(window.location.href).catch(() => undefined);
+    } else if (name === 'cycle-theme') {
+      const current = document.documentElement.dataset.theme ?? 'dark';
+      const idx = themes.findIndex((t) => t.id === current);
+      const next = themes[(idx + 1) % themes.length];
+      applyTheme(next.id);
     }
   }
 
@@ -202,18 +289,26 @@ export function initCommandPalette(): void {
     lastFocused = null;
   }
 
+  function goBack(): void {
+    close();
+    window.location.assign('/');
+  }
+
   function selectItem(item: HTMLAnchorElement): void {
-    const action = item.dataset.action;
+    const action = item.dataset.action as SearchItem['action'] | undefined;
+    const label = item.textContent?.trim() ?? '';
     if (action) {
+      pushRecent({ label, icon: 'file', action });
       runAction(action);
+    } else {
+      pushRecent({ label, icon: 'file', href: item.getAttribute('href') ?? '/' });
+      window.location.assign(item.getAttribute('href') ?? '/');
     }
   }
 
   input.addEventListener('keydown', (e) => {
     if (items.length === 0) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-      }
+      if (e.key === 'Enter') e.preventDefault();
       return;
     }
     if (e.key === 'ArrowDown') {
@@ -224,12 +319,15 @@ export function initCommandPalette(): void {
       e.preventDefault();
       selectedIndex = Math.max(0, selectedIndex - 1);
       updateSelection();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goBack();
     } else if (e.key === 'Enter') {
       e.preventDefault();
       const target = items[selectedIndex] ?? items[0];
+      if (!target) return;
       selectItem(target);
       close();
-      if (!target.dataset.action) window.location.assign(target.href);
     }
   });
 
@@ -239,17 +337,30 @@ export function initCommandPalette(): void {
   });
 
   overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) close();
+    if (e.target === overlay) {
+      close();
+    }
   });
 
   results.addEventListener('click', (e) => {
     const target = (e.target as Element).closest<HTMLAnchorElement>('.cmd-item');
     if (!target) return;
-    if (target.dataset.action) {
-      e.preventDefault();
-      selectItem(target);
-    }
+    e.preventDefault();
+    selectItem(target);
     close();
+  });
+
+  clear?.addEventListener('click', () => {
+    clearRecents();
+    input.focus();
+  });
+
+  back?.addEventListener('click', () => {
+    goBack();
+  });
+
+  document.getElementById('cmd-palette-back')?.addEventListener('click', () => {
+    goBack();
   });
 
   overlay.addEventListener('keydown', (e) => {
@@ -294,4 +405,6 @@ export function initCommandPalette(): void {
     if (isOpen()) close();
     else open();
   });
+
+  recents = loadRecents();
 }
