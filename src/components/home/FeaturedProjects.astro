@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Section from '../Section.astro';
 import ProjectCard from '../ProjectCard.astro';
 import type { PortfolioSection } from '../../data/sections';
+import { byStars } from '../../lib/projects';
 
 interface Props {
   section: PortfolioSection;
@@ -10,20 +11,28 @@ interface Props {
 
 const { section } = Astro.props as Props;
 
-const featured = (await getCollection('projects')).filter((p) => p.data.featured).sort(
-  (a, b) => b.data.stars - a.data.stars,
-);
+const all = await getCollection('projects');
+const featured = all
+  .filter((project) => project.data.featured)
+  .sort(byStars)
+  .slice(0, 4);
+const writeUps = all.length;
 ---
 
 <Section id={section.id} index={section.index} title={section.title} path={section.path}>
   <div class="card-grid">
     {
-      featured.map((p) => (
-        <ProjectCard project={p} />
+      featured.map((project) => (
+        <ProjectCard project={project} />
       ))
     }
   </div>
-  <p style="margin-top:1rem;font-size:.82rem;color:var(--fg-dim)">
-    <a href="/projects/">&gt;_ ls ./projects --all</a> — full directory with write-ups.
-  </p>
+  <div class="sec-cta">
+    <a class="btn primary" href="/projects/">
+      <span class="prompt" aria-hidden="true">❯</span> open the project explorer
+    </a>
+    <span class="sec-cta-note">
+      {writeUps} write-ups — filter by stack, year, status, or featured
+    </span>
+  </div>
 </Section>

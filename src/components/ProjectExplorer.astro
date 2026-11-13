@@ -1,0 +1,115 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { facets, groupByYear, type ProjectEntry } from '../lib/projects';
+
+interface Props {
+  projects: ProjectEntry[];
+}
+
+const { projects } = Astro.props as Props;
+
+const total = projects.length;
+const years = groupByYear(projects);
+const categories = facets(projects, 'category');
+const statuses = facets(projects, 'status');
+const featured = projects.filter((project) => project.data.featured).length;
+const filters = [
+  { key: 'category', label: 'category', options: categories },
+  { key: 'status', label: 'status', options: statuses },
+] as const;
+const yearsDesc = years.map((group) => ({ value: String(group.year), count: group.projects.length }));
+---
+
+<section class="explorer" data-explorer data-total={total} aria-labelledby="explorer-heading">
+  <h2 id="explorer-heading" class="sr-only">Filter projects</h2>
+
+  <div class="explorer-controls" data-explorer-controls>
+    {
+      filters.map((group) => (
+        <div class="fgroup" role="group" aria-label={`Filter by ${group.label}`}>
+          <span class="fgroup-label" aria-hidden="true">{group.label}</span>
+          <button type="button" class="fbtn" data-filter={group.key} data-value="" aria-pressed="true">
+            all
+          </button>
+          {group.options.map((option) => (
+            <button
+              type="button"
+              class="fbtn"
+              data-filter={group.key}
+              data-value={option.value}
+              aria-pressed="false"
+            >
+              {option.value}
+              <span class="fcount" aria-hidden="true">{option.count}</span>
+            </button>
+          ))}
+        </div>
+      ))
+    }
+
+    <div class="fgroup" role="group" aria-label="Filter by year">
+      <span class="fgroup-label" aria-hidden="true">year</span>
+      <button type="button" class="fbtn" data-filter="year" data-value="" aria-pressed="true">all</button>
+      {
+        yearsDesc.map((option) => (
+          <button type="button" class="fbtn" data-filter="year" data-value={option.value} aria-pressed="false">
+            {option.value}
+            <span class="fcount" aria-hidden="true">{option.count}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="fgroup" role="group" aria-label="Filter by featured flag">
+      <span class="fgroup-label" aria-hidden="true">flag</span>
+      <button type="button" class="fbtn" data-filter="featured" data-value="" aria-pressed="true">all</button>
+      <button type="button" class="fbtn" data-filter="featured" data-value="1" aria-pressed="false">
+        featured
+        <span class="fcount" aria-hidden="true">{featured}</span>
+      </button>
+    </div>
+
+    <button type="button" class="freset" data-explorer-reset>reset</button>
+  </div>
+
+  <p class="explorer-status">
+    <span data-explorer-count aria-live="polite" aria-atomic="true">{total} / {total} projects</span>
+    <span class="explorer-query" data-explorer-query aria-hidden="true"></span>
+  </p>
+
+  <noscript>
+    <p class="explorer-note">
+      <span aria-hidden="true"># </span>filters need javascript — the full list is below.
+    </p>
+  </noscript>
+
+  <div data-explorer-list>
+    {
+      years.map((group) => (
+        <details class="year-group" data-year-group={String(group.year)} open>
+          <summary class="year-head">
+            <span class="year-caret" aria-hidden="true">▸</span>
+            <span class="year-label"><span class="underline">┬</span> {group.year}</span>
+            <span class="year-count">
+              <span data-group-count>{group.projects.length}</span>
+              <span class="sr-only"> projects</span>
+            </span>
+            <span class="year-path" aria-hidden="true">~/projects/{group.year}</span>
+          </summary>
+          <div class="card-grid">
+            {group.projects.map((project) => <ProjectCard project={project} />)}
+          </div>
+        </details>
+      ))
+    }
+  </div>
+
+  <p class="explorer-empty" data-explorer-empty hidden>
+    <span class="nl">no matches — </span>
+    <button type="button" class="freset" data-explorer-reset>clear filters</button>
+  </p>
+</section>
+
+<script>
+  import '../scripts/explorer';
+</script>

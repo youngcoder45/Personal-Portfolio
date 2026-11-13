@@ -20,6 +20,7 @@ npm run dev      # start dev server
 npm run build    # regenerate og.png, then build to dist/
 npm run preview  # serve the production build
 npm run check    # astro check (tsc)
+npm run verify   # check + build + internal link audit
 ```
 
 ## Deploy

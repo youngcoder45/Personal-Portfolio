@@ -9,49 +9,82 @@ interface Props {
 const { project, showBlurb = true } = Astro.props as Props;
 const { data, id } = project;
 const href = `/projects/${id}/`;
+
+const statusLabel: Record<string, string> = {
+  active: 'active',
+  maintained: 'maintained',
+  experimental: 'experimental',
+  archived: 'archived',
+};
+const statusMark: Record<string, string> = {
+  active: '●',
+  maintained: '◆',
+  experimental: '◇',
+  archived: '▣',
+};
 ---
 
-<article class="card">
+<article
+  class="card"
+  data-project
+  data-id={id}
+  data-category={data.category}
+  data-year={String(data.year)}
+  data-status={data.status}
+  data-featured={data.featured ? '1' : '0'}
+  data-tags={data.tags.join(' ')}
+>
   <div class="win-bar">
-    <span class="lang">◆</span>
+    <span class="lang" aria-hidden="true">◆</span>
     <span class="title">{data.language}</span>
     <span class="meta">
-      {data.org ? 'org · TCVH' : 'personal'}
-      {data.status === 'active' ? <span class="st">● active</span> : <span>{data.status}</span>}
+      <span class="pstat" data-status={data.status}>
+        <span aria-hidden="true">{statusMark[data.status]}</span>
+        {statusLabel[data.status]}
+      </span>
+      {data.org && <span class="porg">org · TCVH</span>}
     </span>
   </div>
   <div class="cbody">
     <h3>
-      <a href={href}>
+      <a class="card-title" href={href}>
         <span class="nl">&gt;_ </span>{data.title}
       </a>
     </h3>
     {showBlurb && <p class="blurb">{data.blurb}</p>}
-    <div class="tags" aria-label="tags">
+    <div class="chips" aria-label="stack">
       <span class="tag" data-cat={data.category}>{data.category}</span>
-      {data.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}
+      {data.stack.slice(0, 4).map((item) => <span class="chip">{item}</span>)}
     </div>
     <div class="meta">
       <span class="r">
-        <span class="gn">★ {data.stars}</span>
-        <span>{data.year}</span>
+        {
+          data.stars > 0 && (
+            <span class="gn" title="star count, curated manually">
+              <span aria-hidden="true">★</span> {data.stars}
+            </span>
+          )
+        }
+        <span class="pyear">{data.year}</span>
       </span>
       <span class="links">
-        <a class="repo" href={href}>↗ read</a>
-        {data.star ? (
-          <a class="repo" href={data.repo} target="_blank" rel="noopener noreferrer">
-            ★ star this repo
-          </a>
-        ) : (
+        <a class="repo card-cta" href={href}>read write-up <span aria-hidden="true">›</span></a>
+        <a
+          class="repo"
+          href={data.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+        >repo <span aria-hidden="true">↗</span></a>
+        {
           data.demo && (
-            <a class="repo" href={data.demo} target="_blank" rel="noopener noreferrer">
-              ↗ live
-            </a>
+            <a
+              class="repo"
+              href={data.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+            >live <span aria-hidden="true">↗</span></a>
           )
-        )}
-        <a class="repo" href={data.repo} target="_blank" rel="noopener noreferrer">
-          ↗ repo
-        </a>
+        }
       </span>
     </div>
   </div>

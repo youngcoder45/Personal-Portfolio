@@ -153,6 +153,7 @@ const schema = JSON.stringify({
       (function () {
         var ids = ['paper','dark','nord','dracula','sunset','dim','synthwave','forest','abyss','retro','cyberpunk','halloween','autumn','coffee'];
         var t = 'dark';
+        document.documentElement.classList.add('js');
         try {
           var stored = localStorage.getItem('av-theme');
           if (stored && ids.indexOf(stored) !== -1) t = stored;

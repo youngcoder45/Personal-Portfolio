@@ -4,9 +4,10 @@
 > portfolio. This document is the implementation contract: scope, sequence,
 > acceptance criteria, and the questions that must be answered before code moves.
 
-- **Status:** Phase 1 complete; Phase 2 awaiting go-ahead
+- **Status:** Phase 2 complete; Phase 3 awaiting go-ahead
 - **Phase 0 completed:** 2026-11-12
 - **Phase 1 completed:** 2026-11-12
+- **Phase 2 completed:** 2026-11-12
 - **Companion documents:** `docs/AKODER-RESEARCH.md`, `docs/PORTFOLIO-ARCHITECTURE.md`
 - **Constraint:** implement one phase at a time; verify before moving on
 - **Stack:** Astro 5, TypeScript, vanilla CSS, MDX, Netlify — unchanged
@@ -201,7 +202,7 @@ new `src/scripts/rail.ts`, `src/components/Layout.astro`,
 
 ---
 
-### Phase 2 — Project explorer and discovery (P1)
+### Phase 2 — Project explorer and discovery (P1) — **complete**
 
 **Objective:** turn `/projects` from a static card list into the best page on the
 site for evaluating Aditya's work.
@@ -243,6 +244,36 @@ Tasks:
 - Mobile layout remains scannable without hover.
 
 **Effort:** M–L. **Depends on:** Phase 0; benefits from Phase 1.
+
+**Outcome (2026-11-12):**
+
+- `src/lib/projects.ts` centralises deterministic ordering (stars, then title),
+  facet counts from real content, year grouping, related-project scoring, and the
+  `git clone` command.
+- `ProjectExplorer.astro` server-renders every project inside collapsible year
+  groups, so the full list works without JavaScript. Filters for category, year,
+  status, and featured are buttons with `aria-pressed`; a live count and query
+  readout report the current view.
+- `scripts/explorer.ts` hides non-matching cards, opens year groups that contain
+  matches, updates the URL with `history.replaceState`, handles `popstate`, and
+  stores the active filter set in `sessionStorage` (`av-projects-filter`).
+  Unknown URL values are ignored rather than showing a blank page.
+- `ProjectCard.astro` adds status badges, language, year, curated star counts,
+  stack chips, a clear “read write-up” action, and a repo/live link. Hover lift is
+  limited to fine pointers; keyboard focus gets the same border treatment.
+- Detail pages gain a sticky metadata sidebar above `1080px`, a copyable
+  `git clone` command with visible and announced feedback, related projects
+  derived from shared tags/category (language only breaks ties), and back links
+  that restore the last filtered explorer view.
+- The homepage shows the four featured projects and links to the explorer. Five
+  projects were de-featured so “featured” means something.
+- Retro theme tokens were darkened (`--fg-dim`, `--green`, `--amber`) to clear
+  4.5:1 for small text; the primary card action now uses `--fg-strong` with an
+  accent underline so it stays readable in every theme.
+- Verified: 0/0/0 diagnostics, 18 pages, 312 local references, 62/62 browser
+  interaction checks, 42/42 Phase 1 checks still passing, no horizontal overflow
+  at 1440/1024/768/390, filter/back-restore/no-JS/keyboard/reduced-motion paths
+  all exercised. Primary card action contrast ≥ 9.68:1 in all 14 themes.
 
 ---
 
@@ -566,5 +597,4 @@ Phase 0 was approved and completed on 2026-11-12. Implementation now proceeds
 4. Any new content or claim must be supplied or confirmed by the owner; nothing
    will be invented to fill a section.
 
-Phase 2 is the next gate: the project explorer, filters, and project-detail
-upgrades described above.
+Phase 3 is the next gate: command palette depth, as described above.
