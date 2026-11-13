@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
-import { identity, socials } from '../lib/profile';
+import { identity, socials, paletteLinks } from '../lib/profile';
 import TopBar from './TopBar.astro';
 import FooterBar from './FooterBar.astro';
 import BootScreen from './BootScreen.astro';
@@ -58,6 +58,15 @@ const searchContent = JSON.stringify([
           (k) => typeof k === 'string' && k.length > 0,
         ),
       })),
+  },
+  {
+    title: 'Links',
+    items: paletteLinks.map((s) => ({
+      label: s.label,
+      icon: /github/i.test(s.label) ? 'github' : /mail/i.test(s.label) || s.href.startsWith('mailto:') ? 'mail' : 'link',
+      href: s.href,
+      keywords: [s.hint].filter((k) => typeof k === 'string' && k.length > 0),
+    })),
   },
 ]).replace(/</g, '\\u003c');
 const knowsAbout = [
@@ -238,7 +247,9 @@ const schema = JSON.stringify({
     <script>
       import '../scripts/theme.ts';
       import { initCommandPalette } from '../scripts/palette.ts';
+      import { initLivePreview } from '../scripts/preview.ts';
       initCommandPalette();
+      initLivePreview();
     </script>
   </body>
 </html>

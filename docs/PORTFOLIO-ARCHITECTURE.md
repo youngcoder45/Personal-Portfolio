@@ -187,6 +187,7 @@ Current inventory: **4 published notes**.
 | --- | --- | --- |
 | `scripts/theme.ts` | `Layout.astro` | Apply theme, persist to `localStorage`, sync theme menu and icon |
 | `scripts/palette.ts` | `Layout.astro` | `⌘/Ctrl+K` palette, fuzzy search, keyboard selection, actions, recents, drill-back |
+| `scripts/preview.ts` | `Layout.astro` | Cursor-follow live-site preview card on project cards' “live ↗” links |
 | `scripts/rail.ts` | `SectionRail.astro` | Centre-band section tracking, `aria-current`, top-nav anchor sync |
 | `scripts/progress.ts` | `ReadingProgress.astro` | Fixed-bar reading progress on long-form pages |
 | `scripts/explorer.ts` | `ProjectExplorer.astro` | Facet filtering, year-group visibility, URL sync, stored filter set |
@@ -534,3 +535,47 @@ Mobile palette renders as a full-screen sheet without overflow
 
 Palette bundle budget: 4.50 kB gzip after Phase 3 (baseline 3.76 kB before) →
 +0.74 kB gzip, within the +3 kB Phase 3 target.
+
+## 19. Pre-Phase-4 additions verification
+
+Changes:
+
+- `src/lib/profile.ts`: `githubStats.repoStars` (site repo star count, read
+  from the public GitHub API on 2026-11-13), plus `extraLinks` and
+  `paletteLinks` (Dev.to, daily.dev, Peerlist, Bluesky, Medium, Hashnode,
+  Kaggle on top of the existing socials).
+- `src/components/FooterBar.astro`: the “star this repo” link now renders
+  `★ 5 · star this repo` with an `as of November 2026` tooltip.
+- `src/components/Layout.astro`: composes a “Links” palette group from
+  `paletteLinks` into the embedded search index; imports `scripts/preview.ts`.
+- `src/scripts/palette.ts`: `link` and `mail` icons added to the icon map.
+- `src/components/ProjectCard.astro`: the “live ↗” anchor gained
+  `data-live={data.demo}`.
+- `src/scripts/preview.ts` (new): cursor-follow live-site preview card built
+  from the card's own data; mouse pointers only, `pointer-events: none`,
+  hides on leave/scroll/Escape, clamped to the viewport.
+- `src/styles/global.css`: `.live-preview` styles scoped to theme variables.
+
+Verification result:
+
+```text
+astro check: 0 errors, 0 warnings, 0 hints
+build:       18 pages
+link audit:  312 local references across 18 pages, no missing targets
+
+firefox webdriver interaction suite (pre-phase-4):  11/11 checks passed
+```
+
+Browser checks (Firefox, WebDriver):
+
+```text
+Footer shows "★ 5 · star this repo" with the as-of tooltip
+Palette Links group holds all 15 profiles with correct hrefs; searching
+"peerlist" surfaces the Peerlist link; github/mail icons distinct
+Hovering "live ↗" floats the preview card (domain + title + blurb + chips);
+it follows the cursor, stays inside the viewport near edges, hides on
+pointer leave, and never intercepts clicks (pointer-events: none)
+```
+
+Bundle budget: Layout script 5.32 kB gzip (4.50 kB before) → +0.82 kB for the
+preview module.

@@ -4,7 +4,7 @@
 > portfolio. This document is the implementation contract: scope, sequence,
 > acceptance criteria, and the questions that must be answered before code moves.
 
-- **Status:** Phase 3 complete; Phase 4 awaiting go-ahead
+- **Status:** Phase 3 complete; pre-Phase-4 additions complete; Phase 4 in progress
 - **Phase 0 completed:** 2026-11-12
 - **Phase 1 completed:** 2026-11-12
 - **Phase 2 completed:** 2026-11-12
@@ -354,6 +354,45 @@ Tasks:
 ---
 
 ### Phase 4 — GitHub telemetry with honest fallback (P2, optional) — **next gate**
+
+### Pre-Phase-4 additions (2026-11-13) — **complete**
+
+Three small features requested immediately before Phase 4, shipped ahead of it:
+
+1. **Footer star count** — the footer's “star this repo” link now shows the
+   star count of the site's own source repo
+   (`github.com/youngcoder45/Personal-Portfolio`) directly next to the label:
+   `★ 5 · star this repo`, with an `as of November 2026` tooltip. The count was
+   read from the public GitHub API on 2026-11-13 and authored as
+   `githubStats.repoStars` in `src/lib/profile.ts`; Phase 4 replaces it with a
+   build-time fetch.
+2. **Palette Links group** — the command palette gained a “Links” group with
+   all 15 profiles: the eight existing socials (GitHub, LinkedIn, Instagram, X,
+   Mastodon, ORCID, org, email) plus Dev.to, daily.dev, Peerlist, Bluesky,
+   Medium, Hashnode, and Kaggle. The full list lives in `paletteLinks` in
+   `src/lib/profile.ts` (extras in `extraLinks`); the contact section keeps
+   rendering `socials` unchanged. Group order is now Recent → Pages → Notes →
+   Projects → Links → Actions. Two new icons (`link`, `mail`) were added to
+   the palette icon map; GitHub items keep the GitHub mark and email uses the
+   mail icon.
+3. **Live-site hover preview** — hovering the “live ↗” link on a project card
+   floats a cursor-following, terminal-styled preview card (window chrome with
+   the site's domain and a “live” badge, project title, blurb, up to four
+   stack chips, and an “opens in a new tab” footer). Implemented in
+   `src/scripts/preview.ts`, reading the card's own server-rendered data — no
+   screenshots and no third-party services (the demo host sends
+   `x-frame-options: DENY`, so embedding the real site is impossible, and the
+   card is an honest summary instead). Mouse pointers only (`pointerType:
+   'mouse'`), `pointer-events: none` so it never intercepts clicks, hides on
+   pointer leave, scroll, or Escape, and stays clamped inside the viewport.
+
+**Verification:** `npm run verify` clean (0/0/0, 18 pages, 312 local refs);
+Firefox WebDriver suite `/tmp/opencode/wd-pre4.mjs` **11/11 passed** (footer
+count + tooltip, Links group contents/hrefs/icons/keyword search, preview
+appear/follow/clamp/hide/passthrough). Layout bundle 5.32 kB gzip
+(+0.82 kB for the preview module).
+
+---
 
 **Objective:** show real activity and project metadata without making the build
 depend on a secret or fabricating data.

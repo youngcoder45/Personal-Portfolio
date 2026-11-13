@@ -1,13 +1,18 @@
 ---
-import { identity, socials } from '../lib/profile';
+import { identity, socials, githubStats } from '../lib/profile';
 ---
 
 <footer class="ubar" aria-label="status bar">
   <div class="ubar-inner">
     <div class="u-group">
       <span class="u star">
-        <a href={identity.repo} target="_blank" rel="noopener noreferrer">
-          <span class="box amber">★</span> star this repo
+        <a
+          href={identity.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={`${githubStats.repoStars} stars on this site's source repo, as of November 2026`}
+        >
+          <span class="box amber">★</span> {githubStats.repoStars} · star this repo
         </a>
       </span>
       <span class="u">

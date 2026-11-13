@@ -23,6 +23,9 @@ export const githubStats = {
   publicRepos: 52,
   totalRepos: 78,
   asOf: "November 2026",
+  /** Star count of this site's own source repo, confirmed via the public
+   * GitHub API on 2026-11-13. Phase 4 replaces this with a build-time fetch. */
+  repoStars: 5,
 } as const;
 
 export const socials: { label: string; href: string; hint: string }[] = [
@@ -63,6 +66,52 @@ export const socials: { label: string; href: string; hint: string }[] = [
     hint: "contact@aditya-verma.me",
   },
 ] as const;
+
+/** Additional profile links shown in the command palette (the contact
+ * section keeps rendering `socials`; these extend the palette only). */
+export const extraLinks: { label: string; href: string; hint: string }[] = [
+  {
+    label: "Dev.to",
+    href: "https://dev.to/youngcoder45",
+    hint: "@youngcoder45",
+  },
+  {
+    label: "daily.dev",
+    href: "https://daily.dev/youngcoder45",
+    hint: "youngcoder45",
+  },
+  {
+    label: "Peerlist",
+    href: "https://peerlist.io/youngcoder45",
+    hint: "youngcoder45",
+  },
+  {
+    label: "Bluesky",
+    href: "https://bsky.app/profile/youngcoder45.bsky.social",
+    hint: "@youngcoder45.bsky.social",
+  },
+  {
+    label: "Medium",
+    href: "https://medium.com/@youngcoder45",
+    hint: "@youngcoder45",
+  },
+  {
+    label: "Hashnode",
+    href: "https://hashnode.com/@youngcoder45",
+    hint: "@youngcoder45",
+  },
+  {
+    label: "Kaggle",
+    href: "https://www.kaggle.com/youngcoder45",
+    hint: "youngcoder45",
+  },
+] as const;
+
+/** Full link set for the command palette: every social plus the extras. */
+export const paletteLinks: { label: string; href: string; hint: string }[] = [
+  ...socials,
+  ...extraLinks,
+];
 
 export type NavItem = {
   id: string;
