@@ -4,6 +4,7 @@ export type SectionId =
   | 'projects'
   | 'notes'
   | 'environment'
+  | 'github'
   | 'contact';
 
 export type PortfolioSection = {
@@ -61,8 +62,16 @@ export const portfolioSections: PortfolioSection[] = [
     enabled: true,
   },
   {
-    id: 'contact',
+    id: 'github',
     index: '06',
+    label: 'activity',
+    title: 'activity',
+    path: '~/var/log/gh-activity.log',
+    enabled: true,
+  },
+  {
+    id: 'contact',
+    index: '07',
     label: 'contact',
     title: 'contact',
     path: '~/.local/share/aditya/contact',

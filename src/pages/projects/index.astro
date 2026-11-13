@@ -5,11 +5,15 @@ import Section from '../../components/Section.astro';
 import ProjectExplorer from '../../components/ProjectExplorer.astro';
 import { byStars } from '../../lib/projects';
 import { githubStats } from '../../lib/profile';
+import { loadGitHubData, fetchedOn } from '../../lib/github';
 
 const projects: CollectionEntry<'projects'>[] = (await getCollection('projects')).sort(byStars);
+const gh = await loadGitHubData();
 
 const writeUpCount = projects.length;
-const repoCountLabel = `${githubStats.publicRepos} public repos · ${writeUpCount} write-ups`;
+const repoCount = gh?.publicRepos ?? githubStats.publicRepos;
+const repoCountSrc = gh?.publicRepos != null ? `fetched from GitHub at build time (${fetchedOn(gh)})` : `snapshot as of ${githubStats.asOf}`;
+const repoCountLabel = `${repoCount} public repos · ${writeUpCount} write-ups`;
 ---
 
 <Layout path="/projects" title="~/projects — Aditya Verma" description="Systems, embedded, backend and open-source projects by Aditya Verma — Rust, C/C++, Python, ESP32, Linux tooling and FOSS software.">
@@ -33,9 +37,9 @@ const repoCountLabel = `${githubStats.publicRepos} public repos · ${writeUpCoun
 
   <p
     style="font-size:.78rem;color:var(--fg-faint);margin-top:2.5rem"
-    title={`${githubStats.publicRepos} public repositories as of ${githubStats.asOf}`}
+    title={repoCountSrc}
   >
-    the full {githubStats.publicRepos}-public-repo tree lives on
+    the full {repoCount}-public-repo tree lives on
     <a href="https://github.com/youngcoder45" target="_blank" rel="noopener noreferrer">github.com/youngcoder45</a>.
   </p>
 </Layout>

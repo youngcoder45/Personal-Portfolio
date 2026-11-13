@@ -1,5 +1,10 @@
 ---
 import { identity, socials, githubStats } from '../lib/profile';
+import { loadGitHubData, resolveStars, fetchedOn } from '../lib/github';
+
+const gh = await loadGitHubData();
+const stars = resolveStars(gh?.repoStars, identity.repo, githubStats.repoStars);
+const asOf = stars.live ? fetchedOn(gh) : 'November 2026';
 ---
 
 <footer class="ubar" aria-label="status bar">
@@ -10,9 +15,9 @@ import { identity, socials, githubStats } from '../lib/profile';
           href={identity.repo}
           target="_blank"
           rel="noopener noreferrer"
-          title={`${githubStats.repoStars} stars on this site's source repo, as of November 2026`}
+          title={`${stars.count} stars on this site's source repo${stars.live ? `, fetched at build time (${asOf})` : `, as of ${asOf}`}`}
         >
-          <span class="box amber">★</span> {githubStats.repoStars} · star this repo
+          <span class="box amber">★</span> {stars.count} · star this repo
         </a>
       </span>
       <span class="u">

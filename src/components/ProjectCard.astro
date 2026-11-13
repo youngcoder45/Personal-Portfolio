@@ -1,14 +1,20 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { resolveStars } from '../lib/github';
 
 interface Props {
   project: CollectionEntry<'projects'>;
   showBlurb?: boolean;
+  /** Build-time fetched star counts keyed by `owner/repo`. */
+  liveStars?: Record<string, number>;
+  /** Human label for when the live fetch happened, e.g. "13 Nov 2026". */
+  starsAsOf?: string | null;
 }
 
-const { project, showBlurb = true } = Astro.props as Props;
+const { project, showBlurb = true, liveStars, starsAsOf } = Astro.props as Props;
 const { data, id } = project;
 const href = `/projects/${id}/`;
+const stars = resolveStars(liveStars, data.repo, data.stars);
 
 const statusLabel: Record<string, string> = {
   active: 'active',
@@ -60,8 +66,8 @@ const statusMark: Record<string, string> = {
       <span class="r">
         {
           data.stars > 0 && (
-            <span class="gn" title="star count, curated manually">
-              <span aria-hidden="true">★</span> {data.stars}
+            <span class="gn" title={stars.live ? `star count from GitHub, fetched at build time${starsAsOf ? ` (${starsAsOf})` : ''}` : 'star count, curated manually'}>
+              <span aria-hidden="true">★</span> {stars.count}
             </span>
           )
         }

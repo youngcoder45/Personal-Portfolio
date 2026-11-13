@@ -1,0 +1,20 @@
+---
+import Section from '../Section.astro';
+import GitHubActivity from '../GitHubActivity.astro';
+import { loadGitHubData } from '../../lib/github';
+import type { PortfolioSection } from '../../data/sections';
+
+interface Props {
+  section: PortfolioSection;
+}
+
+const { section } = Astro.props as Props;
+const gh = await loadGitHubData();
+// fallback: sum of authored star counts across the nine tracked project repos
+import { getCollection } from 'astro:content';
+const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + p.data.stars, 0);
+---
+
+<Section id={section.id} index={section.index} title={section.title} path={section.path}>
+  <GitHubActivity data={gh} curatedStars={curatedStars} />
+</Section>

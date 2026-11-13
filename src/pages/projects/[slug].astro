@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../components/Layout.astro';
 import { stackLabels } from '../../data/skills';
 import { cloneCommand, relatedProjects } from '../../lib/projects';
+import { loadGitHubData, resolveStars, fetchedOn } from '../../lib/github';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -20,6 +21,10 @@ const cat = stackLabels[data.category];
 const metaTitle = `${data.title} — Aditya Verma`.length <= 62
   ? `${data.title} — Aditya Verma`
   : data.title;
+
+const gh = await loadGitHubData();
+const starsAsOf = fetchedOn(gh);
+const stars = resolveStars(gh?.repoStars, data.repo, data.stars);
 
 const related = relatedProjects(project, await getCollection('projects'));
 const clone = cloneCommand(project);
@@ -78,7 +83,7 @@ const statusLabel: Record<string, string> = {
             <dt class="k">language</dt><dd class="v">{data.language}</dd>
             <dt class="k">year</dt><dd class="v">{data.year}</dd>
             <dt class="k">stars</dt>
-            <dd class="v"><span title="star count, curated manually"><span aria-hidden="true">★</span> {data.stars}</span></dd>
+            <dd class="v"><span title={stars.live ? `star count from GitHub, fetched at build time${starsAsOf ? ` (${starsAsOf})` : ''}` : 'star count, curated manually'}><span aria-hidden="true">★</span> {stars.count}</span></dd>
             <dt class="k">stack</dt><dd class="v">{data.stack.join(', ')}</dd>
             <dt class="k">status</dt>
             <dd class="v"><span class="pstat" data-status={data.status}>{statusLabel[data.status]}</span></dd>
@@ -128,7 +133,12 @@ const statusLabel: Record<string, string> = {
                 <span class="related-title">{item.data.title}</span>
                 <span class="related-meta">
                   {item.data.category} · {item.data.year} ·
-                  <span class="gn"><span aria-hidden="true">★</span> {item.data.stars}</span>
+                  {(() => {
+                    const relatedStar = resolveStars(gh?.repoStars, item.data.repo, item.data.stars);
+                    return (
+                      <span class="gn" title={relatedStar.live ? `star count from GitHub, fetched at build time${starsAsOf ? ` (${starsAsOf})` : ''}` : 'star count, curated manually'}><span aria-hidden="true">★</span> {relatedStar.count}</span>
+                    );
+                  })()}
                 </span>
               </a>
             </li>

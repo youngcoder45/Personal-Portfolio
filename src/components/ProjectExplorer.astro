@@ -1,12 +1,15 @@
 ---
 import ProjectCard from './ProjectCard.astro';
 import { facets, groupByYear, type ProjectEntry } from '../lib/projects';
+import { loadGitHubData, fetchedOn } from '../lib/github';
 
 interface Props {
   projects: ProjectEntry[];
 }
 
 const { projects } = Astro.props as Props;
+const gh = await loadGitHubData();
+const starsAsOf = fetchedOn(gh);
 
 const total = projects.length;
 const years = groupByYear(projects);
@@ -97,7 +100,7 @@ const yearsDesc = years.map((group) => ({ value: String(group.year), count: grou
             <span class="year-path" aria-hidden="true">~/projects/{group.year}</span>
           </summary>
           <div class="card-grid">
-            {group.projects.map((project) => <ProjectCard project={project} />)}
+            {group.projects.map((project) => <ProjectCard project={project} liveStars={gh?.repoStars} starsAsOf={starsAsOf} />)}
           </div>
         </details>
       ))

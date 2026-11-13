@@ -110,7 +110,8 @@ Runtime work is limited to:
 | `ProjectCard.astro` | Project summary card with status, language, year, tags, stack chips, actions |
 | `NoteRow.astro` | Dense note list row with date and tags |
 | `Term.astro` | Floating terminal dock, noscript fallback, panel markup |
-| `home/*.astro` | Homepage sections: man page, toolchain, projects, notes, environment, contact |
+| `home/*.astro` | Homepage sections: man page, toolchain, projects, notes, environment, activity, contact |
+| `GitHubActivity.astro` | Build-time GitHub telemetry: contribution calendar (keyboard-navigable), labelled repo stats, honest unavailability state |
 
 Page composition is registry-driven: `index.astro` maps `enabledSections` from
 `src/data/sections.ts` to the components in `src/components/home/`. Shared visual
@@ -175,6 +176,7 @@ Current inventory: **4 published notes**.
 | File | Contents |
 | --- | --- |
 | `src/lib/profile.ts` | Identity, GitHub count snapshot, socials, typed nav (route/anchor), tagline, neofetch, rig |
+| `src/lib/github.ts` | Build-time GitHub fetch (optional `GITHUB_TOKEN`), repo star map, contribution calendar, node_modules cache, honest fallbacks |
 | `src/data/sections.ts` | Ordered homepage sections, enabled flags, hero/rail descriptors |
 | `src/data/skills.ts` | Six skill groups, 32 skills, proficiency tags |
 | `src/data/themes.ts` | 14 themes with mode and swatches |
@@ -188,6 +190,7 @@ Current inventory: **4 published notes**.
 | `scripts/theme.ts` | `Layout.astro` | Apply theme, persist to `localStorage`, sync theme menu and icon |
 | `scripts/palette.ts` | `Layout.astro` | `⌘/Ctrl+K` palette, fuzzy search, keyboard selection, actions, recents, drill-back |
 | `scripts/preview.ts` | `Layout.astro` | Cursor-follow live-site preview card on project cards' “live ↗” links |
+| inline calendar script | `GitHubActivity.astro` | Contribution-calendar roving tabindex, arrow-key grid navigation, day readout |
 | `scripts/rail.ts` | `SectionRail.astro` | Centre-band section tracking, `aria-current`, top-nav anchor sync |
 | `scripts/progress.ts` | `ReadingProgress.astro` | Fixed-bar reading progress on long-form pages |
 | `scripts/explorer.ts` | `ProjectExplorer.astro` | Facet filtering, year-group visibility, URL sync, stored filter set |
@@ -359,9 +362,9 @@ Confirmed by the owner on 2026-11-12:
 
 | Field | Value | Ownership |
 | --- | --- | --- |
-| Public GitHub repos | 52 (78 total including private) | Snapshot in `githubStats`; Phase 4 fetch |
+| Public GitHub repos | 52 (78 total including private) | Fetched at build time; `githubStats` snapshot is the fallback, labelled |
 | Project write-ups | 9 | Derived from the collection |
-| Project stars | Authored in frontmatter | Manual until Phase 4 fetch succeeds |
+| Project stars | Authored in frontmatter | Build-time fetch when reachable; fetched values win, curated values labelled |
 | Degree | B.Tech, Electronics & Telecommunications, Mumbai University | Authored |
 | Degree dates | 2026 — 2030 | Authored |
 | Coding since | 2021 | Authored; not the degree start |
@@ -579,3 +582,71 @@ pointer leave, and never intercepts clicks (pointer-events: none)
 
 Bundle budget: Layout script 5.32 kB gzip (4.50 kB before) → +0.82 kB for the
 preview module.
+
+## 20. Phase 4 verification
+
+Changes:
+
+- `src/lib/github.ts` (new): build-time telemetry module. Optional
+  `GITHUB_TOKEN` unlocks the GraphQL contribution calendar; repo star counts
+  (both `youngcoder45` and the `TheCodeVerseHub` org) and the public-repo
+  count come from the REST API (authenticated or anonymous). Fresh results
+  are cached in `node_modules/.cache/av-github.json` (preserved by Netlify
+  between builds, 24 h TTL); failures fall back to a stale cache, then to
+  authored values. 10 s timeouts, `console.warn` on failure, and the build
+  never fails on a network error. `resolveStars`/`repoFullName`/`fetchedOn`
+  helpers give every consumer an honest origin label.
+- `src/components/GitHubActivity.astro` (new): server-rendered calendar
+  (`role="grid"`, weekday-aligned, five `color-mix`-derived levels from the
+  active theme accent), roving-tabindex arrow-key navigation with a polite
+  day readout, a legend, and an explicit "calendar unavailable" note when no
+  token was present — never zeros. Stats carry per-figure origin labels
+  ("fetched 13 Nov 2026" vs "curated · November 2026").
+- `src/data/sections.ts`: new `github` homepage section (`[06] ~/activity`),
+  contact renumbered to `[07]`. Section disabled in one place via
+  `enabled: false`.
+- `src/pages/about.astro`: activity section added as `[04]`, contact moved to
+  `[05]`.
+- Live stars with fallback: `ProjectCard.astro`, `ProjectExplorer.astro`,
+  `home/FeaturedProjects.astro`, and `src/pages/projects/[slug].astro`
+  (info panel + related list) now render the fetched star count when the
+  build got one, else the authored count — each labelled by origin.
+- `src/components/FooterBar.astro` and `src/pages/projects/index.astro` use
+  fetched values with origin-labelled tooltips.
+- `.env.example` (new): documents `GITHUB_TOKEN` (fine-grained, no scopes
+  needed) for local builds and Netlify.
+
+Verification result:
+
+```text
+astro check: 0 errors, 0 warnings, 0 hints
+build:       18 pages, live anonymous fetch (68 repo star counts)
+link audit:  314 local references across 18 pages, no missing targets
+
+firefox webdriver interaction suite (phase 4 calendar):  7/7 checks passed
+firefox webdriver interaction suite (phase 4 fallback):  1/1 check passed
+```
+
+Browser checks (Firefox, WebDriver):
+
+```text
+Homepage gained [06] ~/activity with labelled stats and the calendar grid
+370 day cells; summary "1,112 contributions · 10 Nov 2025 → 14 Nov 2026"
+Arrow keys move focus (±1 day / ±7 days), Home/End jump, polite readout
+About page shows the same activity section as [04]
+Fallback build: "contribution calendar unavailable" note, labelled figures,
+never zeros
+```
+
+Resilience matrix:
+
+```text
+no token, network ok    → fetched stars/repos, "calendar unavailable" note
+no token, network down  → authored values labelled "curated", build succeeds
+invalid token           → HTTP 401 logged clearly, authored fallbacks
+with token              → full calendar + labelled fetched stats
+```
+
+To enable the calendar in production, set `GITHUB_TOKEN` in Netlify's
+environment variables (see `.env.example`); the next build fetches it
+automatically and the note disappears. No token ever reaches the client.

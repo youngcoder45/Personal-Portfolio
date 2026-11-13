@@ -4,7 +4,7 @@
 > portfolio. This document is the implementation contract: scope, sequence,
 > acceptance criteria, and the questions that must be answered before code moves.
 
-- **Status:** Phase 3 complete; pre-Phase-4 additions complete; Phase 4 in progress
+- **Status:** Phase 4 complete; Phase 5 awaiting go-ahead
 - **Phase 0 completed:** 2026-11-12
 - **Phase 1 completed:** 2026-11-12
 - **Phase 2 completed:** 2026-11-12
@@ -353,7 +353,7 @@ Tasks:
 
 ---
 
-### Phase 4 — GitHub telemetry with honest fallback (P2, optional) — **next gate**
+### Phase 4 — GitHub telemetry with honest fallback (P2, optional) — **complete**
 
 ### Pre-Phase-4 additions (2026-11-13) — **complete**
 
@@ -433,6 +433,44 @@ project pages, `docs/`.
 - Fetch failures are logged clearly during build.
 
 **Effort:** M. **Depends on:** Phase 0; coordinate with Phase 2 if stars are fetched.
+
+**Outcome (2026-11-14):**
+
+- New `src/lib/github.ts`: build-time fetch module. Optional `GITHUB_TOKEN`
+  unlocks the GraphQL contribution calendar; repo star counts (both repo
+  owners) and the public-repo count come from the REST API with or without a
+  token. Results cache in `node_modules/.cache/av-github.json` (24 h TTL,
+  preserved by Netlify); failures degrade to stale cache, then to authored
+  values. 10 s timeouts, clear build logs, build never fails.
+- New `GitHubActivity.astro`: server-rendered, weekday-aligned calendar grid
+  (`role="grid"`, roving tabindex, Arrow/Home/End keys, polite day readout,
+  five accent-derived levels per active theme), labelled stats
+  ("fetched 13 Nov 2026" vs "curated · November 2026"), and an explicit
+  "contribution calendar unavailable" note instead of zeros when no token
+  was configured.
+- Placement (owner's choice: homepage + about): new homepage section
+  `[06] ~/activity` (contact renumbered `[07]`) and an about-page section
+  `[04] ~/activity` (contact moved to `[05]`). Disabling it in one place =
+  `enabled: false` in `src/data/sections.ts`.
+- Live stars with fallback (owner's choice): project cards, the explorer,
+  detail pages (info panel + related list), the footer star count, and the
+  projects-index repo count now prefer build-time fetched values, each
+  labelled by origin; authored values stay as the labelled fallback.
+- `.env.example` documents `GITHUB_TOKEN` (fine-grained, no scopes needed).
+  Not yet set on Netlify — the production build currently shows the honest
+  unavailability note; adding the token flips the calendar on automatically.
+- Privacy: no token and no fetch code reach the client; the site CSP
+  (`connect-src 'self'`) is untouched because everything fetches at build.
+
+**Verification (2026-11-14):**
+
+- `npm run verify`: 0/0/0 diagnostics, 18 pages, 314 local references, clean
+  build with a successful live anonymous fetch (68 repo star counts).
+- Firefox WebDriver suites: calendar build **7/7** (mocked cache injecting a
+  53-week calendar), fallback build **1/1**; Phase 3 regression suite 15/15
+  and pre-Phase-4 suite 11/11 still pass.
+- Build succeeds with no token, with a network failure, and with an invalid
+  token (HTTP 401 logged, authored fallbacks, no zeros rendered).
 
 ---
 

@@ -4,6 +4,7 @@ import Section from '../Section.astro';
 import ProjectCard from '../ProjectCard.astro';
 import type { PortfolioSection } from '../../data/sections';
 import { byStars } from '../../lib/projects';
+import { loadGitHubData, fetchedOn } from '../../lib/github';
 
 interface Props {
   section: PortfolioSection;
@@ -17,13 +18,15 @@ const featured = all
   .sort(byStars)
   .slice(0, 4);
 const writeUps = all.length;
+const gh = await loadGitHubData();
+const starsAsOf = fetchedOn(gh);
 ---
 
 <Section id={section.id} index={section.index} title={section.title} path={section.path}>
   <div class="card-grid">
     {
       featured.map((project) => (
-        <ProjectCard project={project} />
+        <ProjectCard project={project} liveStars={gh?.repoStars} starsAsOf={starsAsOf} />
       ))
     }
   </div>

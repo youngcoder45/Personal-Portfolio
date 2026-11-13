@@ -1,0 +1,164 @@
+---
+/**
+ * GitHub activity — contribution calendar + repo stats, server-rendered.
+ *
+ * The calendar only renders when the build fetched one (a GITHUB_TOKEN was
+ * present); otherwise an explicit unavailability note is shown instead of
+ * zeros. Every stat is labelled with its origin ("fetched" vs "curated");
+ * fetched and manual values are never blended silently.
+ */
+import type { GitHubData } from '../lib/github';
+import { fetchedOn } from '../lib/github';
+import { githubStats } from '../lib/profile';
+
+interface Props {
+  data: GitHubData | null;
+  /** Sum of authored star counts over tracked repos, used as the labelled fallback. */
+  curatedStars: number;
+}
+
+const { data, curatedStars } = Astro.props as Props;
+const cal = data?.calendar ?? null;
+const asOf = fetchedOn(data);
+const publicRepos = data?.publicRepos ?? null;
+const starsTotal = data
+  ? Object.values(data.repoStars).reduce((a: number, b: number) => a + b, 0)
+  : null;
+
+const cur = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+function dayLabel(date: string, count: number): string {
+  let when = date;
+  try {
+    when = cur.format(new Date(`${date}T00:00:00Z`));
+  } catch {
+    /* keep raw date */
+  }
+  return count === 0 ? `no contributions on ${when}` : `${count} contribution${count === 1 ? '' : 's'} on ${when}`;
+}
+
+// flatten weeks into weekday-aligned rows of cells
+type Cell = { date: string; count: number; level: number } | null;
+const cells: Cell[] = [];
+if (cal) {
+  const flat: NonNullable<Cell>[] = [];
+  for (const week of cal.weeks) for (const day of week) flat.push(day);
+  const first = flat[0];
+  const pad = first ? new Date(`${first.date}T00:00:00Z`).getUTCDay() : 0;
+  for (let i = 0; i < pad; i++) cells.push(null);
+  cells.push(...flat);
+}
+const firstReal = cells.findIndex((c) => c !== null);
+const rangeLabel =
+  cal?.start && cal?.end
+    ? `${cur.format(new Date(`${cal.start}T00:00:00Z`))} → ${cur.format(new Date(`${cal.end}T00:00:00Z`))}`
+    : null;
+---
+
+<div class="gh-activity">
+  <div class="gh-stats" role="list" aria-label="GitHub statistics">
+    <div class="gh-stat" role="listitem">
+      <span class="gh-k">public repos</span>
+      <span
+        class="gh-v"
+        title={publicRepos !== null && asOf ? `fetched from GitHub at build time (${asOf})` : `snapshot confirmed ${githubStats.asOf}`}
+      >
+        <span aria-hidden="true">▶</span> {publicRepos ?? githubStats.publicRepos}
+      </span>
+      <span class="gh-src">{publicRepos !== null ? `fetched${asOf ? ` ${asOf}` : ''}` : `curated · ${githubStats.asOf}`}</span>
+    </div>
+    <div class="gh-stat" role="listitem">
+      <span class="gh-k">stars · tracked repos</span>
+      <span class="gh-v" title={starsTotal !== null && asOf ? `fetched from GitHub at build time (${asOf})` : 'sum of authored star counts'}>
+        <span aria-hidden="true">★</span> {starsTotal ?? curatedStars}
+      </span>
+      <span class="gh-src">{starsTotal !== null ? `fetched${asOf ? ` ${asOf}` : ''}` : 'curated'}</span>
+    </div>
+    <div class="gh-stat" role="listitem">
+      <span class="gh-k">org</span>
+      <span class="gh-v"><span aria-hidden="true">◈</span> TheCodeVerseHub</span>
+      <span class="gh-src">maintainer · since Jan 2026</span>
+    </div>
+  </div>
+
+  {
+    cal ? (
+      <div class="gh-cal-wrap">
+        <p class="gh-sum">
+          <span class="gh-total">{cal.total.toLocaleString('en-GB')}</span> contributions ·{' '}
+          <span class="gh-range">{rangeLabel}</span>
+        </p>
+        <div class="gh-cal" role="grid" aria-label="Contribution calendar" data-cal>
+          {cells.map((c, i) =>
+            c ? (
+              <span
+                class="gh-cell"
+                data-level={c.level}
+                role="gridcell"
+                aria-label={dayLabel(c.date, c.count)}
+                tabindex={i === firstReal ? 0 : -1}
+              />
+            ) : (
+              <span class="gh-cell gh-pad" aria-hidden="true" />
+            ),
+          )}
+        </div>
+        <p class="gh-legend">
+          <span>less</span>
+          <span class="gh-cell" data-level="0" aria-hidden="true" />
+          <span class="gh-cell" data-level="1" aria-hidden="true" />
+          <span class="gh-cell" data-level="2" aria-hidden="true" />
+          <span class="gh-cell" data-level="3" aria-hidden="true" />
+          <span class="gh-cell" data-level="4" aria-hidden="true" />
+          <span>more</span>
+        </p>
+        <p id="gh-readout" class="gh-readout" aria-live="polite">
+          Use arrow keys to inspect days.
+        </p>
+      </div>
+    ) : (
+      <p class="gh-missing" role="note">
+        <span aria-hidden="true">∅</span> contribution calendar unavailable — it needs a{' '}
+        <code>GITHUB_TOKEN</code> at build time. Every figure above is labelled with its
+        origin; nothing here is padded with zeros.
+      </p>
+    )
+  }
+</div>
+
+<script>
+  const grid = document.querySelector<HTMLElement>('[data-cal]');
+  const readout = document.getElementById('gh-readout');
+  if (grid && readout) {
+    const cells = Array.from(grid.querySelectorAll<HTMLElement>('.gh-cell[data-level]'));
+    const current = cells.findIndex((c) => c.tabIndex === 0);
+    const select = (i: number) => {
+      if (cells.length === 0) return;
+      const idx = Math.max(0, Math.min(cells.length - 1, i));
+      const prev = cells.find((c) => c.tabIndex === 0);
+      if (prev) prev.tabIndex = -1;
+      cells[idx].tabIndex = 0;
+      cells[idx].focus();
+      const label = cells[idx].getAttribute('aria-label');
+      if (label) readout.textContent = label;
+    };
+    grid.addEventListener('keydown', (e) => {
+      const active = cells.findIndex((c) => c === document.activeElement);
+      if (active === -1) return;
+      const step: Record<string, number> = { ArrowUp: -1, ArrowDown: 1, ArrowLeft: -7, ArrowRight: 7 };
+      if (e.key in step) {
+        e.preventDefault();
+        select(active + step[e.key]);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        select(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        select(cells.length - 1);
+      }
+    });
+    if (current !== -1) {
+      const label = cells[current]?.getAttribute('aria-label');
+      if (label) readout.textContent = label;
+    }
+  }
+</script>

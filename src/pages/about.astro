@@ -1,7 +1,13 @@
 ---
 import Layout from '../components/Layout.astro';
 import Section from '../components/Section.astro';
+import GitHubActivity from '../components/GitHubActivity.astro';
+import { loadGitHubData } from '../lib/github';
+import { getCollection } from 'astro:content';
 import { identity, tagline } from '../lib/profile';
+
+const gh = await loadGitHubData();
+const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + p.data.stars, 0);
 ---
 
 <Layout path="/about" person progress description="Education, experience and biography of Aditya Verma — electronics engineering student, AUR maintainer, and systems & backend developer in Rust, C, C++ and Python." title="Aditya Verma — Systems & Backend Developer · About">
@@ -159,7 +165,11 @@ import { identity, tagline } from '../lib/profile';
     </div>
   </Section>
 
-  <Section index="04" title="contact" path="{{ identity.github }}">
+  <Section index="04" title="activity" path="~/var/log/gh-activity.log">
+    <GitHubActivity data={gh} curatedStars={curatedStars} />
+  </Section>
+
+  <Section index="05" title="contact" path="{{ identity.github }}">
     <p style="color:var(--fg-dim);font-size:.86rem">
       &gt;_ want the short version? Run <code style="color:var(--cyan)">man aditya</code> in the
       terminal on the <a href="/">index page</a>, or skip ahead to
