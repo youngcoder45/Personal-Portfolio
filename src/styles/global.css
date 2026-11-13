@@ -1270,6 +1270,9 @@ section {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1rem;
 }
+@media (min-width: 1020px) {
+  .card-grid--three { grid-template-columns: repeat(3, 1fr); }
+}
 .card {
   position: relative;
   display: flex;
@@ -2396,6 +2399,7 @@ html.js .explorer-controls {
 }
 .rail-dash {
   display: block;
+  flex: none;
   width: 10px;
   height: 1px;
   background: currentColor;
@@ -2461,7 +2465,7 @@ html.js .explorer-controls {
 @media (min-width: 1440px) {
   .section-rail {
     left: max(1rem, calc((100vw - var(--maxw)) / 2 - 150px));
-    width: 128px;
+    width: 140px;
   }
   .rail-item {
     justify-content: flex-start;

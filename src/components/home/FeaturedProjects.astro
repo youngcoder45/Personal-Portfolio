@@ -13,19 +13,24 @@ interface Props {
 const { section } = Astro.props as Props;
 
 const all = await getCollection('projects');
+// The homepage grid always shows at least six projects: featured first, then
+// the most-starred remainder, never dropping below six while write-ups exist.
 const featured = all
   .filter((project) => project.data.featured)
-  .sort(byStars)
-  .slice(0, 4);
+  .sort(byStars);
+const rest = all
+  .filter((project) => !project.data.featured)
+  .sort(byStars);
+const sixUp = [...featured, ...rest].slice(0, Math.max(6, Math.min(featured.length, all.length)));
 const writeUps = all.length;
 const gh = await loadGitHubData();
 const starsAsOf = fetchedOn(gh);
 ---
 
 <Section id={section.id} index={section.index} title={section.title} path={section.path}>
-  <div class="card-grid">
+  <div class="card-grid card-grid--three">
     {
-      featured.map((project) => (
+      sixUp.map((project) => (
         <ProjectCard project={project} liveStars={gh?.repoStars} starsAsOf={starsAsOf} />
       ))
     }
