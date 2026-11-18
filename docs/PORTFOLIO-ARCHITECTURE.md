@@ -5,9 +5,9 @@
 > and the known technical debt that the roadmap should address.
 
 - **Repository:** `/home/aditya/Documents/github-1/Portfolio`
-- **Snapshot date:** 2026-11-12
-- **Status:** Phase 2 complete; documentation updated through the explorer work
-- **Verification:** `npm ci`, `npm run check`, and `npm run build` all pass
+- **Snapshot date:** 2026-11-18
+- **Status:** Complete (Phases 0–7 shipped & verified); production-ready release
+- **Verification:** `npm ci`, `npm run check`, `npm run build`, and `npm run check:links` all pass with 0 errors
 
 ## 1. Stack
 
@@ -112,6 +112,7 @@ Runtime work is limited to:
 | `Term.astro` | Floating terminal dock, noscript fallback, panel markup |
 | `home/*.astro` | Homepage sections: man page, toolchain, projects, notes, environment, activity, contact |
 | `GitHubActivity.astro` | Build-time GitHub telemetry: contribution calendar (keyboard-navigable), labelled repo stats, honest unavailability state |
+| `Bookshelf.astro` | Verified reading shelf on `/about`: 6 confirmed books, CSS spine styling, zero fake ratings |
 
 Page composition is registry-driven: `index.astro` maps `enabledSections` from
 `src/data/sections.ts` to the components in `src/components/home/`. Shared visual

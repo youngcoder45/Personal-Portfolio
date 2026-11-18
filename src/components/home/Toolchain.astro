@@ -1,6 +1,6 @@
 ---
 import Section from '../Section.astro';
-import { levelTag, skillGroups } from '../../data/skills';
+import { levelTag, skillGroups, totalSkillsCount, totalEvidenceCount } from '../../data/skills';
 import type { PortfolioSection } from '../../data/sections';
 
 interface Props {
@@ -8,52 +8,269 @@ interface Props {
 }
 
 const { section } = Astro.props as Props;
+
+const levelFilterOptions = [
+  { level: 5, label: 'expert' },
+  { level: 4, label: 'strong' },
+  { level: 3, label: 'working' },
+  { level: 2, label: 'learning' },
+];
 ---
 
 <Section id={section.id} index={section.index} title={section.title} path={section.path}>
-  <p class="tc-note">
-    <span aria-hidden="true">＄</span> <code>aditya --manifest</code> · 6 bundles ·
-    {skillGroups.reduce((n, g) => n + g.skills.length, 0)} packages ·
-    proficiency is tagged honestly:
-    <span class="tc-tag lv-5">expert</span>
-    <span class="tc-tag lv-4">strong</span>
-    <span class="tc-tag lv-3">working</span>
-    <span class="tc-tag lv-2">learning</span>
-  </p>
+  <div class="tc-container" data-toolchain>
+    <div class="tc-header-row">
+      <p class="tc-note">
+        <span aria-hidden="true">＄</span> <code>aditya --manifest</code> · {skillGroups.length} bundles ·
+        <span data-tc-count>{totalSkillsCount} packages</span> ·
+        proficiency is tagged honestly:
+        <span class="tc-tag lv-5">expert</span>
+        <span class="tc-tag lv-4">strong</span>
+        <span class="tc-tag lv-3">working</span>
+        <span class="tc-tag lv-2">learning</span>
+      </p>
 
-  <div class="tc">
-    <div class="win-bar">
-      <span class="dot r" aria-hidden="true"></span>
-      <span class="dot a" aria-hidden="true"></span>
-      <span class="dot g" aria-hidden="true"></span>
-      <span class="title">~/.config/aditya/toolchain</span>
-      <span class="meta">manifest · compiled per bundle</span>
+      <!-- View Switcher -->
+      <div class="tc-views" role="group" aria-label="Toolchain view mode">
+        <button
+          type="button"
+          class="tc-view-btn active"
+          data-tc-view="manifest"
+          aria-pressed="true"
+          title="Terminal manifest view with dot leaders and level tags"
+        >
+          <span class="tc-view-icon" aria-hidden="true">≡</span> manifest
+        </button>
+        <button
+          type="button"
+          class="tc-view-btn"
+          data-tc-view="process"
+          aria-pressed="false"
+          title="Process dependency view linking skills to real project evidence"
+        >
+          <span class="tc-view-icon" aria-hidden="true">⑂</span> process &amp; evidence ({totalEvidenceCount})
+        </button>
+      </div>
     </div>
-    <div class="tc-body">
-      {
-        skillGroups.map((g, i) => (
-          <article class="tc-group">
-            <header class="tc-head">
-              <span class="tc-idx">[{String(i + 1).padStart(2, '0')}]</span>
-              <h3>{g.title}</h3>
-              <span class="tc-path" title={g.path}>{g.path}</span>
-            </header>
-            <p class="tc-blurb">{g.blurb}</p>
-            <ul class="tc-list">
-              {g.skills.map((s) => (
-                <li class="tc-item">
-                  <span class="tc-name">{s.name}</span>
-                  <span class="tc-lead" aria-hidden="true"></span>
-                  <span class={`tc-tag lv-${s.level}`} title={`${s.name}: ${levelTag(s.level)}`}>
-                    {levelTag(s.level)}
-                  </span>
-                  <span class="tc-spec">{s.spec}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))
-      }
+
+    <!-- Filter and Search Toolbar -->
+    <div class="tc-toolbar" role="search" aria-label="Filter skills">
+      <div class="tc-search-box">
+        <span class="tc-search-prompt" aria-hidden="true">grep</span>
+        <input
+          type="search"
+          class="tc-search-input"
+          data-tc-search
+          placeholder="filter packages, specs or projects... (ESC to clear)"
+          aria-label="Filter packages by keyword"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <div class="tc-filter-row">
+        <!-- Bundle Filters -->
+        <div class="tc-pill-group" role="group" aria-label="Filter by bundle">
+          <span class="tc-pill-label" aria-hidden="true">bundle:</span>
+          <button type="button" class="tc-pill-btn active" data-tc-filter="" aria-pressed="true">
+            all
+          </button>
+          {
+            skillGroups.map((g) => (
+              <button
+                type="button"
+                class="tc-pill-btn"
+                data-tc-filter={g.id}
+                aria-pressed="false"
+              >
+                {g.id}
+                <span class="tc-pill-count" aria-hidden="true">{g.skills.length}</span>
+              </button>
+            ))
+          }
+        </div>
+
+        <!-- Level Filters -->
+        <div class="tc-pill-group" role="group" aria-label="Filter by level">
+          <span class="tc-pill-label" aria-hidden="true">level:</span>
+          <button type="button" class="tc-pill-btn active" data-tc-level="" aria-pressed="true">
+            all
+          </button>
+          {
+            levelFilterOptions.map((opt) => (
+              <button
+                type="button"
+                class={`tc-pill-btn lv-btn-${opt.level}`}
+                data-tc-level={String(opt.level)}
+                aria-pressed="false"
+              >
+                {opt.label}
+              </button>
+            ))
+          }
+        </div>
+
+        <!-- Evidence Toggle -->
+        <button
+          type="button"
+          class="tc-pill-btn tc-evidence-toggle"
+          data-tc-evidence
+          aria-pressed="false"
+          title="Show only skills with verified project or note evidence"
+        >
+          <span>with evidence</span>
+          <span class="tc-pill-count" aria-hidden="true">{totalEvidenceCount}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Announcer -->
+    <div id="tc-status" class="sr-only" aria-live="polite"></div>
+
+    <!-- Empty Search State -->
+    <p class="tc-empty" data-tc-empty hidden>
+      <span class="tc-empty-prompt">&gt;_</span> no packages matched the active filters —
+      <button type="button" class="tc-reset-btn" data-tc-reset>clear filters</button>
+    </p>
+
+    <!-- VIEW 1: Manifest View (Terminal file ~/.config/aditya/toolchain) -->
+    <div class="tc" data-tc-manifest-view>
+      <div class="win-bar">
+        <span class="dot r" aria-hidden="true"></span>
+        <span class="dot a" aria-hidden="true"></span>
+        <span class="dot g" aria-hidden="true"></span>
+        <span class="title">~/.config/aditya/toolchain</span>
+        <span class="meta">manifest · compiled per bundle</span>
+      </div>
+      <div class="tc-body">
+        {
+          skillGroups.map((g, i) => (
+            <article class="tc-group" data-tc-group data-group={g.id}>
+              <header class="tc-head">
+                <span class="tc-idx">[{String(i + 1).padStart(2, '0')}]</span>
+                <h3>{g.title}</h3>
+                <span class="tc-path" title={g.path}>{g.path}</span>
+              </header>
+              <p class="tc-blurb">{g.blurb}</p>
+              <ul class="tc-list">
+                {g.skills.map((s) => {
+                  const searchStr = `${s.name} ${s.spec} ${levelTag(s.level)} ${g.title} ${g.id} ${
+                    s.evidence ? s.evidence.map((e) => `${e.title} ${e.note ?? ''}`).join(' ') : ''
+                  }`.toLowerCase();
+                  const hasEvidence = Boolean(s.evidence && s.evidence.length > 0);
+
+                  return (
+                    <li
+                      class="tc-item"
+                      data-tc-item
+                      data-group={g.id}
+                      data-level={String(s.level)}
+                      data-has-evidence={hasEvidence ? 'true' : 'false'}
+                      data-search={searchStr}
+                    >
+                      <div class="tc-row">
+                        <span class="tc-name">{s.name}</span>
+                        <span class="tc-lead" aria-hidden="true"></span>
+                        <span class={`tc-tag lv-${s.level}`} title={`${s.name}: ${levelTag(s.level)}`}>
+                          {levelTag(s.level)}
+                        </span>
+                      </div>
+                      <span class="tc-spec">{s.spec}</span>
+                      {hasEvidence && s.evidence && (
+                        <div class="tc-evidence-row" aria-label={`Evidence for ${s.name}`}>
+                          <span class="tc-ev-lead" aria-hidden="true">↳ evidence:</span>
+                          <div class="tc-ev-chips">
+                            {s.evidence.map((ev) => (
+                              <a
+                                href={ev.path}
+                                class="tc-ev-link"
+                                title={`${ev.title}${ev.note ? ` — ${ev.note}` : ''}`}
+                              >
+                                <span class="tc-ev-icon" aria-hidden="true">↗</span>
+                                <span class="tc-ev-title">{ev.title}</span>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- VIEW 2: Process & Evidence Graph View (/proc/aditya/pipeline) -->
+    <div class="tc tc-process-container" data-tc-process-view hidden>
+      <div class="win-bar">
+        <span class="dot r" aria-hidden="true"></span>
+        <span class="dot a" aria-hidden="true"></span>
+        <span class="dot g" aria-hidden="true"></span>
+        <span class="title">/proc/aditya/pipeline</span>
+        <span class="meta">dependency &amp; verified evidence graph</span>
+      </div>
+      <div class="tc-process-body">
+        {
+          skillGroups.map((g, i) => (
+            <div class="tc-proc-bundle" data-tc-group data-group={g.id}>
+              <header class="tc-proc-head">
+                <span class="tc-proc-node">[NODE {String(i + 1).padStart(2, '0')}]</span>
+                <span class="tc-proc-title">{g.title}</span>
+                <span class="tc-proc-path">{g.path}</span>
+              </header>
+              <div class="tc-proc-grid">
+                {g.skills.map((s) => {
+                  const searchStr = `${s.name} ${s.spec} ${levelTag(s.level)} ${g.title} ${g.id} ${
+                    s.evidence ? s.evidence.map((e) => `${e.title} ${e.note ?? ''}`).join(' ') : ''
+                  }`.toLowerCase();
+                  const hasEvidence = Boolean(s.evidence && s.evidence.length > 0);
+
+                  return (
+                    <article
+                      class="tc-proc-card"
+                      data-tc-item
+                      data-group={g.id}
+                      data-level={String(s.level)}
+                      data-has-evidence={hasEvidence ? 'true' : 'false'}
+                      data-search={searchStr}
+                    >
+                      <div class="tc-proc-card-head">
+                        <span class="tc-proc-name">{s.name}</span>
+                        <span class={`tc-tag lv-${s.level}`}>{levelTag(s.level)}</span>
+                      </div>
+                      <p class="tc-proc-spec">{s.spec}</p>
+
+                      <div class="tc-proc-evidence">
+                        <span class="tc-proc-ev-label">
+                          {hasEvidence ? 'verified projects & notes:' : 'independent foundation'}
+                        </span>
+                        {hasEvidence && s.evidence ? (
+                          <ul class="tc-proc-ev-list">
+                            {s.evidence.map((ev) => (
+                              <li>
+                                <a href={ev.path} class="tc-proc-ev-link">
+                                  <span class="tc-ev-arrow" aria-hidden="true">↗</span>
+                                  <span class="tc-proc-ev-title">{ev.title}</span>
+                                  {ev.note && <span class="tc-proc-ev-note">· {ev.note}</span>}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span class="tc-proc-ev-none">core runtime skill without standalone case study</span>
+                        )}
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </div>
 </Section>

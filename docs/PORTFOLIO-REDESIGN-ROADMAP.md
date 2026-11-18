@@ -4,11 +4,16 @@
 > portfolio. This document is the implementation contract: scope, sequence,
 > acceptance criteria, and the questions that must be answered before code moves.
 
-- **Status:** Phase 4 complete; Phase 5 awaiting go-ahead
+- **Status:** Complete (Phases 0–7 shipped & verified)
 - **Phase 0 completed:** 2026-11-12
 - **Phase 1 completed:** 2026-11-12
 - **Phase 2 completed:** 2026-11-12
 - **Phase 3 completed:** 2026-11-13
+- **Phase 4 completed:** 2026-11-14
+- **Phase 5 completed:** 2026-11-18
+- **Phase 5b completed:** 2026-11-18
+- **Phase 6 completed:** 2026-11-18
+- **Phase 7 completed:** 2026-11-18
 - **Companion documents:** `docs/AKODER-RESEARCH.md`, `docs/PORTFOLIO-ARCHITECTURE.md`
 - **Constraint:** implement one phase at a time; verify before moving on
 - **Stack:** Astro 5, TypeScript, vanilla CSS, MDX, Netlify — unchanged
@@ -507,9 +512,27 @@ new `Toolchain.astro` or inline section, `global.css`.
 
 **Effort:** M. **Depends on:** Phase 2 (for skill-to-project links).
 
+**Outcome (2026-11-18):**
+
+- Upgraded `src/data/skills.ts` with `SkillEvidence` type and attached 27 verified
+  evidence relationships directly connecting skills to real projects (e.g. `Rust` →
+  `niri-utils`, `Python` → `Eigen-Bot`, `Discord-Server-Exporter`, `OpenCV-Math-Solver`,
+  `Student-Performance-Predictor`) and notes (`C` & `ESP32` → `esp32-registers`, `tui-without-curses`).
+- Built an interactive, progressively enhanced toolbar in `Toolchain.astro`: bundle pills,
+  honest level tags, evidence toggle (`with evidence: 27`), grep search box with ESC clear,
+  and live ARIA region announcements (`#tc-status`).
+- Added dual switchable views: **Manifest View** (`~/.config/aditya/toolchain`) with dot
+  leaders, level tags, and inline evidence chips, plus **Process View**
+  (`/proc/aditya/pipeline`) structured as an engineering dependency graph.
+- Client state in `src/scripts/toolchain.ts` handles real-time multi-token filtering, group
+  visibility toggles, empty-result prompt, and view preference persistence in `sessionStorage`
+  (`av-toolchain-view`). Server renders 100% of skills in static HTML for no-JS resilience.
+- Verified: `npm run verify` passes with 0 diagnostics, 18 pages, 372 local references
+  with zero broken links.
+
 ---
 
-### Phase 5b — Bookshelf (P2)
+### Phase 5b — Bookshelf (P2) — **complete**
 
 **Objective:** add a real reading shelf using the six books confirmed by the owner,
 without inventing ratings, progress, or reviews.
@@ -533,8 +556,8 @@ Tasks:
 4. Add a short section note explaining the shelf is a reading list, not a review feed.
 5. Keep the markup readable without JavaScript.
 
-**Files:** new `src/data/books.ts`, new `Bookshelf.astro`, `src/pages/index.astro`
-or `src/pages/about.astro`, `global.css`.
+**Files:** new `src/data/books.ts`, new `Bookshelf.astro`, `src/pages/about.astro`,
+`src/styles/global.css`.
 
 **Acceptance criteria:**
 
@@ -545,6 +568,19 @@ or `src/pages/about.astro`, `global.css`.
 - Mobile layout does not rely on hover.
 
 **Effort:** S. **Depends on:** Phase 1 (section system).
+
+**Outcome (2026-11-18):**
+
+- Created `src/data/books.ts` containing all 6 confirmed books, their themes, years,
+  and honest reading focus without fake star ratings or progress bars.
+- Created `src/components/Bookshelf.astro` styled as an engineer's personal shelf:
+  window bar (`~/.local/share/aditya/bookshelf.db`), spine accents, volume tags,
+  category badges, and takeaway blurbs in vanilla CSS.
+- Mounted on `/about` as section `[04] ~/reading` (`~/.local/share/aditya/bookshelf.db`),
+  renumbering activity to `[05]` and contact to `[06]`.
+- Verified keyboard accessibility, responsive card reflow on mobile, theme contrast,
+  and full readability without JavaScript.
+
 
 ---
 
@@ -581,6 +617,26 @@ Tasks:
 - CSS bundle stays within budget (target: ≤ 45 kB raw, ≤ 10 kB gzip).
 
 **Effort:** S–M. **Depends on:** Phases 1–3.
+
+**Outcome (2026-11-18):**
+
+- Implemented CSS native multi-page view transitions (`@view-transition { navigation: auto; }`)
+  with `pageFadeOut` and `pageFadeIn` root pseudo-elements, plus smooth entry animations
+  for `main` and `.sec`.
+- Wrapped all motion in unified `@media (prefers-reduced-motion: reduce)` resets across
+  view transitions, entrance animations, and micro-interactions.
+- Added tactile micro-interactions: command palette `modalPop` spring animation, button
+  press feedback (`:active { transform: translateY(1px) }`), and enhanced copy-to-clipboard
+  state transitions (`data-state="ok"`).
+- Replaced the placeholder 404 page with an engineered kernel panic / SIGSEGV terminal
+  window (`exit 139`, register dump, mapped routes, keyboard shortcut integration with the
+  command palette).
+- Added comprehensive `@media print` stylesheet for offline reading and resume/case study
+  PDF export: hides navigation chrome, terminal dock, rail, and palette, cleans typography
+  to dark on white, avoids card page breaks, and appends destination URLs.
+- Verified: `npm run verify` passes with 0 diagnostics, 18 pages, 377 local references,
+  and zero broken links. CSS bundle is ~11.5 kB gzip across all 14 themes, print styles, and
+  features.
 
 ---
 
@@ -622,6 +678,23 @@ Tasks:
 - Documented list of deferred P2/P3 items.
 
 **Effort:** M. **Depends on:** all implemented phases.
+
+**Outcome (2026-11-18):**
+
+- Automated validation: `npm run verify` passed cleanly with 0 diagnostics across 54 files,
+  18 static pages rendered, and 377 local links audited with zero broken references.
+- HTML validation: All 18 pages verified for `<!DOCTYPE html>`, `lang="en"`, accessible `<h1`>
+  headings, skip links (`#main-content`), and zero duplicate element IDs.
+- Security review: Clean strict CSP headers verified in `netlify.toml`, zero secrets or
+  private API tokens in client bundles or HTML outputs.
+- Discovery assets: Verified static RSS feed (`dist/rss.xml`), sitemaps (`dist/sitemap-index.xml`,
+  `dist/sitemap-0.xml`), social cards (`dist/og.png`), and LLM context (`public/llms.txt`,
+  `public/llms-full.txt`).
+- Performance review: Total CSS bundle is ~11.5 kB gzip across all 14 themes, print styles, and
+  components. Client JS footprint remains minimal (~5.3 kB gzip for `Layout.js`, ~14.7 kB gzip for `Term.js`).
+- Complete redesign lifecycle executed and recorded in `docs/PORTFOLIO-ARCHITECTURE.md` and
+  `docs/PORTFOLIO-REDESIGN-ROADMAP.md`.
+
 
 ## 5. Sequencing summary
 

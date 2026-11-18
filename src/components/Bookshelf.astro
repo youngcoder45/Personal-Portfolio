@@ -1,0 +1,217 @@
+---
+import { books } from '../data/books';
+---
+
+<div class="shelf">
+  <div class="win-bar">
+    <span class="dot r" aria-hidden="true"></span>
+    <span class="dot a" aria-hidden="true"></span>
+    <span class="dot g" aria-hidden="true"></span>
+    <span class="title">~/.local/share/aditya/bookshelf.db</span>
+    <span class="meta">curated reading list · {books.length} volumes</span>
+  </div>
+
+  <div class="shelf-body">
+    <p class="shelf-note">
+      <span aria-hidden="true">＄</span> <code>cat ~/reading/shelf.tsv</code> · physical & digital volumes revisited often.
+      Curated reading list — no algorithmic ratings or vanity metrics.
+    </p>
+
+    <div class="shelf-grid" role="list">
+      {
+        books.map((book, idx) => (
+          <article class="book-card" role="listitem" tabindex="0">
+            <div class="book-spine" aria-hidden="true">
+              <span class="book-spine-line" />
+            </div>
+            <div class="book-content">
+              <header class="book-header">
+                <span class="book-vol">vol.{String(idx + 1).padStart(2, '0')}</span>
+                <span class="book-tag">{book.tag}</span>
+                <span class="book-year">{book.year}</span>
+              </header>
+
+              <h4 class="book-title">{book.title}</h4>
+              <p class="book-author">by <span>{book.author}</span></p>
+              <p class="book-note">{book.note}</p>
+
+              <footer class="book-footer" aria-hidden="true">
+                <span class="book-cat">{book.category}</span>
+                <span class="book-format">shelf // permanent</span>
+              </footer>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .shelf {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-1);
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+
+  .shelf-body {
+    padding: 1.1rem;
+  }
+
+  .shelf-note {
+    color: var(--fg-dim);
+    font-size: 0.82rem;
+    margin: 0 0 1.1rem;
+    line-height: 1.5;
+  }
+
+  .shelf-note code {
+    color: var(--accent);
+  }
+
+  .shelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 1rem;
+  }
+
+  .book-card {
+    display: flex;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+    transition: border-color var(--transition), transform var(--transition);
+  }
+
+  .book-card:hover,
+  .book-card:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .book-card:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .book-card:hover {
+      transform: none;
+    }
+  }
+
+  .book-spine {
+    width: 0.45rem;
+    background: var(--bg-3);
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .book-spine-line {
+    width: 100%;
+    background: var(--accent);
+    opacity: 0.55;
+    transition: opacity var(--transition);
+  }
+
+  .book-card:hover .book-spine-line,
+  .book-card:focus-visible .book-spine-line {
+    opacity: 1;
+  }
+
+  .book-content {
+    flex: 1;
+    padding: 0.95rem 1.05rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .book-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.72rem;
+    color: var(--fg-dim);
+    margin-bottom: 0.45rem;
+  }
+
+  .book-vol {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .book-tag {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.05rem 0.4rem;
+    color: var(--green);
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+
+  .book-year {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .book-title {
+    margin: 0 0 0.2rem;
+    font-size: 1.02rem;
+    color: var(--fg-strong);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .book-author {
+    margin: 0 0 0.55rem;
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+  }
+
+  .book-author span {
+    color: var(--fg);
+  }
+
+  .book-note {
+    margin: 0 0 0.85rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--fg);
+    flex: 1;
+  }
+
+  .book-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed var(--border);
+    padding-top: 0.5rem;
+    font-size: 0.68rem;
+    color: var(--fg-dim);
+  }
+
+  .book-cat {
+    color: var(--fg-dim);
+  }
+
+  .book-format {
+    font-family: var(--font-mono);
+    opacity: 0.75;
+  }
+
+  @media (max-width: 480px) {
+    .shelf-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

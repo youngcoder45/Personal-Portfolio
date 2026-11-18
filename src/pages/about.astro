@@ -2,6 +2,7 @@
 import Layout from '../components/Layout.astro';
 import Section from '../components/Section.astro';
 import GitHubActivity from '../components/GitHubActivity.astro';
+import Bookshelf from '../components/Bookshelf.astro';
 import { loadGitHubData } from '../lib/github';
 import { getCollection } from 'astro:content';
 import { identity, tagline } from '../lib/profile';
@@ -69,7 +70,7 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
           <h3>SEE ALSO</h3>
           <div class="body">
             <p class="deps">
-              education(7) · experience(5) · toolchain(1) · projects(1) · notes(1) — same system,
+              education(7) · experience(5) · reading(7) · toolchain(1) · projects(1) · notes(1) — same system,
               different man pages.
             </p>
           </div>
@@ -165,11 +166,15 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
     </div>
   </Section>
 
-  <Section index="04" title="activity" path="~/var/log/gh-activity.log">
+  <Section index="04" title="reading" path="~/.local/share/aditya/bookshelf.db">
+    <Bookshelf />
+  </Section>
+
+  <Section index="05" title="activity" path="~/var/log/gh-activity.log">
     <GitHubActivity data={gh} curatedStars={curatedStars} />
   </Section>
 
-  <Section index="05" title="contact" path="{{ identity.github }}">
+  <Section index="06" title="contact" path="{{ identity.github }}">
     <p style="color:var(--fg-dim);font-size:.86rem">
       &gt;_ want the short version? Run <code style="color:var(--cyan)">man aditya</code> in the
       terminal on the <a href="/">index page</a>, or skip ahead to

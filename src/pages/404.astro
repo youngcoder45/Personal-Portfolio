@@ -2,30 +2,208 @@
 import Layout from '../components/Layout.astro';
 ---
 
-<Layout path="/404" title="404 — page not found — Aditya Verma">
+<Layout path="/404" title="404 — segmentation fault — Aditya Verma">
   <h1 class="sr-only">404 — page not found</h1>
-  <div class="win" style="max-width:640px;margin:4rem auto">
-    <div class="win-bar">
-      <span class="dot r" aria-hidden="true"></span>
-      <span class="dot a" aria-hidden="true"></span>
-      <span class="dot g" aria-hidden="true"></span>
-      <span class="title">aditya@arch: ~/dev/portfolio</span>
-      <span class="meta">segfault</span>
-    </div>
-    <div style="padding:1.3rem 1.4rem;font-size:.9rem">
-      <p style="color:var(--red)">segmentation fault (core dumped)</p>
-      <pre aria-hidden="true" style="color:var(--fg-dim);margin:.5rem 0 1rem">$ cat ./requested-page
-cat: ./requested-page: No such file or directory</pre>
-      <p style="color:var(--fg-dim)">
-        404 — the page you wanted isn't in the page table.<br />
-        Try one of these known-good addresses:
-      </p>
-      <ul style="margin:.6rem 0 0;padding-left:1.3rem">
-        <li><a href="/">~/ — index</a></li>
-        <li><a href="/projects/">~/projects</a></li>
-        <li><a href="/notes/">~/notes</a></li>
-        <li><a href="/#contact">~/contact</a></li>
-      </ul>
+
+  <div class="err-page">
+    <div class="win err-win">
+      <div class="win-bar">
+        <span class="dot r" aria-hidden="true"></span>
+        <span class="dot a" aria-hidden="true"></span>
+        <span class="dot g" aria-hidden="true"></span>
+        <span class="title">aditya@arch: ~/dev/portfolio (x86_64)</span>
+        <span class="meta">SIGSEGV · exit 139</span>
+      </div>
+
+      <div class="err-body">
+        <div class="err-header">
+          <span class="err-sig" aria-hidden="true">KERNEL PANIC:</span>
+          <span class="err-msg">segmentation fault (core dumped)</span>
+        </div>
+
+        <pre class="err-dump" aria-label="Crash memory dump"><code>[   0.000404] traps: page fault at RIP: 0033:0x0000000000000404
+[   0.000405] CR2: 0000000000000000  RAX: 00000000deadbeef
+[   0.000406] $ cat ./requested-route
+[   0.000407] cat: requested route not found in virtual address space.
+[   0.000408] process terminating with signal 11 (SIGSEGV)</code></pre>
+
+        <p class="err-desc">
+          The requested path could not be resolved in the page directory.
+          The route may have been moved, archived, or was never mapped to memory.
+        </p>
+
+        <div class="err-actions">
+          <a href="/" class="btn primary">
+            <span class="prompt" aria-hidden="true">❯</span> cd ~/ (home)
+          </a>
+          <a href="/projects/" class="btn">
+            <span class="prompt" aria-hidden="true">❯</span> ls ~/projects
+          </a>
+          <a href="/notes/" class="btn">
+            <span class="prompt" aria-hidden="true">❯</span> cat ~/notes
+          </a>
+          <button type="button" class="btn" id="openPaletteFrom404">
+            <span class="prompt" aria-hidden="true">⌘</span> search site (Cmd+K)
+          </button>
+        </div>
+
+        <div class="err-suggest">
+          <span class="err-suggest-label">Known-good mapped entrypoints:</span>
+          <ul class="err-list">
+            <li><a href="/"><code>~/</code> — overview, identity &amp; live terminal</a></li>
+            <li><a href="/about/"><code>~/about</code> — education, experience &amp; reading list</a></li>
+            <li><a href="/projects/niri-utils/"><code>~/projects/niri-utils</code> — Wayland compositor IPC layer</a></li>
+            <li><a href="/projects/eclipse-linux/"><code>~/projects/eclipse-linux</code> — Void Linux distro with Dynamod init</a></li>
+            <li><a href="/notes/esp32-registers/"><code>~/notes/esp32-registers</code> — bare-metal GPIO &amp; timer registers</a></li>
+            <li><a href="/#contact"><code>~/contact</code> — community discord &amp; email</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </Layout>
+
+<script>
+  const btn = document.getElementById('openPaletteFrom404');
+  btn?.addEventListener('click', () => {
+    const trigger = document.getElementById('paletteToggle');
+    if (trigger) {
+      trigger.click();
+    } else {
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
+    }
+  });
+</script>
+
+<style>
+  .err-page {
+    min-height: calc(100vh - 12rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .err-win {
+    width: 100%;
+    max-width: 660px;
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius);
+    background: var(--bg-1);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .err-body {
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .err-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .err-sig {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.45rem;
+    background: var(--red);
+    color: var(--bg-0);
+    border-radius: var(--radius);
+  }
+
+  .err-msg {
+    font-family: var(--font-mono);
+    color: var(--red);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .err-dump {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    overflow-x: auto;
+    margin: 0;
+  }
+
+  .err-dump code {
+    color: inherit;
+    background: transparent;
+    padding: 0;
+  }
+
+  .err-desc {
+    margin: 0;
+    color: var(--fg);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .err-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .err-suggest {
+    border-top: 1px dashed var(--border);
+    padding-top: 0.9rem;
+  }
+
+  .err-suggest-label {
+    display: block;
+    font-size: 0.74rem;
+    color: var(--fg-dim);
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+  }
+
+  .err-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+  }
+
+  .err-list a {
+    color: var(--fg-dim);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    transition: color var(--transition);
+  }
+
+  .err-list a:hover {
+    color: var(--accent);
+  }
+
+  .err-list code {
+    color: var(--cyan);
+    font-size: 0.78rem;
+  }
+
+  @media (max-width: 580px) {
+    .err-actions {
+      flex-direction: column;
+    }
+    .err-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
