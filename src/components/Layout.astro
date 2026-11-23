@@ -122,7 +122,7 @@ const schema = JSON.stringify({
         ]
       : []),
   ],
-});
+}).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
