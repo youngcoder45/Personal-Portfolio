@@ -19,7 +19,7 @@ interface Props {
 
 const {
   title = 'Aditya Verma | Systems & Backend Developer, Rust, C & Python',
-  description = 'Aditya Verma — systems & backend developer and electronics engineering student from Mumbai. Rust, C, C++, Python for Linux, embedded ESP32 & open source.',
+  description = 'Aditya Verma - systems & backend developer and electronics engineering student from Mumbai. Rust, C, C++, Python for Linux, embedded ESP32 & open source.',
   path,
   person = false,
   progress = false,
@@ -91,7 +91,7 @@ const schema = JSON.stringify({
       '@id': `${site}/#website`,
       url: `${site}/`,
       name: identity.name,
-      description: 'Portfolio of Aditya Verma — systems & backend developer. Rust, C, C++, Python. Linux, embedded ESP32, robotics & open source.',
+      description: 'Portfolio of Aditya Verma - systems & backend developer. Rust, C, C++, Python. Linux, embedded ESP32, robotics & open source.',
       inLanguage: 'en',
       ...(person ? { publisher: { '@id': `${site}/#person` } } : {}),
     },
@@ -151,7 +151,7 @@ const schema = JSON.stringify({
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content={`${identity.name} — ${identity.title} — terminal-flavoured portfolio`} />
+    <meta property="og:image:alt" content={`${identity.name} - ${identity.title} - terminal-flavoured portfolio`} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -163,7 +163,7 @@ const schema = JSON.stringify({
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content={`${identity.name} — ${identity.title}`} />
+    <meta name="twitter:image:alt" content={`${identity.name} - ${identity.title}`} />
 
     <link rel="icon" type="image/png" href="/me.png" />
     <link rel="alternate" type="application/rss+xml" title="aditya · notes" href="/rss.xml" />

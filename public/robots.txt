@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-# AI / LLM crawlers — content is fully static, welcome to index it.
+# AI / LLM crawlers - content is fully static, welcome to index it.
 User-agent: GPTBot
 Allow: /
 

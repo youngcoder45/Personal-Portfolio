@@ -19,7 +19,7 @@ weirdness is charming, but the ecosystem was missing some conveniences, so I
 started writing small utilities. `niri-utils` grew out of that: a modular layer
 that slots on top of the compositor without forking it.
 
-The design rule is simple — **compose, don't fork**.
+The design rule is simple - **compose, don't fork**.
 
 ```rust
 // niri listens on a unix socket; utils talk to it.
@@ -37,7 +37,7 @@ stream.write_all(b"ListWorkspaces\n")?;
 
 ## Why Rust
 
-`niri` itself is Rust, wayland-rs and friends are Rust — matching the ecosystem
+`niri` itself is Rust, wayland-rs and friends are Rust - matching the ecosystem
 means matching the type system. Also: I wanted to write more Rust and this was
 the perfect excuse. "Rust won't spare me fr!!!" is a state of mind.
 

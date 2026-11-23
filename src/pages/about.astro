@@ -11,14 +11,14 @@ const gh = await loadGitHubData();
 const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + p.data.stars, 0);
 ---
 
-<Layout path="/about" person progress description="Education, experience and biography of Aditya Verma — electronics engineering student, AUR maintainer, and systems & backend developer in Rust, C, C++ and Python." title="Aditya Verma — Systems & Backend Developer · About">
+<Layout path="/about" person progress description="Education, experience and biography of Aditya Verma - electronics engineering student, AUR maintainer, and systems & backend developer in Rust, C, C++ and Python." title="Aditya Verma - Systems & Backend Developer · About">
   <nav class="crumb" aria-label="breadcrumb">
     <a href="/">~</a>
     <span>/</span>
     <span class="cw">about</span>
   </nav>
 
-  <h1 class="sr-only">{identity.name} — {identity.title} · about</h1>
+  <h1 class="sr-only">{identity.name} - {identity.title} · about</h1>
 
   <Section index="01" title="whoami" path="~/.local/share/man/man1/aditya(1)">
     <div class="man">
@@ -36,7 +36,7 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
         <section class="man-sec">
           <h3>NAME</h3>
           <div class="body">
-            <p><b>aditya</b> — <b>{identity.title}</b>; electronics engineering student; AUR maintainer; founder of <b>@TheCodeVerseHub</b>.</p>
+            <p><b>aditya</b> - <b>{identity.title}</b>; electronics engineering student; AUR maintainer; founder of <b>@TheCodeVerseHub</b>.</p>
           </div>
         </section>
 
@@ -56,7 +56,7 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
               A heavy user of <b>Linux</b> (Arch daily-driver, plus a Void-based <b>EclipseLinux</b>
               pet distro), a maintainer in the <b>Arch User Repository</b>, a tinkerer in the
               <b>Wayland</b> ecosystem (niri, dotfiles, a compositor experiment), and a believer
-              that <b>web tech is one tool in the box</b> — not the identity.
+              that <b>web tech is one tool in the box</b> - not the identity.
             </p>
             <p>
               Maintains <b>@TheCodeVerseHub</b>, an open community that builds and ships software
@@ -70,7 +70,7 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
           <h3>SEE ALSO</h3>
           <div class="body">
             <p class="deps">
-              education(7) · experience(5) · reading(7) · toolchain(1) · projects(1) · notes(1) — same system,
+              education(7) · experience(5) · reading(7) · toolchain(1) · projects(1) · notes(1) - same system,
               different man pages.
             </p>
           </div>
@@ -91,11 +91,11 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
       <div class="tl">
         <article class="tl-item">
           <span class="tl-meta">
-            <time>2026 — 2030</time>
+            <time>2026 - 2030</time>
             <span class="tl-tag">in progress</span>
           </span>
           <div class="tl-body">
-            <h3>B.Tech — Electronics &amp; Telecommunications</h3>
+            <h3>B.Tech - Electronics &amp; Telecommunications</h3>
             <p class="tl-org">Mumbai University</p>
             <p>
               The electrical + CS overlap on purpose: signal processing, embedded systems, digital
@@ -119,7 +119,7 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
       <div class="tl">
         <article class="tl-item">
           <span class="tl-meta">
-            <time>Jan 2026 — present</time>
+            <time>Jan 2026 - present</time>
             <span class="tl-tag">foss</span>
           </span>
           <div class="tl-body">
@@ -134,7 +134,7 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
 
         <article class="tl-item">
           <span class="tl-meta">
-            <time>2021 — present</time>
+            <time>2021 - present</time>
             <span class="tl-tag">opensource</span>
           </span>
           <div class="tl-body">
@@ -142,7 +142,7 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
             <p class="tl-org">solo → {identity.handle} · @TheCodeVerseHub</p>
             <p>
               Systems, tools and embedded projects shipped publicly. From C/esp32 firmware to Rust
-              Wayland tooling, Python bots and ML experiments — all on
+              Wayland tooling, Python bots and ML experiments - all on
               <a href={identity.github} target="_blank" rel="noopener noreferrer">github</a>.
             </p>
           </div>
@@ -150,14 +150,14 @@ const curatedStars = (await getCollection('projects')).reduce((sum, p) => sum + 
 
         <article class="tl-item">
           <span class="tl-meta">
-            <time>2025 — present</time>
+            <time>2025 - present</time>
             <span class="tl-tag">community</span>
           </span>
           <div class="tl-body">
-            <h3>Founder — TheCodeVerseHub</h3>
+            <h3>Founder - TheCodeVerseHub</h3>
             <p class="tl-org">open community for sharers &amp; builders</p>
             <p>
-              A community that builds and ships software together — workshops, projects and mutual
+              A community that builds and ships software together - workshops, projects and mutual
               debugging sessions over Discord.
             </p>
           </div>

@@ -1,5 +1,5 @@
 /**
- * aditya-shell — a small interactive terminal for the landing page.
+ * aditya-shell - a small interactive terminal for the landing page.
  * Vanilla TS, no deps. The only "real" client interaction on the site.
  * Falls back to an instant render when the user prefers reduced motion,
  * and the server renders a full `<noscript>` fallback too.
@@ -150,7 +150,7 @@ const skillsCmd: Cmd = (args) => {
 };
 
 const projectsCmd: Cmd = () => [
-  { cls: 'dim', text: 'featured — full list at /projects' },
+  { cls: 'dim', text: 'featured - full list at /projects' },
   '',
   { text: '  niri-utils                 rust · wayland tooling', cls: 'dim' },
   { text: '  EclipseLinux               lua/void · distro', cls: 'dim' },

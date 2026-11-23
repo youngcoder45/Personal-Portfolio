@@ -1,7 +1,7 @@
 /**
  * Build-time GitHub telemetry with honest fallbacks.
  *
- * Everything here runs during the static build only — no token, no network
+ * Everything here runs during the static build only - no token, no network
  * call, and no fetch code ever reaches the client bundle. Every failure
  * degrades to labelled, authored data instead of failing the build:
  *

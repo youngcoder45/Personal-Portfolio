@@ -16,19 +16,19 @@ const repoCountSrc = gh?.publicRepos != null ? `fetched from GitHub at build tim
 const repoCountLabel = `${repoCount} public repos · ${writeUpCount} write-ups`;
 ---
 
-<Layout path="/projects" title="~/projects — Aditya Verma" description="Systems, embedded, backend and open-source projects by Aditya Verma — Rust, C/C++, Python, ESP32, Linux tooling and FOSS software.">
+<Layout path="/projects" title="~/projects - Aditya Verma" description="Systems, embedded, backend and open-source projects by Aditya Verma - Rust, C/C++, Python, ESP32, Linux tooling and FOSS software.">
   <nav class="crumb" aria-label="breadcrumb">
     <a href="/">~</a>
     <span>/</span>
     <span class="cw">projects</span>
   </nav>
 
-  <h1 class="sr-only">~/projects — Aditya Verma</h1>
+  <h1 class="sr-only">~/projects - Aditya Verma</h1>
 
-  <Section index="01" title="projects" path={`~/projects — ${repoCountLabel}`}>
+  <Section index="01" title="projects" path={`~/projects - ${repoCountLabel}`}>
     <p style="color:var(--fg-dim);font-size:.86rem;margin-top:-.4rem;margin-bottom:1.4rem">
       <code style="color:var(--green)">find ~/projects -name '*.mdx' -print</code>
-      — systems, hardware, backend and FOSS. Web stuff lives at the back of this
+      - systems, hardware, backend and FOSS. Web stuff lives at the back of this
       directory for a reason.
     </p>
 

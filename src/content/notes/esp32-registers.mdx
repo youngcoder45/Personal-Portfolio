@@ -1,13 +1,13 @@
 ---
 title: 'GPIO as a state machine: bare-metal ESP32 in C vs Rust'
-description: 'Flash an LED the hard way — registers, datasheets, and what Rust adds (and costs) at the metal.'
+description: 'Flash an LED the hard way - registers, datasheets, and what Rust adds (and costs) at the metal.'
 pubDate: 2026-09-14
 tags: ['esp32', 'embedded', 'rust', 'c', 'registers']
 ---
 
 Flashing an LED is the "hello world" of hardware. Everyone does it with the
 Arduino framework's `digitalWrite` and moves on. Boring. So this week I did it
-*from the datasheet* on an ESP32 — first in C, then in Rust, both without the
+*from the datasheet* on an ESP32 - first in C, then in Rust, both without the
 Arduino runtime.
 
 ## Reading the register map

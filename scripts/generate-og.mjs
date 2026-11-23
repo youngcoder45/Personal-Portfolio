@@ -1,4 +1,4 @@
-// Generates public/og.png — the 1200x630 social preview card.
+// Generates public/og.png the 1200x630 social preview card.
 // Rendered from an inline SVG using the site's design tokens (see global.css).
 // Run automatically before `astro build` via the `prebuild` npm script.
 import { writeFile, mkdir, readFile } from 'node:fs/promises';

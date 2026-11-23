@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "Aditya Verma — Systems & Backend Developer. A terminal-flavoured personal site built with Astro, TypeScript, Vanilla CSS and MDX.",
+  "description": "Aditya Verma - Systems & Backend Developer. A terminal-flavoured personal site built with Astro, TypeScript, Vanilla CSS and MDX.",
   "scripts": {
     "dev": "astro dev",
     "prebuild": "node scripts/generate-og.mjs",

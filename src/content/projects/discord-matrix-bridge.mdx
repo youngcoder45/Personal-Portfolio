@@ -28,7 +28,7 @@ matrix.on(RoomEvent.Timeline, (ev) => {
 
 - Matrix events are **stateful**; Discord messages are append-mostly. Mapping
   edits means replaying state, not letting events fall through.
-- WebSocket reconnection makes or breaks it — exponential backoff is
+- WebSocket reconnection makes or breaks it - exponential backoff is
   non-negotiable.
 - Done in TypeScript because two SDKs in JavaScript would have been chaos.
 

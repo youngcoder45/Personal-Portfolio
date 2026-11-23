@@ -18,8 +18,8 @@ const { project } = Astro.props as Props;
 const { Content } = await render(project);
 const { data } = project;
 const cat = stackLabels[data.category];
-const metaTitle = `${data.title} — Aditya Verma`.length <= 62
-  ? `${data.title} — Aditya Verma`
+const metaTitle = `${data.title} - Aditya Verma`.length <= 62
+  ? `${data.title} - Aditya Verma`
   : data.title;
 
 const gh = await loadGitHubData();
@@ -76,7 +76,7 @@ const statusLabel: Record<string, string> = {
     <aside class="p-side" aria-label="Project metadata">
       <div class="win p-side-card">
         <div class="win-bar">
-          <span class="title">info — `stat`</span>
+          <span class="title">info - `stat`</span>
         </div>
         <div class="p-side-body">
           <dl>
@@ -124,7 +124,7 @@ const statusLabel: Record<string, string> = {
     related.length > 0 && (
       <section class="related" aria-labelledby="related-heading">
         <h2 class="related-head" id="related-heading">
-          <span class="underline">┬</span> related — <code>grep -l</code>
+          <span class="underline">┬</span> related - <code>grep -l</code>
         </h2>
         <ul class="related-list">
           {related.map((item) => (
@@ -149,7 +149,7 @@ const statusLabel: Record<string, string> = {
   }
 
   <p class="back-row">
-    <a href="/projects/" data-projects-back>&lt; cd .. — back to projects</a>
+    <a href="/projects/" data-projects-back>&lt; cd .. - back to projects</a>
   </p>
 </Layout>
 

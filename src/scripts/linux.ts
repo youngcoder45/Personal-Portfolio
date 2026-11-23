@@ -1,5 +1,5 @@
 /**
- * linux.ts — a pile of static, Linux-flavoured commands for aditya-shell.
+ * linux.ts - a pile of static, Linux-flavoured commands for aditya-shell.
  *
  * Nothing here touches the real system. Every "tool" prints a themed,
  * deterministic result so the terminal feels like a workstation while
@@ -98,7 +98,7 @@ function tree(): CmdOut {
 
 function cat(args: string[]): CmdOut {
   const f = args.filter((a) => !a.startsWith('-')).join(' ').replace(/^\.\//, '');
-  if (!f) return [r('cat: missing operand — try: cat about.md', 'dim')];
+  if (!f) return [r('cat: missing operand - try: cat about.md', 'dim')];
   if (vfs[f]) return [r(`# ${f}`, 'ok'), ...vfs[f].map((t) => r(t))];
   if (f === 'contact.txt') return [r('# contact.txt', 'ok'), ...contactRows()];
   return [r(`cat: ${f}: No such file or directory`, 'err')];
@@ -164,7 +164,7 @@ function top(): CmdOut {
     r(' 2048 aditya    20   0  512.0m  88.0m   2.1   1.4   0:31.04 niri'),
     r(' 8192 aditya    20   0   12.0m   4.0m   0.1   0.2   0:00.02 cargo'),
     '',
-    r('press q to quit — but this is static output, so you already did.', 'dim'),
+    r('press q to quit - but this is static output, so you already did.', 'dim'),
   ];
 }
 
@@ -210,7 +210,7 @@ function dmesg(): CmdOut {
 function journal(): CmdOut {
   return [
     r('-- Journal begins at Fri 2026-09-18 09:12:04 IST. --', 'dim'),
-    r('Sep 21 09:12:04 arch systemd[1]: Started aditya.service — Software Engineering.'),
+    r('Sep 21 09:12:04 arch systemd[1]: Started aditya.service - Software Engineering.'),
     r('Sep 21 09:12:05 arch kernel: amdgpu: ring gfx initialized'),
     r('Sep 21 16:42:07 arch aditya-shell[8192]: cargo build --release finished in 0.42s', 'ok'),
     r('Sep 21 16:42:07 arch systemd[1]: Reached target Daily Craft.')
@@ -262,7 +262,7 @@ function curl(args: string[]): CmdOut {
     r('server: netlify'),
     '',
     r('<!doctype html><html lang="en">…', 'dim'),
-    r(`# fetched ${url} — this is a static site, so it was already there.`, 'ok'),
+    r(`# fetched ${url} - this is a static site, so it was already there.`, 'ok'),
   ];
 }
 
@@ -506,7 +506,7 @@ function systemctl(args: string[]): CmdOut {
       r('     CGroup: /user.slice/aditya.slice'),
     ];
   }
-  return [r(`systemctl: ${verb} aditya.service — it never really stops`, 'dim')];
+  return [r(`systemctl: ${verb} aditya.service - it never really stops`, 'dim')];
 }
 
 function pacman(args: string[]): CmdOut {
@@ -538,7 +538,7 @@ export function runLinux(cmd: string, args: string[], history: string[]): CmdOut
     case 'pwd':
       return [r(HOME)];
     case 'cd':
-      return [r(`cd: ${args[0] ?? '~'}: this terminal renders output only — it does not navigate.`, 'err'), r('try `tree`, `ls`, or `cat about.md`.', 'dim')];
+      return [r(`cd: ${args[0] ?? '~'}: this terminal renders output only - it does not navigate.`, 'err'), r('try `tree`, `ls`, or `cat about.md`.', 'dim')];
     case 'tree':
       return tree();
     case 'cat':
@@ -567,13 +567,13 @@ export function runLinux(cmd: string, args: string[], history: string[]): CmdOut
     case 'mkdir':
       return [r(`mkdir: created directory '${args[0] ?? 'newdir'}' (in your imagination)`, 'ok')];
     case 'touch':
-      return [r(`touch: '${args[0] ?? 'newfile'}' — 0 bytes of pure potential`, 'ok')];
+      return [r(`touch: '${args[0] ?? 'newfile'}' - 0 bytes of pure potential`, 'ok')];
     case 'rm':
       return /-rf?\s*\/\s*$/.test(args.join(' ')) || args.join(' ').includes('/*')
         ? [r('rm: refusing to shred the filesystem. i live here.', 'err')]
         : [r(`rm: '${args.filter((a) => !a.startsWith('-')).join(' ') || 'nothing'}': removed`, 'ok')];
     case 'chmod':
-      return [r(`chmod: ${args.join(' ') || 'mode unchanged'} — permissions are a state of mind`, 'ok')];
+      return [r(`chmod: ${args.join(' ') || 'mode unchanged'} - permissions are a state of mind`, 'ok')];
     case 'grep':
       return grep(args);
     case 'which':
@@ -665,7 +665,7 @@ export function runLinux(cmd: string, args: string[], history: string[]): CmdOut
     case 'cargo':
       return args.includes('build') || args.includes('run')
         ? compile('cargo')
-        : [r('cargo 1.83.0 — usage: cargo build | cargo run | cargo test')];
+        : [r('cargo 1.83.0 - usage: cargo build | cargo run | cargo test')];
     case 'python':
     case 'python3':
     case 'py':
@@ -678,19 +678,19 @@ export function runLinux(cmd: string, args: string[], history: string[]): CmdOut
       return [r('v26.8.2')];
     case 'nvim':
     case 'vim':
-      return [r('Why would you exit vim? :q  (jk — stay a while)', 'err')];
+      return [r('Why would you exit vim? :q  (jk - stay a while)', 'err')];
     case 'nano':
-      return [r('GNU nano 8.2 — ^O to write out, ^X to exit. (you probably wanted nvim.)', 'dim')];
+      return [r('GNU nano 8.2 - ^O to write out, ^X to exit. (you probably wanted nvim.)', 'dim')];
     case 'tmux':
       return [r('[aditya-shell] 0:code* 1:notes- 2:build-', 'ok'), r('detached (from session aditya-shell)', 'dim')];
     case 'code':
-      return [r('code: command not found — this machine lives in the terminal.', 'err'), r('try `nvim .`', 'dim')];
+      return [r('code: command not found - this machine lives in the terminal.', 'err'), r('try `nvim .`', 'dim')];
     case 'docker':
       return [r('CONTAINER ID   IMAGE       STATUS         NAMES'), r('a1b2c3d4e5f6   archlinux   Up 6 days      dev'), r('f6e5d4c3b2a1   postgres    Up 6 days      db', 'ok')];
     case 'alias':
       return [r("alias ll='ls -la'"), r("alias gs='git status'"), r("alias cb='cargo build --release'")];
     case 'export':
-      return [r(`export: ${args.join(' ')} — noted, but this shell forgets on reload`, 'dim')];
+      return [r(`export: ${args.join(' ')} - noted, but this shell forgets on reload`, 'dim')];
     case 'history':
       return history.length
         ? history.map((h, i) => r(`${String(i + 1).padStart(4, ' ')}  ${h}`))
@@ -716,7 +716,7 @@ export function runLinux(cmd: string, args: string[], history: string[]): CmdOut
     case 'reboot':
     case 'shutdown':
     case 'poweroff':
-      return [r(`${cmd}: interactive confirmation required. denied.`, 'err'), r('uptime is 6 days — respect the streak.', 'dim')];
+      return [r(`${cmd}: interactive confirmation required. denied.`, 'err'), r('uptime is 6 days - respect the streak.', 'dim')];
     case 'mkfs':
       return [r('mkfs: are you sure? (y/N)  ... no. definitely no.', 'err')];
     case 'dd':

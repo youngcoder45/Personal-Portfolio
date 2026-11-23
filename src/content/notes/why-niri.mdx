@@ -5,7 +5,7 @@ pubDate: 2026-08-22
 tags: ['linux', 'wayland', 'niri', 'compositor']
 ---
 
-People assume "Linux desktop" means a window manager. It doesn't — unless by
+People assume "Linux desktop" means a window manager. It doesn't - unless by
 "manage" you mean "*nobody answered when the app asked for pixels*". The thing
 that actually owns your screen on Wayland is a **compositor**, and it's only
 *sort of* optional.
@@ -25,7 +25,7 @@ lease-ability (laptops: this is how smooth scrolling "just works").
 
 ## So why niri?
 
-I tried the usual suspects — i3-with-scrollbars, sway, hyprland — and kept
+I tried the usual suspects - i3-with-scrollbars, sway, hyprland - and kept
 feeling like the WM was *negotiating* with me. Niri skips the negotiation by
 design: everything lives on one infinitely scrolling column. Your "workspaces"
 are vertical space; switch with two fingers.
@@ -42,7 +42,7 @@ negotiating a tiling arrangement.
 ## Xwayland: the compatibility crutch
 
 Some apps still demand X11. Xwayland translates them into a Wayland surface.
-It works because pragmatic beats pure — same reason I keep a KDE Plasma config
+It works because pragmatic beats pure - same reason I keep a KDE Plasma config
 around as a Plan B.
 
 If you're curious where "system construction" meets day-to-day Linux, the

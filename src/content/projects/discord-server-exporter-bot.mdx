@@ -14,8 +14,8 @@ org: false
 ---
 
 A batteries-included **Discord server dump tool**: the bot reads everything the
-API exposes — metadata, roles, channels, members, permissions, threads, forums,
-voice, stage, emoji, stickers, AutoMod, invites, bots, webhooks — and writes it
+API exposes - metadata, roles, channels, members, permissions, threads, forums,
+voice, stage, emoji, stickers, AutoMod, invites, bots, webhooks - and writes it
 all to structured files and a human-readable report.
 
 ```python
@@ -31,16 +31,16 @@ async with Client(intents=intents) as client:
 Every export ends up in a `ServerName_YYYY-MM-DD.zip` containing:
 
 - **JSON dumps** for each domain (`server.json`, `roles.json`, `permissions.json`, …).
-- **`server.md`** — a human-readable report: overview, hierarchy, issues.
-- **`ai_summary.txt`** — a 0–100 health score across 6 dimensions + risk level.
-- **`ai_prompt.txt`** — a pre-built LLM audit prompt (I keep feeding these to
+- **`server.md`** - a human-readable report: overview, hierarchy, issues.
+- **`ai_summary.txt`** - a 0–100 health score across 6 dimensions + risk level.
+- **`ai_prompt.txt`** - a pre-built LLM audit prompt (I keep feeding these to
   Claude and getting genuinely useful restructuring advice).
 
 ## Design
 
 - **SOLID-split modules**: one exporter per domain (`exporter/roles.py`,
   `exporter/channels.py`, …), so adding a domain doesn't touch the rest.
-- **Async everywhere** — rate limits handled with a configurable request delay.
+- **Async everywhere** - rate limits handled with a configurable request delay.
 - **Error resilience**: partial exports survive individual module failures, and
   permission gaps degrade to "skipped" instead of aborting.
 

@@ -10,7 +10,7 @@ export async function GET(context: { site: URL }) {
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   return rss({
-    title: `${identity.name} — ~/notes`,
+    title: `${identity.name} - ~/notes`,
     description: 'Field notes, write-ups and postmortems from a systems & backend developer.',
     site: context.site,
     items: notes.map((note) => ({

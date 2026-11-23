@@ -10,7 +10,7 @@ export type Book = {
 
 /**
  * Curated bookshelf confirmed by the owner on 2026-11-12.
- * Real reading list — no invented star ratings, dates, or progress percentages.
+ * Real reading list - no invented star ratings, dates, or progress percentages.
  */
 export const books: Book[] = [
   {

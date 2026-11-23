@@ -179,7 +179,7 @@ export const neofetch = {
 export const rig = [
   ["OS", "Arch Linux · Void (EclipseLinux)"],
   ["init", "systemd / Dynamod (custom)"],
-  ["WM", "niri — scrolling Wayland compositor"],
+  ["WM", "niri - scrolling Wayland compositor"],
   ["Shell", "zsh + fish"],
   ["Prompt", "starship-ish, hand-rolled"],
   ["Editor", "Neovim (Lua) + Zed + VS Code"],

@@ -5,12 +5,12 @@
  * preview near the cursor, built from the card's own server-rendered data
  * (title, blurb, stack, demo URL). The real site itself cannot be embedded:
  * the demo host sends `x-frame-options: DENY`, and no third-party screenshot
- * service is used — so the preview is an honest summary card, not an image.
+ * service is used - so the preview is an honest summary card, not an image.
  *
  * Progressive enhancement only: the module runs when JS loads, and the card
- * only appears for genuine mouse hover (`pointerType: 'mouse'`) — touch and
+ * only appears for genuine mouse hover (`pointerType: 'mouse'`) - touch and
  * pen pointers never spawn it, and keyboard users keep the plain link.
- * Display toggles only — no animation, so `prefers-reduced-motion` needs no
+ * Display toggles only - no animation, so `prefers-reduced-motion` needs no
  * special-casing.
  */
 
