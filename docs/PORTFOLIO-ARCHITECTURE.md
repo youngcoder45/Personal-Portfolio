@@ -246,8 +246,10 @@ is applied via `data-theme` on `<html>` and persisted as `av-theme`.
 
 ### Typography
 
-System monospace stack for UI and code, system sans for long prose. No external
-font request.
+Comic Neue loaded from Google Fonts is the primary site face via `--font-site`,
+with the original system monospace stack (`--font-mono`) as a fallback. The
+Google Fonts stylesheet is allowlisted in `style-src` and its font files in
+`font-src`; no other external font request is permitted.
 
 ## 8. SEO, discovery, and security
 
@@ -268,7 +270,8 @@ font request.
 - `X-Frame-Options: DENY`
 - `Referrer-Policy: strict-origin-when-cross-origin`
 - Restrictive `Permissions-Policy`
-- CSP with `default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`
+- CSP with `default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`,
+  plus Google Fonts allowances for `style-src` and `font-src`
 - Immutable caching for `/_astro/*`
 
 The CSP currently requires `'unsafe-inline'` for both scripts and styles because

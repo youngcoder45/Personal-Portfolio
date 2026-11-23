@@ -692,6 +692,9 @@ Tasks:
   `public/llms-full.txt`).
 - Performance review: Total CSS bundle is ~11.5 kB gzip across all 14 themes, print styles, and
   components. Client JS footprint remains minimal (~5.3 kB gzip for `Layout.js`, ~14.7 kB gzip for `Term.js`).
+- Typography: Comic Neue loaded via Google Fonts is now the primary site face through
+  `--font-site`, with the original monospace stack retained as the fallback. Netlify CSP
+  allowlists only `fonts.googleapis.com` (styles) and `fonts.gstatic.com` (fonts).
 - Complete redesign lifecycle executed and recorded in `docs/PORTFOLIO-ARCHITECTURE.md` and
   `docs/PORTFOLIO-REDESIGN-ROADMAP.md`.
 
@@ -735,7 +738,7 @@ section system and the confirmed book list.
 | Responsive | 390, 768, 1024, 1440, 1920; no horizontal scroll; touch targets ≥ 44 px |
 | No-JS | Homepage content, projects list, notes, terminal fallback, palette trigger |
 | Content | Dates, counts, stars, links, RSS, sitemap, JSON-LD, `llms.txt` |
-| Performance | CSS/JS budgets, no layout shift, font strategy unchanged |
+| Performance | CSS/JS budgets, no layout shift, Comic Neue swap with monospace fallback |
 | Security | CSP, no secrets, external links use `rel="noopener noreferrer"` |
 
 ## 7. Content decisions (resolved 2026-11-12)
