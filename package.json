@@ -19,7 +19,7 @@
     "@astrojs/mdx": "^4.2.5",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.7.4",
-    "astro": "^5.15.3"
+    "astro": "^7.4.13"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
